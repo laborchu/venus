@@ -1,0 +1,99 @@
+@import "../../../css/variable";
+.menu {
+    width: 205px;
+    height: 100%;
+    border-right: 3px solid $split-color;
+
+    .pop-item {
+        width: 150px;
+        height: 30px;
+        cursor: pointer;
+        padding-left: 10px;
+        padding-top: 5px;
+        &:hover {
+            background-color: $select-color;
+        }
+    }
+    .pop-select {
+        background-color: $select-color;
+    }
+
+    .menu-header {
+        height: 50px;
+        background-color: #F5F5F5;
+        .logo {
+            height: 50px;
+            width: 55px;
+            background-color: $split-color;
+            img {
+                width: 45px;
+                margin-left: 5px;
+                margin-top: 7px;
+            }
+        }
+        .project {
+            display: inline-block;
+            height: 100%;
+            width: 145px;
+            font-size: 16px;
+            padding-left: 10px;
+            padding-top: 12px;
+            cursor: pointer;
+            .project-name {
+                display: inline-block;
+                width: 110px;
+            }
+            .project-down {
+                position: relative;
+                top: -5px;
+            }
+        }
+    }
+    .menu-group {
+        .group-title {
+            font-size: 16px;
+            line-height: 40px;
+            padding-left: 10px;
+        }
+        .group-item {
+            line-height: 35px;
+            padding-left: 30px;
+            font-size: 14px;
+            display: block;
+            color: #373a3c;
+            &:hover {
+                background-color: $select-color;
+            }
+            .item-num {
+                width: 20px;
+                height: 20px;
+                border-radius: 50%;
+                line-height: 20px;
+                text-align: center;
+                background-color: #ddd;
+                margin-top: 7px;
+                margin-right: 10px;
+                font-size: 12px;
+            }
+        }
+        .select{
+            background-color: $select-color;
+        }
+    }
+    .menu-footer{
+        position: absolute;
+        bottom: 1px;
+        height: 40px;
+        border-top: 3px solid $split-color;
+        width: 205px;
+        text-align: center;
+        padding-top: 7px;
+        .pop-item {
+            width: 100px;
+        }
+        i{
+            font-size: 25px;
+            cursor: pointer;
+        }
+    }
+}

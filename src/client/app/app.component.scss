@@ -1,0 +1,14 @@
+.app-container {
+    height: 100%;
+    .app-content {
+        height: 100%;
+        .content-left{
+        	height: 100%;
+        	float: left;
+        }
+        .content-right{
+        	height: 100%;
+        }
+    }
+}
+

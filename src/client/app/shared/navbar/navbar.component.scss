@@ -1,0 +1,30 @@
+@import "../../../css/variable";
+:host /deep/ {
+    .popover-content{
+    padding:9px 0px !important;
+  }
+}
+
+.mv-navbar{
+  background-color: #F5F5F5;
+  height: 50px;
+  
+
+  .navbar-right{
+    .avatar{
+      width: 40px;
+      height: 40px;
+      position: relative;
+      overflow: hidden;
+      border-radius: 50%;
+      margin-right: 10px;
+      margin-top: 5px;
+      img{
+        display: inline;
+        margin: 0 auto;
+        height: 100%;
+        width: auto;
+      }
+    }
+  }
+}

@@ -1,0 +1,28 @@
+@import "../../../css/variable";
+.uc-group {
+    padding-left: 205px;
+    .group-list {
+        float: left;
+        width: 50%;
+        .select{
+            background-color: $select-color;
+        }
+    }
+    .line {
+        width: 3px;
+        height: 100%;
+        background-color: $split-color;
+        display: inline-block;
+        position: fixed;
+    }
+    .group-info {
+        float: left;
+        width: 50%;
+    }
+    .director-cell{
+        width: 100px;
+    }
+    tr:hover{
+        cursor: pointer;
+    }
+}

@@ -1,0 +1,13 @@
+<div class="mv-nav clearfix">
+	<div class="nav-left" [ngClass]="{'can-click':canBack()}" (click)="back()">
+		<span *ngIf="navigate">
+			<i class="fa fa-angle-left"></i>
+		</span>
+		<span>
+			{{title}}
+		</span>
+	</div>
+	<div class="nav-right">
+		<span class="right-btn"><i class="fa fa-save"></i></span>
+	</div>
+</div>

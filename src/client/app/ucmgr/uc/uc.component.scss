@@ -1,0 +1,23 @@
+@import "../../../css/variable";
+.uc-container{
+	padding:10px;
+	.node-list{
+		.leve2{
+			margin-left: 15px;
+		}
+		.node{
+			padding: 5px;
+			cursor: pointer;
+			&:hover{
+				background-color: $select-color;
+			}
+			.node-toobar{
+				float: right;
+				i{
+					margin-right: 5px;
+				}
+			}
+		}
+		
+	}
+}
