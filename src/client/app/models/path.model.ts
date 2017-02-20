@@ -1,6 +1,6 @@
 export class PathModel {
-	id: number;
-	nodeId: number;
+	_id: string;
+	nodeId: string;
 	title: string;
 	type: string;
 }

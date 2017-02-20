@@ -1,26 +1,35 @@
 @import "../../../css/variable";
-.mv-nav{
+.top-bottom {
+    border-top: 2px solid $split-color;
+}
+
+.mv-nav {
     height: 40px;
     border-bottom: 2px solid $split-color;
-    .can-click{
-    	cursor: pointer;
+    .nav-left {
+        float: left;
+        margin-left: 15px;
+        margin-top: 8px;
     }
-	.nav-left{
-		float: left;
-		margin-left: 15px;
-    	margin-top: 8px;
-	}
-	.nav-right{
-		float: right;
-		height: 100%;
-		.right-btn{
-			height: 100%;
-			width: 40px;
-			text-align: center;
-			border-left: 1px solid $split-color;
-			font-size: 16px;
-		    padding-top: 6px;	
-		    display: inline-block;
-		}
-	}
+    .nav-right {
+        float: right;
+        height: 100%;
+        .right-btn {
+            height: 100%;
+            width: 40px;
+            text-align: center;
+            border-left: 1px solid $split-color;
+            font-size: 16px;
+            padding-top: 6px;
+            display: inline-block;
+            cursor: pointer;
+        }
+    }
+    .can-click{
+        cursor: pointer;
+    }
+    .unclick {
+        cursor: default !important;
+        color: #bbb;
+    }
 }

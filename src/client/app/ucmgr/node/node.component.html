@@ -45,7 +45,7 @@
                     </div>
                 </div>
                 <div class="checker">
-                    验证输入没有的用户
+                    验证入没有的用户
                     <div class="checker-toobar">
                         <i class="fa fa-trash"></i>
                     </div>
@@ -77,21 +77,26 @@
         <button type="button" class="btn btn-success" (click)="c('Close click')">保存</button>
     </div>
 </template>
-<mv-nav [title]="nodeModel.name" [navigate]="navagate"></mv-nav>
+<mv-nav [title]="nodeTitle" [formObj]="form" [rightBtnConf]="nodeRightBtnConf" [navigate]="navagate"></mv-nav>
+<div class="node-container">
+    <form #form="ngForm">
+        <div class="form-group">
+            <input type="text" name="title" class="form-control" placeholder="title" 
+            #title="ngModel" [(ngModel)]="nodeModel.title" required>
+            <p class="valid-error" [hidden]="title.valid || title.pristine">不能为空</p>
+        </div>
+        <div class="form-group">
+            <input type="text" name="sleep" class="form-control" placeholder="sleep" 
+            #sleep="ngModel" [(ngModel)]="nodeModel.sleep" number>
+            <p class="valid-error" [hidden]="sleep.valid || sleep.pristine">必须数字</p>
+        </div>
+    </form>
+</div>
+<mv-nav [title]="'路径'" [topBottom]="true"></mv-nav>
 <div class="step-container">
-    <div class="form-group">
-        <input type="text" class="form-control" placeholder="name" [(ngModel)]="nodeModel.name">
-    </div>
-    <div class="form-group">
-        <input type="text" class="form-control" placeholder="sleep" [(ngModel)]="nodeModel.sleep">
-    </div>
-    <div class="line-split">
-        <div class="line-tile">路径</div>
-        <div class="line"></div>
-    </div>
     <div class="step-list">
-        <div *ngFor="let path of pathList" class="step" (click)="openPath(content,path)">
-            {{path.name}}
+        <div *ngFor="let path of nodeModel.paths" class="step" (click)="openPath(content,path)">
+            {{path.title}}
             <div class="step-toobar">
                 <i class="fa fa-trash"></i>
                 <i class="fa fa-plus"></i>

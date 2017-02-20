@@ -3,8 +3,12 @@ import { RouterMap } from "./decorators/Web";
 
 import ProjectController from "./controllers/ProjectController";
 import UcGroupController from "./controllers/UcGroupController";
+import UcController from "./controllers/UcController";
+import NodeController from "./controllers/NodeController";
 new ProjectController();
 new UcGroupController();
+new UcController();
+new NodeController();
 
 export function init(app:any) {
 	RouterMap.__DecoratedRouters.forEach((controller: any, config: any) => {

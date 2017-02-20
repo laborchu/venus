@@ -43,28 +43,48 @@ export class MenuComponent implements OnInit{
 			this.groupArray = ucGroups;
 			this.selectGroup = ucGroups[0];
 		});
+
+		this.ucGroupService.getGroupChangeSubject().subscribe((group: UcGroupModel) => {
+			this.groupArray.every((e: UcGroupModel, index: number) => {
+				if (group._id == e._id) {
+					this.groupArray[index] = group;
+					return false;
+				} else {
+					return true;
+				}
+			});
+			if (this.selectGroup._id == group._id) {
+				this.selectGroup = group;
+			}
+		});
 	}
 
 	doSelectProject(project: ProjectModel) {
 		this.selectProject = project;
+		this.router.navigate(["/projects", project._id, "ucgroups"])
 		this.ucGroupService
 			.getUcGroups(project._id)
 			.subscribe((ucGroups: Array<UcGroupModel>) => {
 			this.groupArray = ucGroups;
-			this.selectGroup = ucGroups[0];
 		});
 	}
 
 	doSelectGroup(group: UcGroupModel) {
 		this.selectGroup = group;
-		this.router.navigate(["/ucgroup",group.id])
+		this.router.navigate(["/ucgroups", group._id]);
 	}
 
 	openUcGroup(content: any) {
-		this.modalService.open(content).result.then((result) => {
-			// debugger
-		}, (reason) => {
-			// debugger
+		this.modalService.open(content, { backdrop: "static" }).result.then(() => {
+			this.newUcGroup.projectId = this.selectProject._id;
+			let ucGroupObservable = this.ucGroupService.addUcGroups(this.newUcGroup);
+			let mapObservable = ucGroupObservable.concatMap(result => {
+				return this.ucGroupService.getUcGroups(this.selectProject._id);
+			});
+			mapObservable.subscribe((ucGroups: Array<UcGroupModel>) => {
+				this.groupArray = ucGroups;
+			});
+		}, () => {
 		});
 	}
 

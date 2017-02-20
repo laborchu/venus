@@ -18,7 +18,7 @@ export class ProjectService extends MvService {
      return this.getHttp(this.projectUrl);
   }
 
-  addProjects(project: ProjectModel): Observable<ProjectModel[]> {
+  addProjects(project: ProjectModel): Observable<ProjectModel> {
 	  return this.postHttp(this.projectUrl, project);
   }
 }

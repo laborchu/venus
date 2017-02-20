@@ -22,7 +22,6 @@ import { ProjectService, UcGroupService, UcService, NodeService, PathService } f
     AppRoutingModule, 
   	SharedModule.forRoot(),
     UcMgrModule,
-
     // InMemoryWebApiModule.forRoot(InMemoryDataService)
     ],
   declarations: [AppComponent],

@@ -1,14 +1,36 @@
 @import "../../../css/variable";
 :host /deep/ {
-    .popover-content{
+  .popover-content{
     padding:9px 0px !important;
   }
+  .navbar-left{
+    .popover{
+      max-width: 400px;
+      width: 400px;
+    }
+    .popover-content{
+      padding:0 !important;
+      .form-control{
+        border:0 !important;
+      }
+    }
+  }
+  
 }
 
 .mv-navbar{
   background-color: #F5F5F5;
   height: 50px;
   
+  .navbar-left{
+    .uc-plus{
+      cursor:pointer;
+      font-size: 25px;
+      margin-left: 10px;
+      margin-top: 7px;
+      display: inline-block;
+    }
+  }
 
   .navbar-right{
     .avatar{

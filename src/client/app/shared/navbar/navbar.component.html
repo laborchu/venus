@@ -1,7 +1,20 @@
 <div class="mv-navbar">
+	<div class="pull-left navbar-left">
+		<span #newUcView="ngbPopover" placement="right" [ngbPopover]="popNewUc"
+			 (click)="$event.stopPropagation();popNewUcClick()" 
+			(document:click)="newUcView.close()" class="uc-plus" >
+			<i class="fa fa-plus"></i>
+		</span>
+	</div>
 	<div class="pull-right navbar-right">
 		<div class="avatar">
 			<img src="assets/img/avatar.png">
 		</div>
 	</div>
 </div>
+
+<template #popNewUc>
+   <input #newUcInput id="newUcInput" type="text" class="form-control" 
+   		  (click)="$event.stopPropagation()" 
+   		  (keyup.enter)="addUc(newUcInput.value,newUcView)">
+</template>

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router, ActivatedRoute, Params } from '@angular/router';
+import { Router, ActivatedRoute, Params, RoutesRecognized } from '@angular/router';
 
 import { UcModel } from '../../models/index';
 import { UcService } from '../../services/index';
@@ -21,18 +21,41 @@ export class UcGroupComponent implements OnInit{
 	) { }
 	ucArray: Array<UcModel>;
 	selectUc: UcModel;
-
 	ngOnInit():void{
+		this.refresh();
+		this.ucService.getUcChangeSubject().subscribe((uc: UcModel) => {
+			this.refresh();
+		});
+	}
+
+	refresh() {
+		let ucId: string;
+		this.route.firstChild.params.subscribe((params: Params) => {
+			ucId = params["ucId"];
+		})
 		this.route.params
-			.switchMap((params: Params) => this.ucService.getUcs(+params["id"]))
+			.switchMap((params: Params) => {
+				return this.ucService.getUcs(params["groupId"]);
+			})
 			.subscribe((ucs: Array<UcModel>) => {
 				this.ucArray = ucs;
-				this.selectUc = ucs[0];
+				if (ucId){
+					this.ucArray.every((e: UcModel)=>{
+						if(e._id==ucId){
+							this.selectUc = e;
+							return false;
+						}
+						return true;
+					})
+				}else{
+					this.selectUc = null;
+				}
+				ucId = null;
 			});
 	}
 
 	showUc(uc: UcModel) {
 		this.selectUc = uc;
-		this.router.navigate(['/ucgroup', uc.groupId, 'uc', uc.id]);
+		this.router.navigate(['/ucgroups', uc.groupId, 'ucs', uc._id]);
 	}
 }

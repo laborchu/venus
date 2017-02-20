@@ -1,12 +1,14 @@
 @import "../../../css/variable";
 .uc-container{
 	padding:10px;
+}
+.node-container{
 	.node-list{
 		.leve2{
 			margin-left: 15px;
 		}
 		.node{
-			padding: 5px;
+			padding: 10px;
 			cursor: pointer;
 			&:hover{
 				background-color: $select-color;

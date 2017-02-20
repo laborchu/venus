@@ -1,4 +1,4 @@
-<div class="mv-nav clearfix">
+<div class="mv-nav clearfix" [ngClass]="{'top-bottom':topBottom}">
 	<div class="nav-left" [ngClass]="{'can-click':canBack()}" (click)="back()">
 		<span *ngIf="navigate">
 			<i class="fa fa-angle-left"></i>
@@ -8,6 +8,25 @@
 		</span>
 	</div>
 	<div class="nav-right">
-		<span class="right-btn"><i class="fa fa-save"></i></span>
+		<span class="right-btn" 
+			*ngIf="rightBtnConf?.del" 
+			mwlConfirmationPopover
+			[title]="'确认删除'+title+'吗?'"
+			(confirm)="rightBtnConf.del.click()"
+		    placement="left">
+			<i class="fa fa-trash"></i>
+		</span>
+		<span class="right-btn" 
+			*ngIf="rightBtnConf?.save" 
+			(click)="formObj?.form?.valid&&rightBtnConf?.save.click()"
+			[ngClass]="{'unclick':(!formObj?.form?.valid||!formObj?.form?.dirty)}">
+			<i class="fa fa-save"></i>
+		</span>
+
+		<span class="right-btn" 
+			*ngIf="rightBtnConf?.add" 
+			(click)="rightBtnConf?.add.click()">
+			<i class="fa fa-plus-circle"></i>
+		</span>
 	</div>
 </div>

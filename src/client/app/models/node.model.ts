@@ -1,5 +1,8 @@
+import { PathModel } from './path.model';
 export class NodeModel {
-	id: number;
-	ucId: number;
-	name: string;
+	_id: string;
+	ucId: string;
+	title: string;
+	dataStatus: number;
+	paths: Array<PathModel>;
 }

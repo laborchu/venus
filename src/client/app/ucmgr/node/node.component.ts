@@ -24,24 +24,44 @@ export class NodeComponent implements OnInit {
 
 	navagate:Array<any>;
 	nodeModel:NodeModel = new NodeModel();
-	pathList: Array<PathModel>;
-	modelTitle:string = "路径";
+	nodeTitle:string = "新增节点";
+
+	groupId:string = "";
+	ucId: string = "";
+
+	nodeRightBtnConf: Object = {
+		save: {
+			click: () => {
+				this.nodeModel.dataStatus = 1;
+				this.nodeModel.ucId = this.ucId;
+				this.nodeService.saveNode(this.nodeModel).subscribe((result)=>{
+				})
+			}
+		},
+		del: {
+			click: () => {
+			}
+		}
+	};
 
 	ngOnInit() {
-		let groupId = 0;
 		this.route.parent.params.subscribe(params => {
-			groupId = +params["id"];
+			this.groupId = params["groupId"];
 		});
-		this.route.params
-			.switchMap((params: Params) => this.nodeService.getNode(+params["nodeId"]))
-			.switchMap((node: NodeModel) => {
-				this.nodeModel = node;
-				this.navagate = ['/ucgroup', groupId, 'uc', node.ucId];
-				return this.pathService.getPaths(node.id);
-			})
-			.subscribe(pathList => {
-				this.pathList = pathList;
-			});
+		this.route.params.subscribe((params: Params) => {
+			let nodeId = params["nodeId"];
+			this.ucId = params["ucId"];
+			if (nodeId) {
+				this.nodeService.getNodes(nodeId).subscribe((nodes: Array<NodeModel>) => {
+					this.nodeModel = nodes[0];
+					this.nodeTitle = this.nodeModel.title;
+					this.ucId = this.nodeModel.ucId;
+					this.navagate = ["/ucgroups", this.groupId, "ucs", this.ucId];
+				});
+			}else{
+				this.navagate = ["/ucgroups", this.groupId, "ucs", this.ucId];
+			}
+		})
 	}
 
 	openPath(content:any,path: PathModel) {

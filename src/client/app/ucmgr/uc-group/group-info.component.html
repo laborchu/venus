@@ -1,6 +1,8 @@
-<form role="form">
-  <div class="form-group">
-    <input type="text" class="form-control" placeholder="uc组名称">
+<mv-nav [title]="ucMode?.name" [formObj]="form" [rightBtnConf]="rightBtnConf"></mv-nav>
+<form #form="ngForm" class="group-info">
+  <div class="form-group"> 
+     <input type="text" name="name" [(ngModel)]="ucGroup.name" #name="ngModel" 
+     class="form-control" placeholder="uc组名称" required>
+     <div [hidden]="name.valid || name.pristine" class="valid-error">名称不能为空</div>
   </div>
-  <button type="button" class="form-control btn btn-primary">保存</button>
 </form>

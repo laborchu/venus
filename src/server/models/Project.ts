@@ -3,7 +3,8 @@ import BaseModel from "./BaseModel";
 import mongoose = require('mongoose');
 
 const _schema = new mongoose.Schema({
-  name: { type: String }
+  name: { type: String },
+  dataStatus: { type: Number }
 });
 const _model = mongoose.model<mongoose.Document>('project', _schema);
 

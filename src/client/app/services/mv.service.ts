@@ -23,6 +23,30 @@ export abstract class MvService {
 			.catch(this.handleError);
 	}
 
+	patchHttp(url: string, data: Object, extractData = this.extractData): Observable<any> {
+		let headers = new Headers({ 'Content-Type': 'application/json' });
+		let options = new RequestOptions({ headers: headers });
+		return this.http.patch(url, data, options)
+			.map(extractData)
+			.catch(this.handleError);
+	}
+
+	delHttp(url: string, extractData = this.extractData): Observable<any> {
+		let headers = new Headers({ 'Content-Type': 'application/json' });
+		let options = new RequestOptions({ headers: headers });
+		return this.http.delete(url, options)
+			.map(extractData)
+			.catch(this.handleError);
+	}
+
+	putHttp(url: string, data: Object, extractData = this.extractData): Observable<any> {
+		let headers = new Headers({ 'Content-Type': 'application/json' });
+		let options = new RequestOptions({ headers: headers });
+		return this.http.put(url, data, options)
+			.map(extractData)
+			.catch(this.handleError);
+	}
+
 	private extractData(res: Response) {
 		let body = res.json();
 		return body.data || {};

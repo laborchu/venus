@@ -9,7 +9,7 @@
 		  	<tr *ngFor="let uc of ucArray" 
 		  		(click)="showUc(uc)"
 		  		[ngClass]="{select:uc==selectUc}">
-		  		<td>{{uc.name}}</td> 
+		  		<td>{{uc.title}}</td> 
 		  		<td class="director-cell">{{uc.director}}</td>
 		  	</tr>
 		</table>

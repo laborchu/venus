@@ -1,5 +1,5 @@
 export class UcGroupModel{
-	id: number;
-	projectId: number;
+	_id: string;
+	projectId: string;
 	name: string;
 }

@@ -14,13 +14,18 @@ export class NodeService extends MvService {
 		super(http);
 	}
 
-	getNodes(ucId:number): Observable<NodeModel[]> {
-		let url = `api/nodes?ucId=^${ucId}$`;
+	getNodes(nodeId: string): Observable<NodeModel[]> {
+		let url = `api/nodes/${nodeId}`;
 		return this.getHttp(url);
 	}
 
-	getNode(nodeId: number): Observable<NodeModel> {
+	saveNode(nodeModel: NodeModel): Observable<NodeModel> {
+		let url = `/api/ucs/${nodeModel.ucId}/nodes`;
+		return this.putHttp(url, nodeModel);
+	}
+
+	delNode(nodeId: string): Observable<NodeModel> {
 		let url = `api/nodes/${nodeId}`;
-		return this.getHttp(url);
+		return this.delHttp(url);
 	}
 }

@@ -1,60 +1,47 @@
-<mv-nav [title]="ucMode?.name"></mv-nav>
+<mv-nav [title]="ucMode?.name" [formObj]="form" [rightBtnConf]="rightBtnConf"></mv-nav>
 <div class="uc-container">
-    <div class="form-group">
-        <input type="text" class="form-control" placeholder="uc名称" value="{{ucMode?.name}}">
-    </div>
-    <div class="form-group">
-        <input type="text" class="form-control" placeholder="ucKey" value="{{ucMode?.ucKey}}">
-    </div>
-    <div class="form-group">
-        <input type="text" class="form-control" placeholder="sleep" value="{{ucMode?.sleep}}">
-    </div>
-    <div class="form-group">
-        <label class="form-check-inline">
-            <input class="form-check-input" type="checkbox" [(ngModel)]="ucMode.build"> build
-        </label>
-        <label class="form-check-inline">
-            <input class="form-check-input" type="checkbox"[(ngModel)]="ucMode.handler"> handler
-        </label>
-        <label class="form-check-inline">
-            <input class="form-check-input" type="checkbox" [(ngModel)]="ucMode.filter"> filter
-        </label>
-        <label class="form-check-inline">
-            <input class="form-check-input" type="checkbox" [(ngModel)]="ucMode.only"> only
-        </label>
-    </div>
-    <div class="line-split">
-        <div class="line-tile">节点</div>
-        <div class="line"></div>
-    </div>
+    <form #form="ngForm">
+        <div class="form-group">
+            <input type="text" name="title" class="form-control" placeholder="uc名称" #title="ngModel" [(ngModel)]="ucMode.title" required>
+            <p class="valid-error" [hidden]="title.valid || title.pristine">不能为空</p>
+        </div>
+        <div class="form-group">
+            <input type="text" name="ucKey" class="form-control" placeholder="ucKey" #ucKey="ngModel" [(ngModel)]="ucMode.ucKey" required>
+            <p class="valid-error" [hidden]="ucKey.valid || ucKey.pristine">不能为空</p>
+        </div>
+        <div class="form-group">
+            <input type="text" name="sleep" class="form-control" placeholder="sleep" #sleep="ngModel" [(ngModel)]="ucMode.sleep" number>
+            <p class="valid-error" [hidden]="sleep.valid || sleep.pristine">必须数字</p>
+        </div>
+        <div class="form-group">
+            <label class="form-check-inline">
+                <input class="form-check-input" name="build" type="checkbox" [(ngModel)]="ucMode.build"> build
+            </label>
+            <label class="form-check-inline">
+                <input class="form-check-input" name="handler" type="checkbox" [(ngModel)]="ucMode.handler"> handler
+            </label>
+            <label class="form-check-inline">
+                <input class="form-check-input" name="filter" type="checkbox" [(ngModel)]="ucMode.filter"> filter
+            </label>
+            <label class="form-check-inline">
+                <input class="form-check-input" name="only" type="checkbox" [(ngModel)]="ucMode.only"> only
+            </label>
+        </div>
+    </form>
+</div>
+<mv-nav [title]="'节点'" [rightBtnConf]="nodeRightBtnConf" [topBottom]="true"></mv-nav>
+<div class="node-container">
     <div class="node-list">
-        <div class="node leve1" *ngFor="let node of nodeList" (click)="showNode(node)">
-            {{node.name}}
-            <div class="node-toobar">
-                <i class="fa fa-trash"></i>
-                <i class="fa fa-plus"></i>
+        <div class="node leve1" *ngFor="let node of ucMode?.nodes" (click)="showNode(node)">
+            {{node.title}}
+            <div class="node-toobar" (click)="$event.stopPropagation()">
+                <i class="fa fa-trash" 
+                    mwlConfirmationPopover 
+                    [title]="'确认删除吗?'"
+                    (confirm)="delNode(node)"
+                    (click)="$event.stopPropagation()"
+                    placement="left"></i>
             </div>
         </div>
-        <!-- <div class="node leve1" (click)="showNode()">
-        	验证输入没有的用户
-        	<div class="node-toobar">
-        		<i class="fa fa-trash"></i>
-        		<i class="fa fa-plus"></i>
-        	</div>
-        </div>
-        <div class="node leve2">
-        	验证输入没有的用户
-        	<div class="node-toobar">
-        		<i class="fa fa-trash"></i>
-        		<i class="fa fa-plus"></i>
-        	</div>
-        </div>
-        <div class="node leve1">
-        	验证输入没有的用户
-        	<div class="node-toobar">
-        		<i class="fa fa-trash"></i>
-        		<i class="fa fa-plus"></i>
-        	</div>
-        </div> -->
     </div>
 </div>
