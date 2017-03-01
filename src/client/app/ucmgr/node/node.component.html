@@ -3,7 +3,7 @@
         <button type="button" class="close" (click)="d('Cross click')">
             <span>&times;</span>
         </button>
-        <h4 class="modal-title">{{modelTitle}}</h4>
+        <h4 class="modal-title">{{pathTitle}}</h4>
     </div>
     <div class="modal-body clearfix">
         <div class="body-left">
@@ -11,24 +11,32 @@
                 <input type="text" class="form-control" placeholder="title">
             </div>
             <div class="form-group">
-                <label class="form-check-inline">
-                    <input class="form-check-input" type="radio" value="option1"> click
-                </label>
-                <label class="form-check-inline">
-                    <input class="form-check-input" type="radio" value="option2"> get
-                </label>
-                <label class="form-check-inline">
-                    <input class="form-check-input" type="radio" value="option3"> input
-                </label>
-                <label class="form-check-inline">
-                    <input class="form-check-input" type="radio" value="option3"> keys
+                <label class="form-check-inline" *ngFor="let type of pathTypes">
+                    <input class="form-check-input" name="type" type="radio" value="{{type}}" (click)="typeChange(type)"> {{type}}
                 </label>
             </div>
-            <div class="form-group">
+            <div class="form-group" *ngIf="pathFieldSet.has('selector')">
+                <label class="form-check-inline" *ngFor="let selector of selectors">
+                    <input class="form-check-input" name="selector" type="radio" value="{{selector}}"> {{selector}}
+                </label>
+            </div>
+            <div class="form-group" *ngIf="pathFieldSet.has('element')">
                 <input type="text" class="form-control" placeholder="element">
             </div>
-            <div class="form-group">
+            <div class="form-group" *ngIf="pathFieldSet.has('value')">
                 <input type="text" class="form-control" placeholder="value">
+            </div>
+            <div class="form-group" *ngIf="pathFieldSet.has('index')">
+                <input type="text" class="form-control" placeholder="index">
+            </div>
+            <div class="form-group" *ngIf="pathFieldSet.has('mode')">
+                <input type="text" class="form-control" placeholder="mode">
+            </div>
+            <div class="form-group" *ngIf="pathFieldSet.has('filter')">
+                <input type="text" class="form-control" placeholder="filter">
+            </div>
+            <div class="form-group" *ngIf="pathFieldSet.has('limit')">
+                <input type="text" class="form-control" placeholder="limit">
             </div>
         </div>
         <div class="body-line"></div>
@@ -92,10 +100,10 @@
         </div>
     </form>
 </div>
-<mv-nav [title]="'路径'" [topBottom]="true"></mv-nav>
+<mv-nav [title]="'路径'" [topBottom]="true" [rightBtnConf]="pathRightBtnConf"></mv-nav>
 <div class="step-container">
     <div class="step-list">
-        <div *ngFor="let path of nodeModel.paths" class="step" (click)="openPath(content,path)">
+        <div *ngFor="let path of nodeModel.paths" class="step" (click)="openPath(path)">
             {{path.title}}
             <div class="step-toobar">
                 <i class="fa fa-trash"></i>

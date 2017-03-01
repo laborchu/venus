@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
-import {NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
+import { NgForm } from '@angular/forms';
 
-import { NodeModel,PathModel } from '../../models/index';
+import { NodeModel, PathModel, PathHelper } from '../../models/index';
 import { PathService, NodeService } from '../../services/index';
 import 'rxjs/add/operator/switchMap';
 
@@ -22,10 +23,17 @@ export class NodeComponent implements OnInit {
 	) {}
 
 
+	@ViewChild('form') public form: NgForm;
+	@ViewChild('content') public pathContent: any;
 	navagate:Array<any>;
 	nodeModel:NodeModel = new NodeModel();
 	nodeTitle:string = "新增节点";
+	pathTitle:string = "新增path";
 
+	pathModel: PathModel = new PathModel();
+	pathFieldSet: Set<String> = new Set();
+	pathTypes: Array<String> = PathHelper.getTypes();
+	selectors: Array<String> = PathHelper.getSelector();
 	groupId:string = "";
 	ucId: string = "";
 
@@ -34,12 +42,32 @@ export class NodeComponent implements OnInit {
 			click: () => {
 				this.nodeModel.dataStatus = 1;
 				this.nodeModel.ucId = this.ucId;
-				this.nodeService.saveNode(this.nodeModel).subscribe((result)=>{
+				this.nodeService.saveNode(this.nodeModel).subscribe((result) => {
+					if (this.nodeModel._id) {
+						this.form.form.markAsPristine();
+					}else{
+						this.router.navigate(["/ucgroups", this.groupId, "ucs", this.ucId]);
+					}
 				})
 			}
 		},
 		del: {
 			click: () => {
+				this.nodeService.delNode(this.nodeModel._id).subscribe(() => {
+					this.router.navigate(["/ucgroups", this.groupId, "ucs", this.ucId]);
+				});
+			}
+		}
+	};
+
+	pathRightBtnConf: Object = {
+		add: {
+			click: () => {
+				this.modalService.open(this.pathContent, { backdrop: "static" }).result.then((result) => {
+					// debugger
+				}, (reason) => {
+					// debugger
+				});
 			}
 		}
 	};
@@ -58,14 +86,19 @@ export class NodeComponent implements OnInit {
 					this.ucId = this.nodeModel.ucId;
 					this.navagate = ["/ucgroups", this.groupId, "ucs", this.ucId];
 				});
-			}else{
+			} else {
 				this.navagate = ["/ucgroups", this.groupId, "ucs", this.ucId];
 			}
-		})
+		});
+		// alert(JSON.stringify(Object.getOwnPropertyNames(this.pathModel)));
 	}
 
-	openPath(content:any,path: PathModel) {
-		this.modalService.open(content).result.then((result) => {
+	typeChange(type:string){
+		[this.pathModel, this.pathFieldSet] = PathHelper.buildModel(type, this.pathModel);
+	}
+
+	openPath(path: PathModel) {
+		this.modalService.open(this.pathContent).result.then((result) => {
 	    	// debugger
 	    }, (reason) => {
 	    	// debugger
