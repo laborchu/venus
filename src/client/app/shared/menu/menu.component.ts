@@ -16,14 +16,14 @@ import 'rxjs/add/operator/concatMap';
   templateUrl: 'menu.component.html',
   styleUrls: ['menu.component.css'],
 })
-export class MenuComponent implements OnInit{ 
+export class MenuComponent implements OnInit{
 	constructor(
 		private modalService: NgbModal,
 		private router:Router,
 		private projectService: ProjectService,
 		private ucGroupService: UcGroupService
 	){}
-	
+
 	projects: Array<ProjectModel>;
 	selectProject: ProjectModel;
 	newProject: ProjectModel = new ProjectModel();
@@ -31,7 +31,7 @@ export class MenuComponent implements OnInit{
 	groupArray: Array<UcGroupModel>;
 	selectGroup: UcGroupModel;
 	newUcGroup: UcGroupModel = new UcGroupModel();
-	
+
 	ngOnInit(): void {
 		let projectObservable = this.projectService.getProjects();
 		let mapProjectUcGroup = projectObservable.concatMap(projects => {

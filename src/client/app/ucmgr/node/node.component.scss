@@ -1,15 +1,25 @@
 @import "../../../css/variable";
 :host /deep/ {
     .modal-dialog {
-        max-width: 700px;
         .modal-body {
             padding: 0;
+            .right-btn{
+                text-align: right;
+                display:block
+            }
         }
     }
 }
-
+.form-inline .form-control{
+    width:100%
+}
 .node-container{
     padding: 10px;
+}
+.radio{
+    label{
+        margin-right:5px
+    }
 }
 
 .step-container {
@@ -49,8 +59,6 @@
         float: left;
         padding: 10px;
         height: 100%;
-	    position: absolute;
-	    right: 0;
         .checker-list {
             .checker {
                 padding: 5px;
@@ -67,11 +75,9 @@
             }
         }
         .checker-form{
-        	position: absolute;
-		    bottom: 0px;
 		    width: 100%;
 		    right: 0;
-	        padding: 0 10px;
+	        padding: 10px;
         	border-top:1px solid $split-color;
         	.row{
         		margin: 0;

@@ -3,7 +3,7 @@ import { Router, ActivatedRoute, Params } from '@angular/router';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { NgForm } from '@angular/forms';
 
-import { NodeModel, PathModel, PathHelper } from '../../models/index';
+import { NodeModel, PathModel, PathHelper,CheckHelper,CheckerModel} from '../../models/index';
 import { PathService, NodeService } from '../../services/index';
 import 'rxjs/add/operator/switchMap';
 
@@ -31,9 +31,12 @@ export class NodeComponent implements OnInit {
 	pathTitle:string = "新增path";
 
 	pathModel: PathModel = new PathModel();
+  checkerModel: CheckerModel = new CheckerModel();
 	pathFieldSet: Set<String> = new Set();
+  checkFieldSet: Set<String> = new Set();
 	pathTypes: Array<String> = PathHelper.getTypes();
 	selectors: Array<String> = PathHelper.getSelector();
+  checks: Array<String> = CheckHelper.getTypes();
 	groupId:string = "";
 	ucId: string = "";
 
@@ -63,7 +66,8 @@ export class NodeComponent implements OnInit {
 	pathRightBtnConf: Object = {
 		add: {
 			click: () => {
-				this.modalService.open(this.pathContent, { backdrop: "static" }).result.then((result) => {
+
+				this.modalService.open(this.pathContent, { backdrop: "static",size:"lg"}).result.then((result) => {
 					// debugger
 				}, (reason) => {
 					// debugger
@@ -97,7 +101,12 @@ export class NodeComponent implements OnInit {
 		[this.pathModel, this.pathFieldSet] = PathHelper.buildModel(type, this.pathModel);
 	}
 
+  checkChange(type:string){
+		[this.checkerModel, this.checkFieldSet] = CheckHelper.buildModel(type, this.checkerModel);
+	}
+
 	openPath(path: PathModel) {
+    this.pathModel = path;
 		this.modalService.open(this.pathContent).result.then((result) => {
 	    	// debugger
 	    }, (reason) => {

@@ -14,17 +14,17 @@
             <p class="valid-error" [hidden]="sleep.valid || sleep.pristine">必须数字</p>
         </div>
         <div class="form-group">
-            <label class="form-check-inline">
-                <input class="form-check-input" name="build" type="checkbox" [(ngModel)]="ucMode.build"> build
+            <label>
+                <input  name="build" type="checkbox" [(ngModel)]="ucMode.build"> build
             </label>
-            <label class="form-check-inline">
-                <input class="form-check-input" name="handler" type="checkbox" [(ngModel)]="ucMode.handler"> handler
+            <label >
+                <input  name="handler" type="checkbox" [(ngModel)]="ucMode.handler"> handler
             </label>
-            <label class="form-check-inline">
-                <input class="form-check-input" name="filter" type="checkbox" [(ngModel)]="ucMode.filter"> filter
+            <label>
+                <input name="filter" type="checkbox" [(ngModel)]="ucMode.filter"> filter
             </label>
-            <label class="form-check-inline">
-                <input class="form-check-input" name="only" type="checkbox" [(ngModel)]="ucMode.only"> only
+            <label >
+                <input name="only" type="checkbox" [(ngModel)]="ucMode.only"> only
             </label>
         </div>
     </form>

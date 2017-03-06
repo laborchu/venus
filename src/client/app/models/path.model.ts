@@ -1,3 +1,4 @@
+import { CheckerModel } from './checker.model.ts';
 enum Selector {
 	xpath,
 	name,
@@ -18,11 +19,11 @@ export enum PathType {
 export namespace PathHelper {
 	export function getTypes(): Array < string > {
 		var keys = Object.keys(PathType);
-		return keys.slice(keys.length / 2, keys.length - 1);
+		return keys.slice(keys.length / 2, keys.length);
 	}
 	export function getSelector(): Array<string> {
 		var keys = Object.keys(Selector);
-		return keys.slice(keys.length / 2, keys.length - 1);
+		return keys.slice(keys.length / 2, keys.length);
 	}
 	export function getField(model: PathModel): Set<String> {
 		let propertyNames:Array<String> = Object.getOwnPropertyNames(model);
@@ -71,9 +72,11 @@ export class PathModel {
 	_id: string = void 0;
 	title: string = void 0;
 	nodeId: string = void 0;
+  sleep: string = void 0;
 	canNull: boolean = false;
 	cacheElement: boolean = false;
 	cacheDesc: boolean = false;
+  checker:Array<CheckerModel>
 }
 
 export class ClickPathModel extends PathModel{

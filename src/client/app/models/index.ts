@@ -3,3 +3,4 @@ export * from './uc-group.model';
 export * from './uc.model';
 export * from './node.model';
 export * from './path.model';
+export * from './checker.model';

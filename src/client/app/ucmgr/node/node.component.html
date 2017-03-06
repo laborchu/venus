@@ -8,35 +8,39 @@
     <div class="modal-body clearfix">
         <div class="body-left">
             <div class="form-group">
-                <input type="text" class="form-control" placeholder="title">
+                <input type="text"  [(ngModel)]="pathModel.title" class="form-control" placeholder="title">
             </div>
-            <div class="form-group">
-                <label class="form-check-inline" *ngFor="let type of pathTypes">
-                    <input class="form-check-input" name="type" type="radio" value="{{type}}" (click)="typeChange(type)"> {{type}}
+            <div class="form-group radio">
+                <label *ngFor="let type of pathTypes">
+                    <input name="type" type="radio"  value="{{type}}" (click)="typeChange(type)"> {{type}}
                 </label>
             </div>
-            <div class="form-group" *ngIf="pathFieldSet.has('selector')">
-                <label class="form-check-inline" *ngFor="let selector of selectors">
-                    <input class="form-check-input" name="selector" type="radio" value="{{selector}}"> {{selector}}
+            <div class="form-group radio" *ngIf="pathFieldSet.has('selector')">
+                <label  *ngFor="let selector of selectors">
+                    <input  name="selector"  [(ngModel)]="pathModel.selector"  type="radio" value="{{selector}}"> {{selector}}
                 </label>
             </div>
-            <div class="form-group" *ngIf="pathFieldSet.has('element')">
+            <div class="form-group" [(ngModel)]="pathModel.element" *ngIf="pathFieldSet.has('element')">
                 <input type="text" class="form-control" placeholder="element">
             </div>
-            <div class="form-group" *ngIf="pathFieldSet.has('value')">
+            <div class="form-group" [(ngModel)]="pathModel.value" *ngIf="pathFieldSet.has('value')">
                 <input type="text" class="form-control" placeholder="value">
             </div>
-            <div class="form-group" *ngIf="pathFieldSet.has('index')">
+            <div class="form-group" [(ngModel)]="pathModel.index" *ngIf="pathFieldSet.has('index')">
                 <input type="text" class="form-control" placeholder="index">
             </div>
-            <div class="form-group" *ngIf="pathFieldSet.has('mode')">
+            <div class="form-group" [(ngModel)]="pathModel.mode" *ngIf="pathFieldSet.has('mode')">
                 <input type="text" class="form-control" placeholder="mode">
             </div>
-            <div class="form-group" *ngIf="pathFieldSet.has('filter')">
+            <div class="form-group" [(ngModel)]="pathModel.filter" *ngIf="pathFieldSet.has('filter')">
                 <input type="text" class="form-control" placeholder="filter">
             </div>
-            <div class="form-group" *ngIf="pathFieldSet.has('limit')">
+            <div class="form-group" [(ngModel)]="pathModel.limit" *ngIf="pathFieldSet.has('limit')">
                 <input type="text" class="form-control" placeholder="limit">
+            </div>
+            <div class="form-group" >
+              <input type="text" [(ngModel)]="pathModel.sleep" number  class="form-control" placeholder="sleep">
+              <p class="valid-error" [hidden]="sleep.valid || sleep.pristine">必须数字</p>
             </div>
         </div>
         <div class="body-line"></div>
@@ -52,32 +56,40 @@
                         <i class="fa fa-trash"></i>
                     </div>
                 </div>
-                <div class="checker">
-                    验证入没有的用户
-                    <div class="checker-toobar">
-                        <i class="fa fa-trash"></i>
-                    </div>
-                </div>
             </div>
             <div class="checker-form">
+                <div class="form-group radio">
+                    <label *ngFor="let type of checks">
+                      <input name="type" type="radio"  value="{{type}}" (click)="checkChange(type)"> {{type}}
+                    </label>
+                </div>
+                <div class="form-inline form-group"  *ngIf="checkFieldSet.has('selector')">
+                  <input type="text" [(ngModel)]="checkerModel.selector" class="form-control" placeholder="selector">
+                </div>
+                <div class="form-inline form-group" *ngIf="checkFieldSet.has('element')">
+                    <input type="text" [(ngModel)]="checkerModel.element"  class="form-control" placeholder="element">
+                </div>
+                <div class="form-inline form-group" *ngIf="checkFieldSet.has('op')">
+                  <input type="text" [(ngModel)]="checkerModel.op"  class="form-control" placeholder="op">
+                </div>
+                <div class="form-inline form-group" *ngIf="checkFieldSet.has('value')">
+                      <input type="text" [(ngModel)]="checkerModel.value"  class="form-control" placeholder="value">
+                </div>
+                <div class="form-inline form-group" *ngIf="checkFieldSet.has('cmdCode')">
+                      <input type="text" [(ngModel)]="checkerModel.cmdCode"  class="form-control" placeholder="cmdCode">
+                </div>
+                <div class="form-inline form-group" *ngIf="checkFieldSet.has('eexist')">
+                      <input type="text" [(ngModel)]="checkerModel.eexist"  class="form-control" placeholder="eexist">
+                </div>
+                <div class="form-inline form-group" *ngIf="checkFieldSet.has('paths')">
+                      <input type="text" [(ngModel)]="checkerModel.paths"  class="form-control" placeholder="paths">
+                </div>
                 <div class="form-group">
-                    <label class="form-check-inline">
-                        <input class="form-check-input" type="radio" value="option1"> eq
-                    </label>
-                    <label class="form-check-inline">
-                        <input class="form-check-input" type="radio" value="option2"> eqs
-                    </label>
-                    <label class="form-check-inline">
-                        <input class="form-check-input" type="radio" value="option3"> length
-                    </label>
-                    <label class="form-check-inline">
-                        <input class="form-check-input" type="radio" value="option3"> prop
-                    </label>
+                    <span class="right-btn">
+                        <i class="fa fa-save"></i>
+                    </span>
                 </div>
-                <div class="form-inline form-group">
-                    <input type="text" class="form-control" placeholder="element">
-                    <input type="text" class="form-control" placeholder="value">
-                </div>
+
             </div>
         </div>
     </div>
@@ -89,12 +101,12 @@
 <div class="node-container">
     <form #form="ngForm">
         <div class="form-group">
-            <input type="text" name="title" class="form-control" placeholder="title" 
+            <input type="text" name="title" class="form-control" placeholder="title"
             #title="ngModel" [(ngModel)]="nodeModel.title" required>
             <p class="valid-error" [hidden]="title.valid || title.pristine">不能为空</p>
         </div>
         <div class="form-group">
-            <input type="text" name="sleep" class="form-control" placeholder="sleep" 
+            <input type="text" name="sleep" class="form-control" placeholder="sleep"
             #sleep="ngModel" [(ngModel)]="nodeModel.sleep" number>
             <p class="valid-error" [hidden]="sleep.valid || sleep.pristine">必须数字</p>
         </div>
