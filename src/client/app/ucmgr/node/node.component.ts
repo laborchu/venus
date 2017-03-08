@@ -3,15 +3,15 @@ import { Router, ActivatedRoute, Params } from '@angular/router';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { NgForm } from '@angular/forms';
 
-import { NodeModel, PathModel, PathHelper,CheckHelper,CheckerModel} from '../../models/index';
+import { NodeModel, PathModel, PathHelper, CheckHelper, CheckerModel } from '../../models/index';
 import { PathService, NodeService } from '../../services/index';
 import 'rxjs/add/operator/switchMap';
 
 
 @Component({
-	moduleId:module.id,
-	templateUrl:'node.component.html',
-	styleUrls:['node.component.css']
+	moduleId: module.id,
+	templateUrl: 'node.component.html',
+	styleUrls: ['node.component.css']
 })
 export class NodeComponent implements OnInit {
 	constructor(
@@ -20,24 +20,24 @@ export class NodeComponent implements OnInit {
 		private route: ActivatedRoute,
 		private nodeService: NodeService,
 		private pathService: PathService
-	) {}
+	) { }
 
 
 	@ViewChild('form') public form: NgForm;
 	@ViewChild('content') public pathContent: any;
-	navagate:Array<any>;
-	nodeModel:NodeModel = new NodeModel();
-	nodeTitle:string = "新增节点";
-	pathTitle:string = "新增path";
+	navagate: Array<any>;
+	nodeModel: NodeModel = new NodeModel();
+	nodeTitle: string = "新增节点";
+	pathTitle: string = "新增path";
 
 	pathModel: PathModel = new PathModel();
-  checkerModel: CheckerModel = new CheckerModel();
+	checkerModel: CheckerModel = new CheckerModel();
 	pathFieldSet: Set<String> = new Set();
-  checkFieldSet: Set<String> = new Set();
+	checkFieldSet: Set<String> = new Set();
 	pathTypes: Array<String> = PathHelper.getTypes();
 	selectors: Array<String> = PathHelper.getSelector();
-  checks: Array<String> = CheckHelper.getTypes();
-	groupId:string = "";
+	checks: Array<String> = CheckHelper.getTypes();
+	groupId: string = "";
 	ucId: string = "";
 
 	nodeRightBtnConf: Object = {
@@ -48,7 +48,7 @@ export class NodeComponent implements OnInit {
 				this.nodeService.saveNode(this.nodeModel).subscribe((result) => {
 					if (this.nodeModel._id) {
 						this.form.form.markAsPristine();
-					}else{
+					} else {
 						this.router.navigate(["/ucgroups", this.groupId, "ucs", this.ucId]);
 					}
 				})
@@ -67,7 +67,7 @@ export class NodeComponent implements OnInit {
 		add: {
 			click: () => {
 
-				this.modalService.open(this.pathContent, { backdrop: "static",size:"lg"}).result.then((result) => {
+				this.modalService.open(this.pathContent, { backdrop: "static", size: "lg" }).result.then((result) => {
 					// debugger
 				}, (reason) => {
 					// debugger
@@ -97,21 +97,21 @@ export class NodeComponent implements OnInit {
 		// alert(JSON.stringify(Object.getOwnPropertyNames(this.pathModel)));
 	}
 
-	typeChange(type:string){
+	typeChange(type: string) {
 		[this.pathModel, this.pathFieldSet] = PathHelper.buildModel(type, this.pathModel);
 	}
 
-  checkChange(type:string){
+	checkChange(type: string) {
 		[this.checkerModel, this.checkFieldSet] = CheckHelper.buildModel(type, this.checkerModel);
 	}
 
 	openPath(path: PathModel) {
-    this.pathModel = path;
+		this.pathModel = path;
 		this.modalService.open(this.pathContent).result.then((result) => {
-	    	// debugger
-	    }, (reason) => {
-	    	// debugger
-	    });
+			// debugger
+		}, (reason) => {
+			// debugger
+		});
 	}
 
 }

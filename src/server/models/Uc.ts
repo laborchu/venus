@@ -11,6 +11,7 @@ const _schema = new mongoose.Schema({
   handler: { type: Boolean },
   filter: { type: Boolean },
   only: { type: Boolean },
+  code: { type: String },
   dataStatus: { type: Number },
   nodes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'nodes' }]
 });

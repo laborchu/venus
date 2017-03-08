@@ -45,6 +45,16 @@ export class UcComponent implements OnInit {
 						this.router.navigate(['/ucgroups', this.ucMode.groupId])
 					});
 			}
+		},
+		code:{
+			finish:(text:string)=>{
+				this.ucMode.code = text;
+				this.ucService.updateUc(this.ucMode)
+					.subscribe(() => {
+						this.ucService.setUcChangeSubject(this.ucMode);
+						this.form.form.markAsPristine();
+					});
+			}
 		}
 	};
 

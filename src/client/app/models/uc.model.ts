@@ -10,5 +10,6 @@ export class UcModel {
 	filter: boolean;
 	only: boolean;
 	dataStatus: number;
+	code: string;
 	nodes: Array<NodeModel>;
 }

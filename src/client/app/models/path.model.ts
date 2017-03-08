@@ -1,4 +1,5 @@
-import { CheckerModel } from './checker.model.ts';
+import { CheckerModel } from './checker.model';
+
 enum Selector {
 	xpath,
 	name,

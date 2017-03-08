@@ -8,18 +8,15 @@
     <div class="modal-body clearfix">
         <form #newUcGroupForm="ngForm">
             <div class="form-group">
-                <input type="text" class="form-control" placeholder="名称" required 
-                [(ngModel)]="newUcGroup.name" name="name"
-                #name="ngModel">
+                <input type="text" class="form-control" placeholder="名称" required [(ngModel)]="newUcGroup.name" name="name" #name="ngModel">
                 <div [hidden]="name.valid || name.pristine" class="valid-error">名称不能为空</div>
             </div>
         </form>
-    </div> 
+    </div>
     <div class="modal-footer">
         <button type="button" [disabled]="!newUcGroupForm.form.valid" class="btn btn-success" (click)="c()">保存</button>
     </div>
 </template>
-
 <template #projectAddContent ngbModalContainer let-c="close" let-d="dismiss">
     <div class="modal-header">
         <button type="button" class="close" (click)="d()">
@@ -30,9 +27,7 @@
     <div class="modal-body clearfix">
         <form #newProjectForm="ngForm">
             <div class="form-group">
-                <input type="text" class="form-control" placeholder="名称" required 
-                [(ngModel)]="newProject.name" name="name"
-                #name="ngModel">
+                <input type="text" class="form-control" placeholder="名称" required [(ngModel)]="newProject.name" name="name" #name="ngModel">
                 <div [hidden]="name.valid || name.pristine" class="valid-error">名称不能为空</div>
             </div>
         </form>
@@ -41,7 +36,25 @@
         <button type="button" [disabled]="!newProjectForm.form.valid" class="btn btn-success" (click)="c()">保存</button>
     </div>
 </template>
-
+<template #projectJsAddContent ngbModalContainer let-c="close" let-d="dismiss">
+    <div class="modal-header">
+        <button type="button" class="close" (click)="d()">
+            <span>&times;</span>
+        </button>
+        <h4 class="modal-title">新增ProjectJs</h4>
+    </div>
+    <div class="modal-body clearfix">
+        <form #newProjectJsForm="ngForm">
+            <div class="form-group">
+                <input type="text" class="form-control" placeholder="jsCode" required [(ngModel)]="newProjectJs.jsCode" name="jsCode" #jsCode="ngModel">
+                <div [hidden]="jsCode.valid || jsCode.pristine" class="valid-error">jsCode不能为空</div>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button type="button" [disabled]="!newProjectJsForm.form.valid" class="btn btn-success" (click)="c()">保存</button>
+    </div>
+</template>
 <div class="menu">
     <header class="menu-header">
         <div class="pull-left logo">
@@ -56,31 +69,30 @@
     </header>
     <div class="menu-group">
         <div class="group-title">
-        <i class="fa fa-book"></i> UC组列表
+            <i class="fa fa-book"></i> UC组列表
         </div>
-        <a class="group-item" 
-            *ngFor="let group of groupArray" 
-            (click)="doSelectGroup(group)"
-            [ngClass]="{select:group==selectGroup}"
-            routerLink="/ucgroup/{{group.id}}">
+        <a class="group-item" *ngFor="let group of groupArray" (click)="doSelectGroup(group)" [ngClass]="{select:group==selectGroup}" routerLink="/ucgroup/{{group.id}}">
             {{group.name}}
             <span class="pull-right item-num">4</span>
+        </a>
+    </div>
+    <div class="menu-group">
+        <div class="group-title">
+            <i class="fa fa-book"></i> 全局脚本
+        </div>
+        <a class="group-item" *ngFor="let projectJs of projectJsArray" (click)="doSelectJs(projectJs)" [ngClass]="{select:projectJs==selectJs}" routerLink="/projects/{{selectProject?._id}}/projectjs/{{projectJs._id}}">
+            {{projectJs.jsCode}}
         </a>
     </div>
     <footer class="menu-footer">
         <i class="fa fa-plus-circle" #plusP="ngbPopover" placement="top" [ngbPopover]="popPlus"></i>
     </footer>
 </div>
-
-
 <template #popProject>
-    <div class="pop-item" 
-    (click)="projectP.close();doSelectProject(project)"
-    [class.pop-select]="project==selectProject" 
-    *ngFor="let project of projects">{{project.name}}</div>
+    <div class="pop-item" (click)="projectP.close();doSelectProject(project)" [class.pop-select]="project==selectProject" *ngFor="let project of projects">{{project.name}}</div>
 </template>
-
 <template #popPlus>
     <div class="pop-item" (click)="plusP.close();openUcGroup(ucGroupAddContent)">新增UC组</div>
     <div class="pop-item" (click)="plusP.close();openNewProject(projectAddContent)">新增Project</div>
+    <div class="pop-item" (click)="plusP.close();openNewProjectJs(projectJsAddContent)">新增ProjectJs</div>
 </template>

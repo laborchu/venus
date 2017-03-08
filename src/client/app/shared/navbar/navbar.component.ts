@@ -20,6 +20,12 @@ export class NavbarComponent implements OnInit {
 		private ucService: UcService
 	) { }
 	groupId: string;
+
+	public options = {
+		position: ["bottom", "right"],
+		timeOut: 3000
+	}
+
 	ngOnInit(): void {
 		this.router.events.subscribe(val => {
 			if (val instanceof RoutesRecognized) {
