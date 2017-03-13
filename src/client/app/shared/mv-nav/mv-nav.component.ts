@@ -1,4 +1,4 @@
-import {Component,Input} from '@angular/core';
+import { Component, Input, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 
@@ -19,6 +19,9 @@ export class MvNavComponent{
 	@Input() rightBtnConf: any;
 	@Input() topBottom: boolean = false;
 	@Input() code: string = "";
+
+	@ViewChild('editor') editor:any;
+
 	canBack(){
 		return this.navigate!=null;
 	}
@@ -26,6 +29,9 @@ export class MvNavComponent{
 		if(this.canBack()){
 			this.router.navigate(this.navigate);
 		}
+	}
+	onChange(code:string) {
+		this.code = code;
 	}
 	codeClick(content:any) {
 		this.modalService.open(content, { backdrop: "static" }).result.then(() => {

@@ -11,16 +11,23 @@ import { MvService } from './mv.service';
 
 @Injectable()
 export class UcGroupService extends MvService {
-	private groupChangeSubject: Subject<UcGroupModel> = new Subject<UcGroupModel>();
+	private selectGroupSubject: Subject<UcGroupModel> = new Subject<UcGroupModel>();
+	private updateGroupSubject: Subject<UcGroupModel> = new Subject<UcGroupModel>();
 	constructor(protected http: Http) {
 		super(http);
 	}
 
-	setGroupChangeSubject(ucModel: UcGroupModel): void {
-		this.groupChangeSubject.next(ucModel);
+	setSelectGroupSubject(ucModel: UcGroupModel): void {
+		this.selectGroupSubject.next(ucModel);
 	}
-	getGroupChangeSubject(): Observable<UcGroupModel> {
-		return this.groupChangeSubject.asObservable();
+	getSelectGroupSubject(): Observable<UcGroupModel> {
+		return this.selectGroupSubject.asObservable();
+	}
+	setUpdateGroupSubject(ucModel: UcGroupModel): void {
+		this.updateGroupSubject.next(ucModel);
+	}
+	getUpdateGroupSubject(): Observable<UcGroupModel> {
+		return this.updateGroupSubject.asObservable();
 	}
 
 	getUcGroup(groupdId: string): Observable<UcGroupModel[]> {

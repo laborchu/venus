@@ -2,8 +2,12 @@
 	<div class="pull-left navbar-left">
 		<span #newUcView="ngbPopover" placement="right" [ngbPopover]="popNewUc"
 			 (click)="$event.stopPropagation();popNewUcClick()" 
-			(document:click)="newUcView.close()" class="uc-plus" >
-			<i class="fa fa-plus"></i>
+			(document:click)="newUcView.close()" class="navbar-item" >
+			<i class="fa fa-plus-circle"></i>
+		</span>
+
+		<span class="navbar-item" title="产生文件" (click)="generate()">
+			<i class="fa fa-life-bouy"></i>
 		</span>
 	</div>
 	<div class="pull-right navbar-right">

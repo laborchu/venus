@@ -19,6 +19,19 @@ class NodeController extends BaseController {
 	}
 
 	@router({
+		method: 'get',
+		path: '/api/ucs/:ucId/nodes'
+	})
+	async getUcNodes(req: e.Request, res: e.Response) {
+		if (req.params.ucId) {
+			let result = await Node.find({ ucId: req.params.ucId });
+			res.send(super.wrapperRes(result));
+		} else {
+			res.send(super.wrapperRes([]));
+		}
+	}
+
+	@router({
 		method: 'put',
 		path: '/api/ucs/:ucId/nodes'
 	})

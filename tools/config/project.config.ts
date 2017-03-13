@@ -30,12 +30,12 @@ export class ProjectConfig extends SeedConfig {
     this.SYSTEM_CONFIG_DEV.paths['base64-js'] = 'node_modules/base64-js/index.js';
     this.SYSTEM_CONFIG_DEV.paths['ieee754'] = 'node_modules/ieee754/index.js';
     this.SYSTEM_CONFIG_DEV.paths['ace/theme/chrome'] = 'node_modules/ace-builds/src-min/theme-chrome.js';
-
+   
     this.SYSTEM_BUILDER_CONFIG.packages['@ng-bootstrap/ng-bootstrap'] = {
       main: 'index.js',
       defaultExtension: 'js'
     };
-  this.SYSTEM_BUILDER_CONFIG.paths['ng2-validation'] = 'node_modules/ng2-validation/bundles/ng2-validation.umd.js';
+    this.SYSTEM_BUILDER_CONFIG.paths['ng2-validation'] = 'node_modules/ng2-validation/bundles/ng2-validation.umd.js';
 
 
     this.SYSTEM_BUILDER_CONFIG.packageConfigPaths = [
@@ -78,4 +78,8 @@ export class ProjectConfig extends SeedConfig {
     'node_modules/font-awesome/fonts/**'
   ];
 
+  MODELS_SRC = [
+    `${this.APP_DEST}/app/models/**`
+  ];
+  MODELS_DEST = `${this.DIST_DIR}/${this.APP_SERVER}/client/app/models`;
 }

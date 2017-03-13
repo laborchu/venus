@@ -54,8 +54,8 @@ export namespace CheckHelper {
     if (newMode){
       let propertyNames: Array<String> = Object.getOwnPropertyNames(oldModel);
       propertyNames.forEach((key:string)=>{
-        if (key != "type") {
-          newMode[key + ""] = oldModel[key + ""];
+        if (oldModel[key]) {
+          newMode[key] = oldModel[key];
         }
       })
     }
@@ -65,29 +65,39 @@ export namespace CheckHelper {
 
 export class CheckerModel {
   _id: string;
+  type: string = null;
+  ucId: string = null;
+  nodeId: string = null;
+  pathId: string = null;
+  dataStatus: number = 1;
 }
 export class EqCheckerModel extends CheckerModel {
+  type: string = CheckType[CheckType.eq];
   selector:string = void 0;
   element:string = void 0;
   value:string = void 0;
 }
 
 export class PropCheckerModel extends CheckerModel {
+  type: string = CheckType[CheckType.prop];
   key:string = void 0;
   op:string = void 0;
   value:string = void 0;
 }
 
 export class CmdCheckerModel extends CheckerModel {
+  type: string = CheckType[CheckType.cmd];
   cmdCode:string = void 0;
 }
 
 export class EexistCheckerModel extends CheckerModel {
+  type: string = CheckType[CheckType.eexist];
   eexist:string = void 0;
   element:string = void 0;
 }
 
 export class IftrueCheckerModel extends CheckerModel {
+  type: string = CheckType[CheckType.iftrue];
   selector:string = void 0;
   element:string = void 0;
   value:string = void 0;

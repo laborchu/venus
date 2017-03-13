@@ -27,7 +27,7 @@ export class GroupInfoComponent implements OnInit{
 				updateGroup.name = this.ucGroup.name;
 				this.ucGroupService.updateUcGroups(updateGroup)
 					.subscribe(() => {
-						this.ucGroupService.setGroupChangeSubject(this.ucGroup);
+						this.ucGroupService.setUpdateGroupSubject(this.ucGroup);
 				});
 			}
 		}

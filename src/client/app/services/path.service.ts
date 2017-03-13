@@ -12,8 +12,8 @@ export class PathService extends MvService {
 		super(http);
 	}
 
-	getPaths(nodeId: Number): Observable<PathModel[]> {
-		let url = `api/paths?nodeId=^${nodeId}$`;
+	getPaths(nodeId: string): Observable<PathModel[]> {
+		let url = `api/nodes/${nodeId}/paths`;
 		return this.getHttp(url);
 	}
 

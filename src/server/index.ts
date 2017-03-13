@@ -3,11 +3,7 @@ import * as express from 'express';
 import * as bodyParser from 'body-parser';
 import * as path from 'path';
 import * as compression from 'compression';
-import * as routes from './routes';
 import Mongodb from './mongodb';
-
-
-// import { Init } from './db/redis';
 
 /**
  * Client Dir
@@ -19,30 +15,29 @@ var app = express();
 
 export function init(port: number, mode: string) {
 
+  //连接mongodb
+  let mongdb: Mongodb = new Mongodb();
+  mongdb.connect();
+
   app.use(bodyParser.urlencoded({ extended: false }));
   app.use(bodyParser.json());
   app.use(bodyParser.text());
   app.use(compression());
-
-  let mongdb: Mongodb = new Mongodb();
-  mongdb.connect();
 
   app.all('/*', function(req, res, next) {
     res.header('Access-Control-Allow-Origin', '*');
     res.header('Access-Control-Allow-Headers', 'X-Requested-With');
     next();
   });
+
+  //初始化路由
+  let routes = require('./routes');
   routes.init(app);
   /**
    * Dev Mode.
    * @note Dev server will only give for you middleware.
    */
   if (mode == 'dev') {
-
-    
-
-    
-
     let root = path.resolve(process.cwd());
     let clientRoot = path.resolve(process.cwd(), './dist/client/dev');
     app.use(express.static(root));

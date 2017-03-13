@@ -37,4 +37,9 @@ export class ProjectService extends MvService {
     return this.getHttp(url);
   }
 
+  generate(projectId: string): Observable<ProjectModel[]> {
+    let url: string = `api/projects/${projectId}/generate`;
+    return this.getHttp(url);
+  }
+
 }

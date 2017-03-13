@@ -6,11 +6,13 @@ import ProjectJsController from "./controllers/ProjectJsController";
 import UcGroupController from "./controllers/UcGroupController";
 import UcController from "./controllers/UcController";
 import NodeController from "./controllers/NodeController";
+import PathController from "./controllers/PathController";
 new ProjectController();
 new ProjectJsController();
 new UcGroupController();
 new UcController();
 new NodeController();
+new PathController();
 
 export function init(app:any) {
 	RouterMap.__DecoratedRouters.forEach((controller: any, config: any) => {

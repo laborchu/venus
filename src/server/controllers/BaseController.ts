@@ -1,11 +1,20 @@
 import e = require('express');
 
+enum RespCode {
+	SUCCESS=1,
+	FAIL=0
+}
+
 class BaseController {
 	wrapperRes(data: any) {
-		return { data: data };
+		return { code: RespCode.SUCCESS, data: data };
 	}
-	
-	aotoRoute(req: e.Request, res:e.Response) {
+
+	wrapperErrorRes(msg: string) {
+		return { code: RespCode.FAIL, msg: msg };
+	}
+
+	aotoRoute(req: e.Request, res: e.Response) {
 	}
 }
 

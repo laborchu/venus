@@ -84,12 +84,17 @@ export class NodeComponent implements OnInit {
 			let nodeId = params["nodeId"];
 			this.ucId = params["ucId"];
 			if (nodeId) {
-				this.nodeService.getNodes(nodeId).subscribe((nodes: Array<NodeModel>) => {
-					this.nodeModel = nodes[0];
-					this.nodeTitle = this.nodeModel.title;
-					this.ucId = this.nodeModel.ucId;
-					this.navagate = ["/ucgroups", this.groupId, "ucs", this.ucId];
-				});
+				this.nodeService.getNodes(nodeId)
+					.concatMap((nodes: Array<NodeModel>) => {
+						this.nodeModel = nodes[0];
+						this.nodeTitle = this.nodeModel.title;
+						this.ucId = this.nodeModel.ucId;
+						this.navagate = ["/ucgroups", this.groupId, "ucs", this.ucId];
+						return this.pathService.getPaths(nodeId);
+					})
+					.subscribe((paths: Array<PathModel>) => {
+						this.nodeModel.paths = paths;
+					});
 			} else {
 				this.navagate = ["/ucgroups", this.groupId, "ucs", this.ucId];
 			}

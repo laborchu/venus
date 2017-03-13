@@ -42,6 +42,7 @@ export class MenuComponent implements OnInit{
 		let mapUcGroup = projectObservable.concatMap(projects => {
 			this.projects = projects;
 			this.selectProject = projects[0];
+			this.projectService.setProjectChangeSubject(this.selectProject);
 			return this.ucGroupService.getUcGroups(projects[0]._id);
 		});
 		mapUcGroup.subscribe((ucGroups: Array<UcGroupModel>) => {
@@ -57,7 +58,7 @@ export class MenuComponent implements OnInit{
 			this.selectJs = array[0];
 		});
 
-		this.ucGroupService.getGroupChangeSubject().subscribe((group: UcGroupModel) => {
+		this.ucGroupService.getUpdateGroupSubject().subscribe((group: UcGroupModel) => {
 			this.groupArray.every((e: UcGroupModel, index: number) => {
 				if (group._id == e._id) {
 					this.groupArray[index] = group;

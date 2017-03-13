@@ -7,8 +7,10 @@
     </div>
     <div class="modal-body clearfix">
 	    <div ace-editor
+	    	#editor
 	       [(text)]="code"
 	       [mode]="'javascript'"
+	       (textChanged)="onChange($event)"
 	       ></div>
     </div>
     <div class="modal-footer">
