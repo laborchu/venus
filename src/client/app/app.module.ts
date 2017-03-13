@@ -11,7 +11,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { SharedModule } from './shared/shared.module';
 import { UcMgrModule } from './ucmgr/ucmgr.module';
 
-import { ProjectService, UcGroupService, UcService, NodeService, PathService } from './services/index';
+import { ProjectService,ProjectJsService, UcGroupService, UcService, NodeService, PathService } from './services/index';
 // import { InMemoryDataService }  from './services/in-memory-data.service';
 
 @NgModule({
@@ -30,7 +30,7 @@ import { ProjectService, UcGroupService, UcService, NodeService, PathService } f
 	    provide: APP_BASE_HREF,
 	    useValue: '<%= APP_BASE %>'
 	  },
-    ProjectService, UcGroupService, UcService, NodeService, PathService
+    ProjectService, UcGroupService, UcService, NodeService, PathService, ProjectJsService
   ],
   bootstrap: [AppComponent]
 

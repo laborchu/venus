@@ -1,60 +1,78 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, Params, RoutesRecognized } from '@angular/router';
 
-import { UcService } from '../../services/index';
-import { UcModel } from '../../models/index';
+import { NotificationsService } from 'angular2-notifications';
+
+import { UcService, UcGroupService, ProjectService } from '../../services/index';
+import { UcModel, ProjectModel, UcGroupModel } from '../../models/index';
 
 /**
  * This class represents the navigation bar component.
  */
 @Component({
-  moduleId: module.id,
-  selector: 'mv-navbar',
-  templateUrl: 'navbar.component.html',
-  styleUrls: ['navbar.component.css'],
+	moduleId: module.id,
+	selector: 'mv-navbar',
+	templateUrl: 'navbar.component.html',
+	styleUrls: ['navbar.component.css'],
 })
-export class NavbarComponent implements OnInit { 
+export class NavbarComponent implements OnInit {
 	constructor(
 		private router: Router,
 		private route: ActivatedRoute,
-		private ucService: UcService
+		private ucService: UcService,
+		private ucGroupService: UcGroupService,
+		private projectService: ProjectService,
+		private _notificationsService: NotificationsService
 	) { }
 	groupId: string;
-	ngOnInit(): void {
-		this.router.events.subscribe(val => {
-			if (val instanceof RoutesRecognized) {
-				if (val.state.root.firstChild) {
-					this.groupId = val.state.root.firstChild.params["groupId"];
-				}
-			}
-		});
+	projectId: string;
 
+	public options = {
+		position: ["bottom", "right"],
+		timeOut: 3000
+	}
+
+	ngOnInit(): void {
+		this.ucGroupService.getSelectGroupSubject().subscribe((ucGroupModel: UcGroupModel) => {
+			this.groupId = ucGroupModel._id;
+		})
+		this.projectService.getProjectChangeSubject().subscribe((project: ProjectModel) => {
+			this.projectId = project._id;
+		})
 	}
 
 	popNewUcClick(): void {
-		setTimeout(function(){
+		setTimeout(function() {
 			let newUcInput = document.getElementById("newUcInput");
-			if (newUcInput){
+			if (newUcInput) {
 				newUcInput.focus();
 			}
-		},100);
+		}, 100);
 	}
 
-	addUc(value: string, newUcView:any): void {
-		if (value){
+	addUc(value: string, newUcView: any): void {
+		if (value) {
 			let uc: UcModel = new UcModel();
 			uc.title = value;
 			uc.groupId = this.groupId;
 			uc.build = true;
-			uc.filter = true;
 			uc.dataStatus = 1;
 			this.route.params
 				.switchMap((params: Params) => this.ucService.addUc(uc))
-				.subscribe((result:UcModel) => {
+				.subscribe((result: UcModel) => {
 					this.ucService.setUcChangeSubject(result);
 					this.router.navigate(['/ucgroups', uc.groupId, 'ucs', result._id]);
 				});
 			newUcView.close();
 		}
+	}
+
+	generate(): void {
+		this.projectService.generate(this.projectId).subscribe(() => {
+			this._notificationsService.success(
+				'Project生成操作',
+				'生成成功'
+			);
+		});
 	}
 }

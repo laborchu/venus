@@ -396,7 +396,6 @@ export class SeedConfig {
       '@angular/platform-browser-dynamic/testing':
         'node_modules/@angular/platform-browser-dynamic/bundles/platform-browser-dynamic-testing.umd.js',
       '@angular/router/testing': 'node_modules/@angular/router/bundles/router-testing.umd.js',
-      'ng2-validation': 'node_modules/ng2-validation/bundles/ng2-validation.umd.js',
       'angular-confirmation-popover': 'node_modules/angular-confirmation-popover/dist/umd/angular-confirmation-popover.js',
 
       'app/*': '/app/*',

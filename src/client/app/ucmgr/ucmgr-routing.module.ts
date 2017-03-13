@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { UcmgrComponent } from './ucmgr.component';
+import { ProjectJsComponent } from './projectjs/projectjs.component';
 
 import { UcGroupComponent, GroupInfoComponent } from './uc-group/index';
 import { UcComponent } from './uc/index';
@@ -12,6 +13,10 @@ import { NodeComponent } from './node/index';
       {
         path: 'projects/:projectId/ucgroups',
         component: UcmgrComponent
+      },
+      {
+        path: 'projects/:projectId/projectjs/:jsId',
+        component: ProjectJsComponent
       },
       {
         path: 'ucgroups/:groupId',

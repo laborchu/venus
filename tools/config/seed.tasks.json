@@ -6,7 +6,8 @@
     "build.assets.dev",
     "build.html_css",
     "build.js.dev",
-    "build.index.dev"
+    "build.index.dev",
+    "copy.models"
   ],
 
   "build.dev.watch": [
@@ -31,17 +32,18 @@
   "build.prod": [
     "check.tools",
     "clean.prod",
-    "tslint",
     "build.server",
     "copy.server.assets",
     "build.assets.prod",
+    "build.fonts",
     "build.html_css",
     "copy.prod",
     "build.js.prod",
     "build.bundles",
     "build.bundles.app",
     "minify.bundles",
-    "build.index.prod"
+    "build.index.prod",
+    "copy.models"
   ],
 
   "build.prod.exp": [

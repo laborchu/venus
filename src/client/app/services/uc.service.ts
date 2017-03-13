@@ -21,10 +21,10 @@ export class UcService extends MvService {
 	setUcChangeSubject(ucModel: UcModel): void {
 		this.ucChangeSubject.next(ucModel);
 	}
+
 	getUcChangeSubject(): Observable<UcModel> {
 		return this.ucChangeSubject.asObservable();
 	}
-
 
 	getUcs(groupId: string): Observable<UcModel[]> {
 		let url = `/api/ucgroups/${groupId}/ucs`;
@@ -43,6 +43,11 @@ export class UcService extends MvService {
 
 	updateUc(uc: UcModel): Observable<UcModel> {
 		let url = `/api/ucs/${uc._id}`;
+		return this.patchHttp(url, uc);
+	}
+
+	updateUcScript(uc: UcModel): Observable<UcModel> {
+		let url = `/api/ucs/${uc._id}/script`;
 		return this.patchHttp(url, uc);
 	}
 

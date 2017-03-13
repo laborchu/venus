@@ -49,7 +49,11 @@ export abstract class MvService {
 
 	private extractData(res: Response) {
 		let body = res.json();
-		return body.data || {};
+		if (body.code==1){
+			return body.data || {};
+		}else{
+			throw new Error(body.msg);
+		}
 	}
 
 	private handleError(error: Response | any) {

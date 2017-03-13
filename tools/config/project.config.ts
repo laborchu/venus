@@ -18,20 +18,39 @@ export class ProjectConfig extends SeedConfig {
     this.SYSTEM_CONFIG_DEV.paths['@ng-bootstrap/ng-bootstrap'] = `${this.APP_BASE}node_modules/@ng-bootstrap/ng-bootstrap/index.js`;
     this.SYSTEM_CONFIG_DEV.paths['traceur'] = 'node_modules/traceur/bin/traceur.js';
     this.SYSTEM_CONFIG_DEV.paths['angular-in-memory-web-api'] = 'node_modules/angular-in-memory-web-api/index.js';
-    this.SYSTEM_BUILDER_CONFIG.packages['@ng-bootstrap/ng-bootstrap'] = {
-       main: 'index.js',
-       defaultExtension: 'js'
-    };
 
+    this.SYSTEM_CONFIG_DEV.paths['angular2-notifications'] = 'node_modules/angular2-notifications/components.js';
+
+    this.SYSTEM_CONFIG_DEV.paths['ng2-validation'] = 'node_modules/ng2-validation/bundles/ng2-validation.umd.js';
+
+    this.SYSTEM_CONFIG_DEV.paths['ng2-ace-editor'] = 'node_modules/ng2-ace-editor/ng2-ace-editor.js';
+    this.SYSTEM_CONFIG_DEV.paths['brace'] = 'node_modules/brace/index.js';
+    this.SYSTEM_CONFIG_DEV.paths['w3c-blob'] = 'node_modules/w3c-blob/index.js';
+    this.SYSTEM_CONFIG_DEV.paths['buffer'] = 'node_modules/buffer/index.js';
+    this.SYSTEM_CONFIG_DEV.paths['base64-js'] = 'node_modules/base64-js/index.js';
+    this.SYSTEM_CONFIG_DEV.paths['ieee754'] = 'node_modules/ieee754/index.js';
+    this.SYSTEM_CONFIG_DEV.paths['ace/theme/chrome'] = 'node_modules/ace-builds/src-min/theme-chrome.js';
+   
+    this.SYSTEM_BUILDER_CONFIG.packages['@ng-bootstrap/ng-bootstrap'] = {
+      main: 'index.js',
+      defaultExtension: 'js'
+    };
+    this.SYSTEM_BUILDER_CONFIG.paths['ng2-validation'] = 'node_modules/ng2-validation/bundles/ng2-validation.umd.js';
+
+
+    this.SYSTEM_BUILDER_CONFIG.packageConfigPaths = [
+      ...this.SYSTEM_BUILDER_CONFIG.packageConfigPaths,
+      join('node_modules', '@ng-bootstrap', '*', 'package.json')
+    ]
     /* Enable typeless compiler runs (faster) between typed compiler runs. */
     // this.TYPED_COMPILE_INTERVAL = 5;
 
     // Add `NPM` third-party libraries to be injected/bundled.
     this.NPM_DEPENDENCIES = [
       ...this.NPM_DEPENDENCIES,
-      {src: 'font-awesome/css/font-awesome.min.css', inject: true}
+      { src: 'font-awesome/css/font-awesome.min.css', inject: true }
       // {src: 'lodash/lodash.min.js', inject: 'libs'},
-    ];      
+    ];
 
     // Add `local` third-party libraries to be injected/bundled.
     this.APP_ASSETS = [
@@ -53,4 +72,14 @@ export class ProjectConfig extends SeedConfig {
     // this.mergeObject(this.PLUGIN_CONFIGS['browser-sync'], { ghostMode: false });
   }
 
+  FONTS_DEST = `${this.APP_DEST}/fonts`;
+
+  FONTS_SRC = [
+    'node_modules/font-awesome/fonts/**'
+  ];
+
+  MODELS_SRC = [
+    `${this.APP_DEST}/app/models/**`
+  ];
+  MODELS_DEST = `${this.DIST_DIR}/${this.APP_SERVER}/client/app/models`;
 }

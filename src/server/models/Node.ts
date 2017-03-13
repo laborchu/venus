@@ -2,43 +2,47 @@
 import BaseModel from "./BaseModel";
 import { Uc } from "./Uc";
 import mongoose = require('mongoose');
-
+import autoIncrement = require('mongoose-auto-increment');
+import { NodeModel } from './index';
 const _schema = new mongoose.Schema({
   title: { type: String },
   sleep: { type: Number },
   dataStatus: { type: Number },
-  ucId: { type: mongoose.Schema.Types.ObjectId, ref: 'ucs' }
+  order: { type: Number },
+  ucId: { type: String }
 });
-const _model = mongoose.model<mongoose.Document>('nodes', _schema);
+
+_schema.plugin(autoIncrement.plugin, { model: 'ucs.nodes', field: 'order', startAt: 1 });
+interface NodeDocument extends NodeModel, mongoose.Document {
+  _id: string;
+}
+
+const _model = mongoose.model<NodeDocument>('ucs.nodes', _schema);
 
 class Node extends BaseModel {
   constructor() {
     super()
   }
-  static find(params:any): Promise<Array<Node>> {
-    return new Promise<Array<Node>>((resolve, reject) => {
-      _model.find(params, (err: any, projects: Array<Node>) => {
+  static find(params: any): Promise<Array<NodeModel>> {
+    params.dataStatus = 1;
+    return new Promise<Array<NodeModel>>((resolve, reject) => {
+      _model.find(params).sort({ order: 1 }).exec((err: any, projects: Array<NodeModel>) => {
         err ? reject(err) : resolve(projects)
       })
     });
   }
 
-  static insert(node: any): Promise<Node> {
-    return new Promise<Node>((resolve, reject) => {
-      _model.insertMany([node], (err: any, nodes: Array<any>) => {
-        Uc.find({ _id: node.ucId }).then((ucs:any)=>{
-          let ucModel = ucs[0];
-          let nodeModel = nodes[0];
-          ucModel.nodes.push(nodeModel._id);
-          Uc.update(ucModel);
-          err ? reject(err) : resolve(nodeModel)
-        });
+  static insert(node: any): Promise<NodeModel> {
+    node._id = new mongoose.Types.ObjectId();
+    return new Promise<NodeModel>((resolve, reject) => {
+      _model.create(node, (err: any, result: NodeModel) => {
+        err ? reject(err) : resolve(result)
       })
     });
   }
 
-  static update(node: any): Promise<Node> {
-    return new Promise<Node>((resolve, reject) => {
+  static update(node: any): Promise<NodeModel> {
+    return new Promise<NodeModel>((resolve, reject) => {
       _model.update({ _id: node._id }, node, {}, (err, rawResponse) => {
         err ? reject(err) : resolve(rawResponse)
       })
@@ -46,9 +50,17 @@ class Node extends BaseModel {
   }
 
 
-  static delete(nodeId: string): Promise<Node> {
-    return new Promise<Node>((resolve, reject) => {
-      _model.update({ _id: nodeId }, {dataStatus:0}, {}, (err, rawResponse) => {
+  static remove(params: any): Promise<any> {
+    return new Promise<any>((resolve, reject) => {
+      _model.remove(params, (err) => {
+        err ? reject(err) : resolve()
+      })
+    });
+  }
+
+  static delete(nodeId: string): Promise<NodeModel> {
+    return new Promise<NodeModel>((resolve, reject) => {
+      _model.update({ _id: nodeId }, { dataStatus: 0 }, {}, (err, rawResponse) => {
         err ? reject(err) : resolve(rawResponse)
       })
     });

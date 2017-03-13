@@ -4,3 +4,4 @@ export * from './uc.model';
 export * from './node.model';
 export * from './path.model';
 export * from './checker.model';
+export * from './project-js.model';

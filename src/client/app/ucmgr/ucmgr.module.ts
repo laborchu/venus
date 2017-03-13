@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { CustomFormsModule } from 'ng2-validation';
 
 import { UcmgrComponent } from './ucmgr.component';
+import { ProjectJsComponent } from './projectjs/projectjs.component';
 import { UcGroupComponent, GroupInfoComponent } from './uc-group/index';
 import { UcComponent } from './uc/index';
 import { NodeComponent } from './node/index';
@@ -13,6 +14,7 @@ import { SharedModule } from '../shared/shared.module';
 
 import { ConfirmationPopoverModule } from 'angular-confirmation-popover';
 
+
 @NgModule({
 	imports: [FormsModule,
 		ConfirmationPopoverModule.forRoot({
@@ -21,7 +23,8 @@ import { ConfirmationPopoverModule } from 'angular-confirmation-popover';
 			confirmText: '确认'
 		}),
 		 CustomFormsModule, CommonModule, UcMgrRoutingModule, SharedModule],
-	declarations: [UcGroupComponent, UcmgrComponent, GroupInfoComponent, UcComponent, NodeComponent],
+	declarations: [UcGroupComponent, UcmgrComponent, ProjectJsComponent, 
+					GroupInfoComponent, UcComponent, NodeComponent],
 	exports: [],
 	providers: []
 })

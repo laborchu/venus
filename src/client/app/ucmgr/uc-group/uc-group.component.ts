@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, Params, RoutesRecognized } from '@angular/router';
 
-import { UcModel } from '../../models/index';
-import { UcService } from '../../services/index';
+import { UcModel, UcGroupModel } from '../../models/index';
+import { UcService, UcGroupService } from '../../services/index';
 import 'rxjs/add/operator/switchMap';
 /**
  * This class represents the navigation bar component.
@@ -17,7 +17,8 @@ export class UcGroupComponent implements OnInit{
 	constructor(
 	  private router: Router,
 	  private route: ActivatedRoute,
-	  private ucService: UcService
+	  private ucService: UcService,
+	  private ucGroupService: UcGroupService
 	) { }
 	ucArray: Array<UcModel>;
 	selectUc: UcModel;
@@ -35,6 +36,9 @@ export class UcGroupComponent implements OnInit{
 		})
 		this.route.params
 			.switchMap((params: Params) => {
+				let updateGroup: UcGroupModel = new UcGroupModel();
+				updateGroup._id = params["groupId"];
+				this.ucGroupService.setSelectGroupSubject(updateGroup);
 				return this.ucService.getUcs(params["groupId"]);
 			})
 			.subscribe((ucs: Array<UcModel>) => {

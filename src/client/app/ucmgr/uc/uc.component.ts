@@ -1,8 +1,9 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { NgForm } from '@angular/forms';
+import { NotificationsService } from 'angular2-notifications';
 
-import { UcModel, NodeModel } from '../../models/index';
+import { UcModel, NodeModel,UcHelper } from '../../models/index';
 import { UcService, NodeService } from '../../services/index';
 import 'rxjs/add/operator/switchMap';
 
@@ -19,7 +20,8 @@ export class UcComponent implements OnInit {
 		private router: Router,
 		private route: ActivatedRoute,
 		private ucService: UcService,
-		private nodeService: NodeService
+		private nodeService: NodeService,
+		private _notificationsService: NotificationsService
 	) { }
 	ucMode: UcModel = new UcModel();
 	ucKeyStr: string = "";
@@ -45,6 +47,29 @@ export class UcComponent implements OnInit {
 						this.router.navigate(['/ucgroups', this.ucMode.groupId])
 					});
 			}
+		},
+		code: {
+			finish: (text: string) => {
+				this.ucMode.code = text;
+				this.ucService.updateUcScript(this.ucMode)
+					.concatMap(()=>{
+						return this.ucService.getUc(this.ucMode._id);
+					})
+					.subscribe((ucs: Array<UcModel>) => {
+						this.form.form.markAsPristine();
+						this.ucMode = ucs[0];
+						this.ucService.setUcChangeSubject(this.ucMode);
+						this._notificationsService.success(
+							'UC操作',
+							"操作成功"
+						);
+					}, (msg) => {
+						this._notificationsService.error(
+							'UC操作',
+							msg
+						);
+					});
+			}
 		}
 	};
 
@@ -59,10 +84,13 @@ export class UcComponent implements OnInit {
 	ngOnInit() {
 		this.route.params
 			.switchMap((params: Params) => this.ucService.getUc(params["ucId"]))
-			.subscribe((ucs: Array<UcModel>) => {
-				this.form.form.markAsPristine();
-				let ucMode2: UcModel = new UcModel();
+			.switchMap((ucs: Array<UcModel>) => {
 				this.ucMode = ucs[0];
+				return this.nodeService.getUcNodes(this.ucMode._id);
+			})
+			.subscribe((nodes: Array<NodeModel>) => {
+				this.ucMode.nodes = nodes;
+				this.form.form.markAsPristine();
 			});
 	}
 
@@ -72,11 +100,11 @@ export class UcComponent implements OnInit {
 
 	delNode(delNode: NodeModel) {
 		this.nodeService.delNode(delNode._id).subscribe(() => {
-			this.ucMode.nodes.every((node,index)=>{
-				if (delNode._id==node._id){
+			this.ucMode.nodes.every((node, index) => {
+				if (delNode._id == node._id) {
 					this.ucMode.nodes.splice(index, 1);
 					return false;
-				}else{
+				} else {
 					return true;
 				}
 			})
