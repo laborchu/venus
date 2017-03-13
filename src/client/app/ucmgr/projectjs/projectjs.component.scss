@@ -1,0 +1,14 @@
+
+:host /deep/ {
+    .ace_editor {
+       height: 85%;
+    }
+}
+
+.projectjs{
+	height: 100%;
+    display: inline-block;
+    position: fixed;
+    width: 100%;
+    overflow: auto;
+}
