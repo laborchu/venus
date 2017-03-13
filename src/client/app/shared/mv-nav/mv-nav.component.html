@@ -8,23 +8,23 @@
 		</span>
 	</div>
 	<div class="nav-right">
-		<span class="right-btn" 
-			*ngIf="rightBtnConf?.del" 
+		<span class="right-btn"
+			*ngIf="rightBtnConf?.del"
 			mwlConfirmationPopover
 			[title]="'确认删除'+title+'吗?'"
 			(confirm)="rightBtnConf.del.click()"
 		    placement="left">
 			<i class="fa fa-trash"></i>
 		</span>
-		<span class="right-btn" 
-			*ngIf="rightBtnConf?.save" 
-			(click)="formObj?.form?.valid&&rightBtnConf?.save.click()"
-			[ngClass]="{'unclick':(!formObj?.form?.valid||!formObj?.form?.dirty)}">
+		<span class="right-btn"
+			*ngIf="rightBtnConf?.save"
+			(click)="(formObj?.form?.valid||!formObj)&&rightBtnConf?.save.click()"
+			[ngClass]="{'unclick':((!formObj?.form?.valid||!formObj?.form?.dirty)&&formObj)}">
 			<i class="fa fa-save"></i>
 		</span>
 
-		<span class="right-btn" 
-			*ngIf="rightBtnConf?.add" 
+		<span class="right-btn"
+			*ngIf="rightBtnConf?.add"
 			(click)="rightBtnConf?.add.click()">
 			<i class="fa fa-plus-circle"></i>
 		</span>

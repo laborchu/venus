@@ -35,8 +35,8 @@
         <div class="node leve1" *ngFor="let node of ucMode?.nodes" (click)="showNode(node)">
             {{node.title}}
             <div class="node-toobar" (click)="$event.stopPropagation()">
-                <i class="fa fa-trash" 
-                    mwlConfirmationPopover 
+                <i class="fa fa-trash"
+                    mwlConfirmationPopover
                     [title]="'确认删除吗?'"
                     (confirm)="delNode(node)"
                     (click)="$event.stopPropagation()"

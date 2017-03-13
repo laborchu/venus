@@ -1,4 +1,4 @@
-import { CheckerModel } from './checker.model.ts';
+import { CheckerModel } from './checker.model';
 enum Selector {
 	xpath,
 	name,
@@ -55,7 +55,10 @@ export namespace PathHelper {
 		} else if (type == PathType.input) {
 			newMode = new InputPathModel();
 			field = getField(newMode);
-		}
+		}else if (type == PathType.keys) {
+      newMode = new KeysPathModel();
+      field = getField(newMode);
+    }
 		if (newMode){
 			let propertyNames: Array<String> = Object.getOwnPropertyNames(oldModel);
 			propertyNames.forEach((key:string)=>{
@@ -72,11 +75,11 @@ export class PathModel {
 	_id: string = void 0;
 	title: string = void 0;
 	nodeId: string = void 0;
-  sleep: string = void 0;
+  sleep:number = void 0;
 	canNull: boolean = false;
 	cacheElement: boolean = false;
 	cacheDesc: boolean = false;
-  checker:Array<CheckerModel>
+  checker:Array<CheckerModel> = []
 }
 
 export class ClickPathModel extends PathModel{

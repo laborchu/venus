@@ -20,23 +20,23 @@
                     <input  name="selector"  [(ngModel)]="pathModel.selector"  type="radio" value="{{selector}}"> {{selector}}
                 </label>
             </div>
-            <div class="form-group" [(ngModel)]="pathModel.element" *ngIf="pathFieldSet.has('element')">
-                <input type="text" class="form-control" placeholder="element">
+            <div class="form-group"  *ngIf="pathFieldSet.has('element')">
+                <input type="text" [(ngModel)]="pathModel.element" class="form-control" placeholder="element">
             </div>
-            <div class="form-group" [(ngModel)]="pathModel.value" *ngIf="pathFieldSet.has('value')">
-                <input type="text" class="form-control" placeholder="value">
+            <div class="form-group"  *ngIf="pathFieldSet.has('value')">
+                <input type="text" [(ngModel)]="pathModel.value" class="form-control" placeholder="value">
             </div>
-            <div class="form-group" [(ngModel)]="pathModel.index" *ngIf="pathFieldSet.has('index')">
-                <input type="text" class="form-control" placeholder="index">
+            <div class="form-group"  *ngIf="pathFieldSet.has('index')">
+                <input type="text" [(ngModel)]="pathModel.index" class="form-control" placeholder="index">
             </div>
-            <div class="form-group" [(ngModel)]="pathModel.mode" *ngIf="pathFieldSet.has('mode')">
-                <input type="text" class="form-control" placeholder="mode">
+            <div class="form-group"  *ngIf="pathFieldSet.has('mode')">
+                <input type="text" [(ngModel)]="pathModel.mode" class="form-control" placeholder="mode">
             </div>
-            <div class="form-group" [(ngModel)]="pathModel.filter" *ngIf="pathFieldSet.has('filter')">
-                <input type="text" class="form-control" placeholder="filter">
+            <div class="form-group"  *ngIf="pathFieldSet.has('filter')">
+                <input type="text" [(ngModel)]="pathModel.filter" class="form-control" placeholder="filter">
             </div>
-            <div class="form-group" [(ngModel)]="pathModel.limit" *ngIf="pathFieldSet.has('limit')">
-                <input type="text" class="form-control" placeholder="limit">
+            <div class="form-group"  *ngIf="pathFieldSet.has('limit')">
+                <input type="text" [(ngModel)]="pathModel.limit" class="form-control" placeholder="limit">
             </div>
             <div class="form-group" >
               <input type="text" [(ngModel)]="pathModel.sleep" number  class="form-control" placeholder="sleep">
@@ -45,19 +45,19 @@
         </div>
         <div class="body-line"></div>
         <div class="body-right">
-            <div class="line-split">
-                <div class="line-tile">验证</div>
-                <div class="line"></div>
-            </div>
+            <mv-nav [title]="checkTitle"  [rightBtnConf]="rightBtnConf"></mv-nav>
             <div class="checker-list">
-                <div class="checker" (click)="openPath(content)">
-                    验证输入没有的用户
+                <div class="checker" *ngFor="let checker of pathModel.checker; let i = index;" (click)="openChecker(checker,i)">
+                    {{checker.title}}
                     <div class="checker-toobar">
                         <i class="fa fa-trash"></i>
                     </div>
                 </div>
             </div>
             <div class="checker-form">
+                <div class="form-group">
+                  <input type="text"  [(ngModel)]="checkerModel.title" class="form-control" placeholder="title">
+                </div>
                 <div class="form-group radio">
                     <label *ngFor="let type of checks">
                       <input name="type" type="radio"  value="{{type}}" (click)="checkChange(type)"> {{type}}
@@ -84,12 +84,11 @@
                 <div class="form-inline form-group" *ngIf="checkFieldSet.has('paths')">
                       <input type="text" [(ngModel)]="checkerModel.paths"  class="form-control" placeholder="paths">
                 </div>
-                <div class="form-group">
-                    <span class="right-btn">
-                        <i class="fa fa-save"></i>
-                    </span>
-                </div>
-
+                <!--<div class="form-group">-->
+                    <!--<span class="right-btn" (click)="checkSave()">-->
+                        <!--<i class="fa fa-save"></i>-->
+                    <!--</span>-->
+                <!--</div>-->
             </div>
         </div>
     </div>

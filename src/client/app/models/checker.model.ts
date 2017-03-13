@@ -65,6 +65,7 @@ export namespace CheckHelper {
 
 export class CheckerModel {
   _id: string;
+  title: string;
 }
 export class EqCheckerModel extends CheckerModel {
   selector:string = void 0;

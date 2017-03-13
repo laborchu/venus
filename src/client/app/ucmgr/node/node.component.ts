@@ -29,6 +29,7 @@ export class NodeComponent implements OnInit {
 	nodeModel:NodeModel = new NodeModel();
 	nodeTitle:string = "新增节点";
 	pathTitle:string = "新增path";
+  checkTitle:string = "验证";
 
 	pathModel: PathModel = new PathModel();
   checkerModel: CheckerModel = new CheckerModel();
@@ -39,7 +40,7 @@ export class NodeComponent implements OnInit {
   checks: Array<String> = CheckHelper.getTypes();
 	groupId:string = "";
 	ucId: string = "";
-
+  checkIndex:number
 	nodeRightBtnConf: Object = {
 		save: {
 			click: () => {
@@ -104,6 +105,10 @@ export class NodeComponent implements OnInit {
   checkChange(type:string){
 		[this.checkerModel, this.checkFieldSet] = CheckHelper.buildModel(type, this.checkerModel);
 	}
+  openChecker(checker:CheckerModel,index:number){
+    this.checkerModel = checker
+    this.checkIndex= index
+	}
 
 	openPath(path: PathModel) {
     this.pathModel = path;
@@ -113,5 +118,25 @@ export class NodeComponent implements OnInit {
 	    	// debugger
 	    });
 	}
+
+  rightBtnConf: Object = {
+    save: {
+      click: () => {
+        if(this.checkIndex&&this.checkIndex>=0){
+          this.pathModel.checker[this.checkIndex] = this.checkerModel
+        }else{
+          this.pathModel.checker.push(this.checkerModel)
+        }
+        this.checkerModel = new CheckerModel()
+        this.checkIndex= -1
+      }
+    },
+    add: {
+      click: () => {
+        this.checkerModel = new CheckerModel()
+        this.checkIndex= -1
+      }
+    }
+  };
 
 }
