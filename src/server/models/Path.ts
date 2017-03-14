@@ -55,9 +55,10 @@ class Path extends BaseModel {
 	}
 
 	static insert(path: any): Promise<PathModel> {
+		path._id = new mongoose.Types.ObjectId();
 		return new Promise<PathModel>((resolve, reject) => {
-			_model.insertMany([path], (err: any, paths: Array<PathModel>) => {
-				err ? reject(err) : resolve(paths[0])
+			_model.create(path, (err: any, result: PathModel) => {
+				err ? reject(err) : resolve(result)
 			})
 		});
 	}

@@ -7,6 +7,12 @@
         .select{
             background-color: $select-color;
         }
+        .group-header{
+            td{
+                padding: 8px;
+                border-bottom: 2px solid $split-color;
+            }
+        }
     }
     .line {
         width: 3px;

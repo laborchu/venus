@@ -1,3 +1,5 @@
+import { BaseHelper } from './base.model';
+
 export enum CheckType {
   eq,
   eqs,
@@ -22,42 +24,51 @@ export namespace CheckHelper {
     })
     return propertyMap;
   }
-  export function buildModel(typeStr: string, oldModel: any): [CheckerModel, Set<String>] {
-    let type: CheckType = (<any>CheckType)[typeStr];
+  export function buildModel(typeStr: string, oldModel: any, clean: boolean = false, filter: any = {}): [CheckerModel, Set<String>] {
     let newMode: any;
     let field: Set<String>;
-    if (type == CheckType.eq){
+    if (typeStr == CheckType[CheckType.eq]){
       newMode = new EqCheckerModel();
       field = getField(newMode);
-    } else if (type == CheckType.eqs) {
+    } else if (typeStr == CheckType[CheckType.eqs]) {
       newMode = new EqCheckerModel();
       field = getField(newMode);
-    } else if (type == CheckType.prop) {
+    } else if (typeStr == CheckType[CheckType.prop]) {
       newMode = new PropCheckerModel();
       field = getField(newMode);
-    } else if (type == CheckType.cmd) {
+    } else if (typeStr == CheckType[CheckType.cmd]) {
       newMode = new CmdCheckerModel();
       field = getField(newMode);
-    } else if (type == CheckType.eexist) {
+    } else if (typeStr == CheckType[CheckType.eexist]) {
       newMode = new EexistCheckerModel();
       field = getField(newMode);
-    } else if (type == CheckType.length) {
+    } else if (typeStr == CheckType[CheckType.length]) {
       newMode = new EqCheckerModel();
       field = getField(newMode);
-    }else if (type == CheckType.iftrue) {
+    } else if (typeStr == CheckType[CheckType.iftrue]) {
       newMode = new IftrueCheckerModel();
       field = getField(newMode);
-    }else if (type == CheckType.stop) {
+    } else if (typeStr == CheckType[CheckType.stop]) {
       newMode = new EqCheckerModel();
       field = getField(newMode);
     }
     if (newMode){
-      let propertyNames: Array<String> = Object.getOwnPropertyNames(oldModel);
+      let propertyNames: Array<String>;
+      if (clean) {
+        propertyNames = Object.getOwnPropertyNames(newMode);
+      } else {
+        propertyNames = Object.getOwnPropertyNames(oldModel);
+      }
+      console.log(oldModel);
       propertyNames.forEach((key:string)=>{
-        if (oldModel[key]) {
+        if (key != "type" && BaseHelper.has(oldModel[key])) {
           newMode[key] = oldModel[key];
         }
+        if ((clean && !BaseHelper.has(newMode[key])) || filter[key]) {
+          delete newMode[key];
+        }
       })
+      console.log(newMode);
     }
     return [newMode, field];
   }
@@ -69,6 +80,7 @@ export class CheckerModel {
   ucId: string = null;
   nodeId: string = null;
   pathId: string = null;
+  order: number = null;
   dataStatus: number = 1;
 }
 export class EqCheckerModel extends CheckerModel {

@@ -9,6 +9,7 @@ const _schema = new mongoose.Schema({
 	ucId: { type: String },
 	nodeId: { type: String },
 	pathId: { type: String },
+	type: { type: String },
 	selector: { type: String },
 	element: { type: String },
 	value: { type: String },
@@ -50,9 +51,10 @@ class Checker extends BaseModel {
 	}
 
 	static insert(path: any): Promise<CheckerModel> {
-		return new Promise<CheckerModel>((resolve, reject) => {
-			_model.insertMany([path], (err: any, paths: Array<CheckerModel>) => {
-				err ? reject(err) : resolve(paths[0])
+		path._id = new mongoose.Types.ObjectId();
+    	return new Promise<CheckerModel>((resolve, reject) => {
+			_model.create(path, (err: any, result: CheckerModel) => {
+				err ? reject(err) : resolve(result)
 			})
 		});
 	}

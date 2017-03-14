@@ -18,6 +18,7 @@ export class MvNavComponent{
 	@Input() formObj: any;
 	@Input() rightBtnConf: any;
 	@Input() topBottom: boolean = false;
+	@Input() marginMenu: boolean = false;
 	@Input() code: string = "";
 
 	@ViewChild('editor') editor:any;

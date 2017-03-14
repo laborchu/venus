@@ -5,7 +5,7 @@
         </button>
         <h4 class="modal-title">编辑UC脚本</h4>
     </div>
-    <div class="modal-body clearfix">
+    <div class="modal-body clearfix pd0">
 	    <div ace-editor
 	    	#editor
 	       [(text)]="code"
@@ -18,7 +18,7 @@
     </div>
 </template>
 
-<div class="mv-nav clearfix" [ngClass]="{'top-bottom':topBottom}">
+<div class="mv-nav clearfix" [ngClass]="{'top-bottom':topBottom,'margin-menu':marginMenu}">
 	<div class="nav-left" [ngClass]="{'can-click':canBack()}" (click)="back()">
 		<span *ngIf="navigate">
 			<i class="fa fa-angle-left"></i>
@@ -30,13 +30,13 @@
 	<div class="nav-right">
 
 		<span class="right-btn" 
-			*ngIf="rightBtnConf?.code" 
+			*ngIf="rightBtnConf?.code&&rightBtnConf.code.hidden!=true" 
 			(click)="codeClick(codeContent)">
 			<i class="fa fa-code"></i>
 		</span>
 
 		<span class="right-btn" 
-			*ngIf="rightBtnConf?.del" 
+			*ngIf="rightBtnConf?.del&&rightBtnConf.del.hidden!=true" 
 			mwlConfirmationPopover
 			[title]="'确认删除'+title+'吗?'"
 			(confirm)="rightBtnConf.del.click()"
@@ -45,16 +45,23 @@
 		</span>
 
 		<span class="right-btn" 
-			*ngIf="rightBtnConf?.save" 
+			*ngIf="rightBtnConf?.save&&rightBtnConf.save.hidden!=true" 
 			(click)="(!formObj||formObj?.form?.valid)&&rightBtnConf?.save.click()"
 			[ngClass]="{'unclick':(formObj&&(!formObj?.form?.valid||!formObj?.form?.dirty))}">
 			<i class="fa fa-save"></i>
 		</span>
 
 		<span class="right-btn" 
-			*ngIf="rightBtnConf?.add" 
+			*ngIf="rightBtnConf?.add&&rightBtnConf.add.hidden!=true" 
 			(click)="rightBtnConf?.add.click()">
 			<i class="fa fa-plus-circle"></i>
+		</span>
+
+
+		<span class="right-btn" 
+			*ngIf="rightBtnConf?.edit&&rightBtnConf.edit.hidden!=true" 
+			(click)="rightBtnConf?.edit.click()">
+			<i class="fa fa-edit"></i>
 		</span>
 	</div>
 </div>

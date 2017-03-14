@@ -32,6 +32,11 @@ export class ProjectService extends MvService {
 	  return this.postHttp(this.projectUrl, project);
   }
 
+  updateProject(project: ProjectModel): Observable<ProjectModel> {
+    let url: string = `api/projects/${project._id}`;
+    return this.patchHttp(url, project);
+  }
+
   getGlobalJs(projectId:string,js:string): Observable<ProjectModel[]>{
     let url: string = `api/projects/${projectId}/${js}`;
     return this.getHttp(url);

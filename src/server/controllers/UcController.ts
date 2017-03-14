@@ -21,6 +21,7 @@ class UcController extends BaseController {
 		}
 	}
 
+
 	@router({
 		method: 'patch',
 		path: '/api/ucs/:ucId'
@@ -45,10 +46,6 @@ class UcController extends BaseController {
 			await Uc.update(ucModel);
 
 			let eachNode = async (nodes: Array<any>, parentId: string) => {
-				//清理原先的node
-				await Node.remove({ ucId: req.params.ucId });
-				await Path.remove({ ucId: req.params.ucId });
-				await Checker.remove({ ucId: req.params.ucId });
 				//解析node
 				if (Array.isArray(nodes)) {
 					//处理nodes
@@ -59,7 +56,7 @@ class UcController extends BaseController {
 						nodeModel.parentId = parentId;
 						nodeModel = await Node.insert(nodeModel);
 						if (node.children && Array.isArray(ucConfig.children)) {
-							eachNode(node.children, nodeModel._id);
+							await eachNode(node.children, nodeModel._id);
 						} else {
 							//处理paths
 							if (Array.isArray(node.paths)) {
@@ -77,11 +74,15 @@ class UcController extends BaseController {
 									if (path.checker) {
 										if (Array.isArray(path.checker)) {
 
+
 										} else {
 											let propertyNames: Array<String> = Object.getOwnPropertyNames(path.checker);
 											propertyNames.forEach(async (prop: string) => {
 												let checkerModel: CheckerModel = null;
 												[checkerModel] = CheckHelper.buildModel(prop, path.checker[prop]);
+												checkerModel.ucId = req.params.ucId;
+												checkerModel.nodeId = nodeModel._id;
+												checkerModel.pathId = pathModel._id;
 												checkerModel = await Checker.insert(checkerModel);
 											})
 										}
@@ -92,7 +93,12 @@ class UcController extends BaseController {
 					}
 				}
 			}
-			eachNode(ucConfig.children,null);
+			//清理原先的node
+			await Node.remove({ ucId: req.params.ucId });
+			await Path.remove({ ucId: req.params.ucId });
+			await Checker.remove({ ucId: req.params.ucId });
+			// 
+			await eachNode(ucConfig.children, null);
 			res.send(super.wrapperRes([]));
 		} catch (e) {
 			

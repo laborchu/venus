@@ -14,7 +14,7 @@ class ProjectController extends BaseController {
 				"projectId": req.params.projectId
 			},{
 				_id:true,
-				jsCode:true
+				name:true
 			}
 			);
 			res.send(super.wrapperRes(result));
@@ -54,7 +54,25 @@ class ProjectController extends BaseController {
 		path: '/api/projectjs/:jsId/script'
 	})
 	async updateScript(req: e.Request, res: e.Response) {
-		let result = await ProjectJs.updateScript(req.body);
+		let result = await ProjectJs.update(req.body);
+		res.send(super.wrapperRes(result));
+	}
+
+	@router({
+		method: 'patch',
+		path: '/api/projectjs/:jsId'
+	})
+	async updateJs(req: e.Request, res: e.Response) {
+		let result = await ProjectJs.update(req.body);
+		res.send(super.wrapperRes(result));
+	}
+
+	@router({
+		method: 'delete',
+		path: '/api/projectjs/:jsId'
+	})
+	async delete(req: e.Request, res: e.Response) {
+		let result = await ProjectJs.delete(req.params.jsId);
 		res.send(super.wrapperRes(result));
 	}
 }
