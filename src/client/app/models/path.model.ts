@@ -1,4 +1,5 @@
 import { CheckerModel } from './checker.model';
+
 enum Selector {
 	xpath,
 	name,
@@ -13,11 +14,13 @@ export enum PathType {
 	get,
 	gets,
 	input,
-	keys
+	keys,
+	press,
+	pope
 }
 
 export namespace PathHelper {
-	export function getTypes(): Array < string > {
+	export function getTypes(): Array<string> {
 		var keys = Object.keys(PathType);
 		return keys.slice(keys.length / 2, keys.length);
 	}
@@ -26,42 +29,48 @@ export namespace PathHelper {
 		return keys.slice(keys.length / 2, keys.length);
 	}
 	export function getField(model: PathModel): Set<String> {
-		let propertyNames:Array<String> = Object.getOwnPropertyNames(model);
-		let propertyMap:Set<String> = new Set();
-		propertyNames.forEach((value)=>{
+		let propertyNames: Array<String> = Object.getOwnPropertyNames(model);
+		let propertyMap: Set<String> = new Set();
+		propertyNames.forEach((value) => {
 			propertyMap.add(value);
 		})
 		return propertyMap;
 	}
-	export function buildModel(typeStr: string, oldModel: any): [PathModel, Set<String>] {
-		let type: PathType = (<any>PathType)[typeStr];
+	export function buildModel(type: string, oldModel: any): [PathModel, Set<String>] {
 		let newMode: any;
 		let field: Set<String>;
-		if (type == PathType.click){
+		if (type == PathType[PathType.click]) {
 			newMode = new ClickPathModel();
 			field = getField(newMode);
-		} else if (type == PathType.tap) {
+		} else if (type == PathType[PathType.tap]) {
 			newMode = new TapPathModel();
 			field = getField(newMode);
-		} else if (type == PathType.clicks) {
+		} else if (type == PathType[PathType.clicks]) {
 			newMode = new ClicksPathModel();
 			field = getField(newMode);
-		} else if (type == PathType.get) {
+		} else if (type == PathType[PathType.get]) {
 			newMode = new GetPathModel();
 			field = getField(newMode);
-		} else if (type == PathType.gets) {
+		} else if (type == PathType[PathType.gets]) {
 			newMode = new GetsPathModel();
 			field = getField(newMode);
-		} else if (type == PathType.input) {
+		} else if (type == PathType[PathType.input]) {
 			newMode = new InputPathModel();
 			field = getField(newMode);
-		}else if (type == PathType.keys) {
+		}else if (type == PathType[PathType.keys]) {
       newMode = new KeysPathModel();
       field = getField(newMode);
-    }
-		if (newMode){
+    } else if (type == PathType[PathType.press]) {
+			newMode = new PressPathModel();
+			field = getField(newMode);
+		} else if (type == PathType[PathType.pope]) {
+			newMode = new PopePathModel();
+			field = getField(newMode);
+		}
+
+		if (newMode) {
 			let propertyNames: Array<String> = Object.getOwnPropertyNames(oldModel);
-			propertyNames.forEach((key:string)=>{
+			propertyNames.forEach((key: string) => {
 				if (key != "type") {
 					newMode[key + ""] = oldModel[key + ""];
 				}
@@ -72,59 +81,75 @@ export namespace PathHelper {
 }
 
 export class PathModel {
-	_id: string = void 0;
-	title: string = void 0;
-	nodeId: string = void 0;
-  sleep:number = void 0;
+
+	_id: string = null;
+	type: string = null;
+	ucId: string = null;
+	nodeId: string = null;
+	title: string = null;
+	sleep: number = null;
 	canNull: boolean = false;
 	cacheElement: boolean = false;
 	cacheDesc: boolean = false;
-  checker:Array<CheckerModel> = []
+	dataStatus: number = 1;
+	checker: Array<CheckerModel>
+
 }
 
-export class ClickPathModel extends PathModel{
-	type: PathType = PathType.click;
-	selector: Selector = void 0;
-	element: string = void 0;
+export class ClickPathModel extends PathModel {
+	type: string = PathType[PathType.click];
+	selector: string = null;
+	element: string = null;
 	inThen: boolean = false;
 }
 
 export class TapPathModel extends PathModel {
-	type: PathType = PathType.tap;
-	selector: Selector = void 0;
-	element: string = void 0;
+	type: string = PathType[PathType.tap];
+	selector: string = null;
+	element: string = null;
 }
 
 export class ClicksPathModel extends PathModel {
-	type: PathType = PathType.clicks;
+	type: string = PathType[PathType.clicks];
 }
 
 export class GetPathModel extends PathModel {
-	type: PathType = PathType.get;
-	selector: Selector = void 0;
-	element: string = void 0;
-	index: number = void 0;
-	mode: string = void 0;
-	filter: string = void 0;
+	type: string = PathType[PathType.get];
+	selector: string = null;
+	element: string = null;
+	index: number = null;
+	mode: string = null;
+	filter: any = null;
 }
 
 export class GetsPathModel extends PathModel {
-	type: PathType = PathType.gets;
-	selector: Selector = void 0;
-	element: string = void 0;
-	limit: number = void 0;
+	type: string = PathType[PathType.gets];
+	selector: string = null;
+	element: string = null;
+	limit: number = null;
 }
 
 export class InputPathModel extends PathModel {
-	type: PathType = PathType.input;
-	selector: Selector = void 0;
-	element: string = void 0;
-	value: string = void 0;
+	type: string = PathType[PathType.input];
+	selector: string = null;
+	element: string = null;
+	value: string = null;
 }
 
 export class KeysPathModel extends PathModel {
-	type: PathType = PathType.keys;
-	value: string = void 0;
+	type: string = PathType[PathType.keys];
+	value: string = null;
+}
+
+export class PressPathModel extends PathModel {
+	type: string = PathType[PathType.press];
+	selector: string = null;
+	element: string = null;
+	value: string = null;
+}
+
+export class PopePathModel extends PathModel {
+	type: string = PathType[PathType.pope];
 }
 
 
