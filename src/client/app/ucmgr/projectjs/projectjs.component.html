@@ -1,0 +1,4 @@
+<mv-nav [title]="projectJs.name" [rightBtnConf]="rightBtnConf" [marginMenu]="true"></mv-nav>
+<div ace-editor [(text)]="projectJs.script" 
+(textChanged)="onChange($event)"
+[mode]="'javascript'"></div>

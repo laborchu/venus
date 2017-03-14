@@ -1,8 +1,11 @@
 import { UcModel } from './uc.model';
+import { BaseHelper } from './base.model';
+
 export class UcGroupModel{
 	_id: string = null;
 	projectId: string = null;
 	name: string = null;
+	order: number = null;
 	dataStatus: number = null;
 	ucs: Array<UcModel>;
 }
@@ -13,7 +16,7 @@ export namespace UcGroupHelper {
 		newModel = new UcGroupModel();
 		let propertyNames: Array<String> = Object.getOwnPropertyNames(newModel);
 		propertyNames.forEach((key: string) => {
-			if (sourceModel[key + ""]) {
+			if (sourceModel) {
 				newModel[key] = sourceModel[key + ""];
 			}
 		})

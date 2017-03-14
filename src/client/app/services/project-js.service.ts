@@ -15,6 +15,14 @@ export class ProjectJsService extends MvService {
     super(http);
   }
 
+  setProjectJsChangeSubject(projectJs: ProjectJsModel): void {
+    this.projectJsChangeSubject.next(projectJs);
+  }
+
+  getProjectJsChangeSubject(): Observable<ProjectJsModel> {
+    return this.projectJsChangeSubject.asObservable();
+  }
+
   getProjectJsList(projectId: string): Observable<ProjectJsModel[]> {
     let url: string = `api/projects/${projectId}/js`;
     return this.getHttp(url);
@@ -34,5 +42,15 @@ export class ProjectJsService extends MvService {
   updateScript(projectJs: ProjectJsModel): Observable<ProjectJsModel> {
     let url: string = `api/projectjs/${projectJs._id}/script`;
     return this.patchHttp(url, projectJs);
+  }
+
+  updateProjectJs(projectJs: ProjectJsModel): Observable<ProjectJsModel> {
+    let url: string = `api/projectjs/${projectJs._id}`;
+    return this.patchHttp(url, projectJs);
+  }
+
+  deleteJs(jsId: string): Observable<ProjectJsModel> {
+    let url: string = `api/projectjs/${jsId}`;
+    return this.delHttp(url);
   }
 }

@@ -1,0 +1,21 @@
+<div class="modal-header">
+    <h4 class="modal-title">全局脚本编辑</h4>
+    <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+<div class="modal-body">
+   <form #newProjectJsForm="ngForm">
+        <div class="form-group">
+            <input type="text" class="form-control" placeholder="name" required [(ngModel)]="model.name" name="name" #name="ngModel">
+            <div [hidden]="name.valid || name.pristine" class="valid-error">name不能为空</div>
+        </div>
+        <div class="form-group">
+            <input type="text" class="form-control" placeholder="jsName" required [(ngModel)]="model.jsName" name="jsName" #jsName="ngModel">
+            <div [hidden]="jsName.valid || jsName.pristine" class="valid-error">jsName不能为空</div>
+        </div>
+    </form>
+</div>
+<div class="modal-footer">
+    <button type="button" [disabled]="!newProjectJsForm.form.valid" class="btn btn-success" (click)="activeModal.close('Close click')">保存</button>
+</div>

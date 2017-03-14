@@ -1,4 +1,5 @@
 import { CheckerModel } from './checker.model';
+import { BaseHelper } from './base.model';
 
 enum Selector {
 	xpath,
@@ -36,7 +37,7 @@ export namespace PathHelper {
 		})
 		return propertyMap;
 	}
-	export function buildModel(type: string, oldModel: any): [PathModel, Set<String>] {
+	export function buildModel(type: string, oldModel: any, clean: boolean = false,filter:any = {}): [PathModel, Set<String>] {
 		let newMode: any;
 		let field: Set<String>;
 		if (type == PathType[PathType.click]) {
@@ -69,10 +70,18 @@ export namespace PathHelper {
 		}
 
 		if (newMode) {
-			let propertyNames: Array<String> = Object.getOwnPropertyNames(oldModel);
+			let propertyNames: Array<String>;
+			if (clean) {
+				propertyNames = Object.getOwnPropertyNames(newMode);
+			} else {
+				propertyNames = Object.getOwnPropertyNames(oldModel);
+			}
 			propertyNames.forEach((key: string) => {
-				if (key != "type") {
-					newMode[key + ""] = oldModel[key + ""];
+				if (key != "type" && BaseHelper.has(oldModel[key])) {
+					newMode[key] = oldModel[key];
+				}
+				if ((clean && !BaseHelper.has(newMode[key])) || filter[key]) {
+					delete newMode[key];
 				}
 			})
 		}
@@ -92,6 +101,7 @@ export class PathModel {
 	cacheElement: boolean = false;
 	cacheDesc: boolean = false;
 	dataStatus: number = 1;
+	order: number = null;
 	checker: Array<CheckerModel>
 
 }

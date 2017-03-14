@@ -11,6 +11,7 @@ import { AceEditorDirective, AceEditorComponent } from 'ng2-ace-editor';
 import { MenuComponent } from './menu/index';
 import { NavbarComponent } from './navbar/index';
 import { MvNavComponent } from './mv-nav/index';
+import { MvProjectJsFormContent } from './projectjs/index';
 /**
  * Do not specify providers for modules that might be imported by a lazy loaded module.
  */
@@ -23,9 +24,12 @@ import { MvNavComponent } from './mv-nav/index';
       confirmText: '确认'
     }),
     SimpleNotificationsModule.forRoot()],
-  declarations: [MenuComponent, NavbarComponent, MvNavComponent, AceEditorDirective, AceEditorComponent],
+  declarations: [MenuComponent, NavbarComponent, MvNavComponent,
+    AceEditorDirective, AceEditorComponent, MvProjectJsFormContent],
   exports: [MenuComponent, NavbarComponent, MvNavComponent,
-    CommonModule, FormsModule, RouterModule, NgbModule, AceEditorDirective, AceEditorComponent]
+    CommonModule, FormsModule, RouterModule, NgbModule, AceEditorDirective, AceEditorComponent,
+    MvProjectJsFormContent],
+  entryComponents: [MvProjectJsFormContent]
 })
 export class SharedModule {
   static forRoot(): ModuleWithProviders {

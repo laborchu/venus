@@ -1,22 +1,22 @@
 @import "../../../css/variable";
-
 :host /deep/ {
     .modal-dialog {
         max-width: 1000px;
-        .modal-body {
-            padding: 0;
-        }
     }
-    .modal-body{
+    .modal-body {
         height: 350px;
     }
-    .ace_editor{
+    .ace_editor {
         height: 100%;
     }
 }
 
 .top-bottom {
     border-top: 2px solid $split-color;
+}
+
+.margin-menu {
+    margin-left: 205px;
 }
 
 .mv-nav {
@@ -41,7 +41,7 @@
             cursor: pointer;
         }
     }
-    .can-click{
+    .can-click {
         cursor: pointer;
     }
     .unclick {

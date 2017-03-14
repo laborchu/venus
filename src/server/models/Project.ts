@@ -7,6 +7,13 @@ import { ProjectModel } from './index';
 
 const _schema = new mongoose.Schema({
   name: { type: String },
+  platform: { type: String },
+  package: { type: String },
+  activity: { type: String },
+  udid: { type: String },
+  platformVersion: { type: String },
+  bundleId: { type: String },
+  deviceName: { type: String },
   order: { type: Number },
   dataStatus: { type: Number }
 });
@@ -30,13 +37,23 @@ class Project extends BaseModel {
     });
   }
 
-  static insert(project: ProjectModel): Promise<ProjectModel> {
+  static insert(project: any): Promise<ProjectModel> {
+    project._id = new mongoose.Types.ObjectId();
     return new Promise<ProjectModel>((resolve, reject) => {
-      _model.insertMany([project], (err: any, projects: Array<ProjectModel>) => {
-        err ? reject(err) : resolve(projects[0])
+      _model.create(project, (err: any, result: ProjectModel) => {
+        err ? reject(err) : resolve(result)
       })
     });
   }
+
+  static update(project: ProjectModel): Promise<ProjectModel> {
+    return new Promise<ProjectModel>((resolve, reject) => {
+      _model.update({ _id: project._id }, project, {}, (err, rawResponse) => {
+        err ? reject(err) : resolve(rawResponse)
+      })
+    });
+  }
+
 }
 
 export { Project }

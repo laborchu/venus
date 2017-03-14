@@ -26,33 +26,49 @@
     </div>
     <div class="modal-body clearfix">
         <form #newProjectForm="ngForm">
+            <div class="form-group radio">
+                <label class="radio-label" *ngFor="let platform of platformTypes">
+                    <input name="type" type="radio" [(ngModel)]="newProject.platform" value="{{platform}}" (click)="platformTypeChange(platform)"> {{platform}}
+                </label>
+            </div>
             <div class="form-group">
+                <label class="form-control-label">name</label>
                 <input type="text" class="form-control" placeholder="名称" required [(ngModel)]="newProject.name" name="name" #name="ngModel">
                 <div [hidden]="name.valid || name.pristine" class="valid-error">名称不能为空</div>
+            </div>
+            <div class="form-group" *ngIf="platformFieldSet.has('package')">
+                <label class="form-control-label">package</label>
+                <input name="package" [(ngModel)]="newProject.package" #package="ngModel" required type="text" class="form-control" placeholder="package">
+                <div [hidden]="package.valid || package.pristine" class="valid-error">package不能为空</div>
+            </div>
+            <div class="form-group" *ngIf="platformFieldSet.has('activity')">
+                <label class="form-control-label">activity</label>
+                <input name="activity" [(ngModel)]="newProject.activity" #activity="ngModel" required type="text" class="form-control" placeholder="activity">
+                <div [hidden]="activity.valid || activity.pristine" class="valid-error">activity不能为空</div>
+            </div>
+            <div class="form-group" *ngIf="platformFieldSet.has('platformVersion')">
+                <label class="form-control-label">platformVersion</label>
+                <input name="platformVersion" [(ngModel)]="newProject.platformVersion" #platformVersion="ngModel" required type="text" class="form-control" placeholder="platformVersion">
+                <div [hidden]="platformVersion.valid || platformVersion.pristine" class="valid-error">platformVersion不能为空</div>
+            </div>
+            <div class="form-group" *ngIf="platformFieldSet.has('bundleId')">
+                <label class="form-control-label">bundleId</label>
+                <input name="bundleId" [(ngModel)]="newProject.bundleId" #bundleId="ngModel" required type="text" class="form-control" placeholder="bundleId">
+                <div [hidden]="bundleId.valid || bundleId.pristine" class="valid-error">bundleId不能为空</div>
+            </div>
+            <div class="form-group" *ngIf="platformFieldSet.has('deviceName')">
+                <label class="form-control-label">deviceName</label>
+                <input name="deviceName" [(ngModel)]="newProject.deviceName" #deviceName="ngModel" required type="text" class="form-control" placeholder="deviceName">
+                <div [hidden]="deviceName.valid || deviceName.pristine" class="valid-error">deviceName不能为空</div>
+            </div>
+            <div class="form-group" *ngIf="platformFieldSet.has('udid')">
+                <label class="form-control-label">udid</label>
+                <input name="udid" [(ngModel)]="newProject.udid" #udid="ngModel"  type="text" class="form-control" placeholder="udid">
             </div>
         </form>
     </div>
     <div class="modal-footer">
         <button type="button" [disabled]="!newProjectForm.form.valid" class="btn btn-success" (click)="c()">保存</button>
-    </div>
-</template>
-<template #projectJsAddContent ngbModalContainer let-c="close" let-d="dismiss">
-    <div class="modal-header">
-        <button type="button" class="close" (click)="d()">
-            <span>&times;</span>
-        </button>
-        <h4 class="modal-title">新增ProjectJs</h4>
-    </div>
-    <div class="modal-body clearfix">
-        <form #newProjectJsForm="ngForm">
-            <div class="form-group">
-                <input type="text" class="form-control" placeholder="jsCode" required [(ngModel)]="newProjectJs.jsCode" name="jsCode" #jsCode="ngModel">
-                <div [hidden]="jsCode.valid || jsCode.pristine" class="valid-error">jsCode不能为空</div>
-            </div>
-        </form>
-    </div>
-    <div class="modal-footer">
-        <button type="button" [disabled]="!newProjectJsForm.form.valid" class="btn btn-success" (click)="c()">保存</button>
     </div>
 </template>
 <div class="menu">
@@ -78,14 +94,15 @@
     </div>
     <div class="menu-group">
         <div class="group-title">
-            <i class="fa fa-book"></i> 全局脚本
+            <i class="fa fa-file-code-o"></i> 全局脚本
         </div>
         <a class="group-item" *ngFor="let projectJs of projectJsArray" (click)="doSelectJs(projectJs)" [ngClass]="{select:projectJs==selectJs}" routerLink="/projects/{{selectProject?._id}}/projectjs/{{projectJs._id}}">
-            {{projectJs.jsCode}}
+            {{projectJs.name}}
         </a>
     </div>
     <footer class="menu-footer">
         <i class="fa fa-plus-circle" #plusP="ngbPopover" placement="top" [ngbPopover]="popPlus"></i>
+        <i class="fa fa-cog" (click)="openNewProject(projectAddContent,this.selectProject)"></i>
     </footer>
 </div>
 <template #popProject>
@@ -94,5 +111,5 @@
 <template #popPlus>
     <div class="pop-item" (click)="plusP.close();openUcGroup(ucGroupAddContent)">新增UC组</div>
     <div class="pop-item" (click)="plusP.close();openNewProject(projectAddContent)">新增Project</div>
-    <div class="pop-item" (click)="plusP.close();openNewProjectJs(projectJsAddContent)">新增ProjectJs</div>
+    <div class="pop-item" (click)="plusP.close();openNewProjectJs()">新增ProjectJs</div>
 </template>
