@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import './operators';
 import { UserModel } from './models/index';
@@ -14,13 +14,21 @@ import { Md5 } from "ts-md5/dist/md5";
 	templateUrl: 'login.component.html',
 	styleUrls: ['login.component.css'],
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
 	constructor(
 		private router: Router,
 		private sessionService: SessionService) {}
 
   uname: string ="";
   pwd: string = "";
+
+  ngOnInit() {
+	  this.sessionService.getSession().subscribe((user: UserModel) => {
+		  if (user._id) {
+			  this.router.navigate(['/projects']);
+		  }
+	  })
+  }
 
   login(){
 	  let user: UserModel = new UserModel();

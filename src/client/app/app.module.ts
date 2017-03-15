@@ -5,8 +5,9 @@ import { HttpModule } from '@angular/http';
 import { FormsModule } from '@angular/forms';
 import { SimpleNotificationsModule } from 'angular2-notifications';
 
-import { AppComponent, LoginComponent } from './index';
+import { AppComponent, LoginComponent, NotFoundComponent } from './index';
 import { AppRoutingModule } from './app-routing.module';
+import { NotFoundRoutingModule } from './not-found-routing.module';
 
 import { SharedModule } from './shared/shared.module';
 import { UcMgrModule } from './ucmgr/ucmgr.module';
@@ -24,16 +25,17 @@ import {
     AppRoutingModule,
     SharedModule.forRoot(),
     UcMgrModule,
+    NotFoundRoutingModule,
     SimpleNotificationsModule.forRoot()
   ],
-  declarations: [AppComponent, LoginComponent],
+  declarations: [AppComponent, LoginComponent, NotFoundComponent],
   providers: [
     {
       provide: APP_BASE_HREF,
       useValue: '<%= APP_BASE %>'
     },
     ProjectService, UcGroupService, UcService, NodeService,
-     PathService, ProjectJsService, SessionService
+    PathService, ProjectJsService, SessionService
   ],
   bootstrap: [AppComponent]
 
