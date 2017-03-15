@@ -59,7 +59,6 @@ export namespace CheckHelper {
       } else {
         propertyNames = Object.getOwnPropertyNames(oldModel);
       }
-      console.log(oldModel);
       propertyNames.forEach((key:string)=>{
         if (key != "type" && BaseHelper.has(oldModel[key])) {
           newMode[key] = oldModel[key];
@@ -68,7 +67,6 @@ export namespace CheckHelper {
           delete newMode[key];
         }
       })
-      console.log(newMode);
     }
     return [newMode, field];
   }

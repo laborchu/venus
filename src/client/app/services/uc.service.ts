@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Response, Http } from '@angular/http';
+import { Router } from '@angular/router';
+import { NotificationsService } from 'angular2-notifications';
 
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
@@ -14,8 +16,10 @@ export class UcService extends MvService {
 
 	private ucChangeSubject: Subject<UcModel> = new Subject<UcModel>();
 
-	constructor(protected http: Http) {
-		super(http);
+	constructor(protected router: Router,
+		protected http: Http,
+		protected _notificationsService: NotificationsService) {
+		super(router, http, _notificationsService);
 	}
 
 	setUcChangeSubject(ucModel: UcModel): void {

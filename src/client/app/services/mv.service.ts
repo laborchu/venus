@@ -1,4 +1,6 @@
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
+import { NotificationsService } from 'angular2-notifications';
 import { Response, Http, Headers, RequestOptions } from '@angular/http';
 
 import { Observable } from 'rxjs/Observable';
@@ -6,7 +8,10 @@ import { Observable } from 'rxjs/Observable';
 import { ProjectModel } from '../models/index';
 
 export abstract class MvService {
-	constructor(protected http: Http) {
+	constructor(
+		protected router: Router,
+		protected http: Http,
+		protected _notificationsService: NotificationsService) {
 	}
 
 	getHttp(url: string, extractData = this.extractData): Observable<any> {
@@ -47,11 +52,19 @@ export abstract class MvService {
 			.catch(this.handleError);
 	}
 
-	private extractData(res: Response) {
+	extractData = (res: Response)=> {
 		let body = res.json();
-		if (body.code==1){
+		if (body.code == 1) {
 			return body.data || {};
-		}else{
+		} else if (body.code == 2) {
+			this.router.navigate(['/login']);
+		} else if (body.code == 0) {
+			
+			this._notificationsService.error(
+				'错误',
+				body.msg
+			);
+		} else {
 			throw new Error(body.msg);
 		}
 	}

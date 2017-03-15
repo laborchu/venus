@@ -3,34 +3,37 @@ import { BrowserModule } from '@angular/platform-browser';
 import { APP_BASE_HREF } from '@angular/common';
 import { HttpModule } from '@angular/http';
 import { FormsModule } from '@angular/forms';
-// import { InMemoryWebApiModule } from 'angular-in-memory-web-api';
+import { SimpleNotificationsModule } from 'angular2-notifications';
 
-import { AppComponent } from './app.component';
+import { AppComponent, LoginComponent } from './index';
 import { AppRoutingModule } from './app-routing.module';
 
 import { SharedModule } from './shared/shared.module';
 import { UcMgrModule } from './ucmgr/ucmgr.module';
 
-import { ProjectService,ProjectJsService, UcGroupService, UcService, NodeService, PathService } from './services/index';
-// import { InMemoryDataService }  from './services/in-memory-data.service';
+import {
+  ProjectService, ProjectJsService, UcGroupService,
+  UcService, NodeService, PathService, SessionService
+} from './services/index';
 
 @NgModule({
   imports: [
-    BrowserModule, 
+    BrowserModule,
     FormsModule,
-    HttpModule, 
-    AppRoutingModule, 
-  	SharedModule.forRoot(),
+    HttpModule,
+    AppRoutingModule,
+    SharedModule.forRoot(),
     UcMgrModule,
-    // InMemoryWebApiModule.forRoot(InMemoryDataService)
-    ],
-  declarations: [AppComponent],
+    SimpleNotificationsModule.forRoot()
+  ],
+  declarations: [AppComponent, LoginComponent],
   providers: [
-	  {
-	    provide: APP_BASE_HREF,
-	    useValue: '<%= APP_BASE %>'
-	  },
-    ProjectService, UcGroupService, UcService, NodeService, PathService, ProjectJsService
+    {
+      provide: APP_BASE_HREF,
+      useValue: '<%= APP_BASE %>'
+    },
+    ProjectService, UcGroupService, UcService, NodeService,
+     PathService, ProjectJsService, SessionService
   ],
   bootstrap: [AppComponent]
 

@@ -74,7 +74,7 @@
 <div class="menu">
     <header class="menu-header">
         <div class="pull-left logo">
-            <img src="assets/img/venus-logo.png">
+            <img src="assets/img/logo.png">
         </div>
         <div class="project pull-left" #projectP="ngbPopover" placement="bottom" [ngbPopover]="popProject">
             <span class="project-name ellipsis" title="{{selectProject?.name}}">
@@ -87,7 +87,7 @@
         <div class="group-title">
             <i class="fa fa-book"></i> UC组列表
         </div>
-        <a class="group-item" *ngFor="let group of groupArray" (click)="doSelectGroup(group)" [ngClass]="{select:group==selectGroup}" routerLink="/ucgroup/{{group.id}}">
+        <a class="group-item" *ngFor="let group of groupArray" (click)="doSelectGroup(group)" [ngClass]="{select:group==selectGroup}">
             {{group.name}}
             <span class="pull-right item-num">4</span>
         </a>
@@ -96,7 +96,7 @@
         <div class="group-title">
             <i class="fa fa-file-code-o"></i> 全局脚本
         </div>
-        <a class="group-item" *ngFor="let projectJs of projectJsArray" (click)="doSelectJs(projectJs)" [ngClass]="{select:projectJs==selectJs}" routerLink="/projects/{{selectProject?._id}}/projectjs/{{projectJs._id}}">
+        <a class="group-item" *ngFor="let projectJs of projectJsArray" (click)="doSelectJs(projectJs)" [ngClass]="{select:projectJs==selectJs}">
             {{projectJs.name}}
         </a>
     </div>

@@ -1,6 +1,7 @@
 import e = require('express');
 
 enum RespCode {
+	SESSION_OUT=2,
 	SUCCESS=1,
 	FAIL=0
 }

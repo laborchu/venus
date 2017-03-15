@@ -27,11 +27,6 @@ export class NavbarComponent implements OnInit {
 	groupId: string;
 	projectId: string;
 
-	public options = {
-		position: ["bottom", "right"],
-		timeOut: 3000
-	}
-
 	ngOnInit(): void {
 		this.ucGroupService.getSelectGroupSubject().subscribe((ucGroupModel: UcGroupModel) => {
 			this.groupId = ucGroupModel._id;

@@ -5,24 +5,23 @@ import { NotificationsService } from 'angular2-notifications';
 
 import { Observable } from 'rxjs/Observable';
 
-import { PathModel } from '../models/index';
+import { UserModel } from '../models/index';
 import { MvService } from './mv.service';
 
 @Injectable()
-export class PathService extends MvService {
+export class SessionService extends MvService {
+	private sessionUrl: string = 'open/session';
+
 	constructor(protected router: Router,
 		protected http: Http,
 		protected _notificationsService: NotificationsService) {
 		super(router, http, _notificationsService);
 	}
 
-	getPaths(nodeId: string): Observable<PathModel[]> {
-		let url = `api/nodes/${nodeId}/paths`;
-		return this.getHttp(url);
+	getSession(): Observable<UserModel> {
+		return this.getHttp(this.sessionUrl);
 	}
-
-	getNode(pathId: number): Observable<PathModel> {
-		let url = `api/paths/${pathId}`;
-		return this.getHttp(url);
+	postSession(user:UserModel): Observable<UserModel> {
+		return this.postHttp(this.sessionUrl, user);
 	}
 }
