@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { NgbModal, NgbModalRef, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { NotificationsService } from 'angular2-notifications';
 
@@ -22,6 +22,7 @@ import 'rxjs/add/operator/concatMap';
 export class MenuComponent implements OnInit {
 	constructor(
 		private modalService: NgbModal,
+		private route: ActivatedRoute,
 		private router: Router,
 		private projectService: ProjectService,
 		private projectJsService: ProjectJsService,
@@ -47,7 +48,7 @@ export class MenuComponent implements OnInit {
 		//初始化项目
 		this.projectService.getProjects().subscribe(projects=>{
 			this.projects = projects;
-			this.doSelectProject(projects[0]);
+			this.doSelectProject(projects[0], this.router.url=="/projects");
 		})
 
 		//监听ucGroup变化
@@ -87,16 +88,17 @@ export class MenuComponent implements OnInit {
 			if (projectJs.dataStatus === 1 && this.selectJs._id == projectJs._id) {
 				this.selectJs = projectJs;
 			}
-			debugger
 		})
 	}
 
-	doSelectProject(project: ProjectModel) {
+	doSelectProject(project: ProjectModel,route:boolean = true) {
 		this.selectProject = project;
 		this.selectJs = null;
 		this.selectGroup = null;
 		this.projectService.setProjectChangeSubject(this.selectProject);
-		this.router.navigate(["/projects", project._id]);
+		if (route){
+			this.router.navigate(["/projects", project._id]);
+		}
 		this.ucGroupService
 			.getUcGroups(project._id)
 			.concatMap((ucGroups: Array<UcGroupModel>) => {
@@ -132,8 +134,11 @@ export class MenuComponent implements OnInit {
 	openNewProject(content: any, project?: ProjectModel) {
 		if (project) {
 			this.newProject = project;
-			this.platformFieldSet = ProjectHelper.getField(this.newProject);
+		}else{
+			this.newProject = new IosProjectModel();
 		}
+		this.platformFieldSet = ProjectHelper.getField(this.newProject);
+
 		this.modalService.open(content, { backdrop: "static" }).result.then(() => {
 			let projectObservable: any = null;
 			if (this.newProject._id) {

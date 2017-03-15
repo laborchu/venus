@@ -35,10 +35,12 @@ export class AppComponent implements OnInit {
   ngOnInit() {
     this.sessionService.getSession().subscribe((user: UserModel) => {
       this.hasLoading = true;
-      if(!user._id){
+      if (!user._id) {
         this.router.navigate(['/login']);
-      }else{
-        this.router.navigate(['/projects']);
+      } else {
+        if (this.router.url == "/") {
+          this.router.navigate(['/projects']);
+        }
       }
     })
   }
