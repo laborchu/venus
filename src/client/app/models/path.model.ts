@@ -37,6 +37,14 @@ export namespace PathHelper {
 		})
 		return propertyMap;
 	}
+    export function setFilter(oldModel: any): PathModel {
+      if(oldModel.filterStr){
+        oldModel.filter = JSON.parse(oldModel.filterStr);
+        return oldModel
+      }
+      return oldModel
+    }
+
 	export function buildModel(type: string, oldModel: any, clean: boolean = false,filter:any = {}): [PathModel, Set<String>] {
 		let newMode: any;
 		let field: Set<String>;
@@ -77,9 +85,10 @@ export namespace PathHelper {
 				propertyNames = Object.getOwnPropertyNames(oldModel);
 			}
 			propertyNames.forEach((key: string) => {
-				if (key != "type" && BaseHelper.has(oldModel[key])) {
-					newMode[key] = oldModel[key];
-				}
+                newMode[key] = oldModel[key];
+                if(key=='filter'){
+                    newMode.filterStr = JSON.stringify(newMode.filter)
+                }
 				if ((clean && !BaseHelper.has(newMode[key])) || filter[key]) {
 					delete newMode[key];
 				}
@@ -126,6 +135,7 @@ export class ClicksPathModel extends PathModel {
 export class GetPathModel extends PathModel {
 	type: string = PathType[PathType.get];
 	selector: string = null;
+  filterStr: string = null;
 	element: string = null;
 	index: number = null;
 	mode: string = null;

@@ -9,6 +9,7 @@ const _schema = new mongoose.Schema({
 	ucId: { type: String },
 	nodeId: { type: String },
 	pathId: { type: String },
+	title: { type: String },
 	type: { type: String },
 	selector: { type: String },
 	element: { type: String },
@@ -58,6 +59,14 @@ class Checker extends BaseModel {
 			})
 		});
 	}
+
+  static update(js: any): Promise<CheckerModel> {
+    return new Promise<CheckerModel>((resolve, reject) => {
+      _model.update({ _id: js._id }, js, {}, (err, rawResponse) => {
+        err ? reject(err) : resolve(rawResponse)
+      })
+    });
+  }
 }
 
 export { Checker }

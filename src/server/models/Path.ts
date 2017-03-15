@@ -62,6 +62,14 @@ class Path extends BaseModel {
 			})
 		});
 	}
+
+  static updatePath(js: any): Promise<PathModel> {
+    return new Promise<PathModel>((resolve, reject) => {
+      _model.update({ _id: js._id }, js, {}, (err, rawResponse) => {
+        err ? reject(err) : resolve(rawResponse)
+      })
+    });
+  }
 }
 
 export { Path }

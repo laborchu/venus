@@ -12,7 +12,7 @@
             </div>
             <div class="form-group radio">
                 <label *ngFor="let type of pathTypes">
-                    <input name="type" type="radio"  value="{{type}}" (click)="typeChange(type)"> {{type}}
+                    <input name="type" type="radio"  [(ngModel)]="pathModel.type"   value="{{type}}" (click)="typeChange(type)"> {{type}}
                 </label>
             </div>
             <div class="form-group radio" *ngIf="pathFieldSet.has('selector')">
@@ -33,7 +33,7 @@
                 <input type="text" [(ngModel)]="pathModel.mode" class="form-control" placeholder="mode">
             </div>
             <div class="form-group"  *ngIf="pathFieldSet.has('filter')">
-                <input type="text" [(ngModel)]="pathModel.filter" class="form-control" placeholder="filter">
+                <input type="text" [(ngModel)]="pathModel.filterStr" class="form-control" placeholder="filter">
             </div>
             <div class="form-group"  *ngIf="pathFieldSet.has('limit')">
                 <input type="text" [(ngModel)]="pathModel.limit" class="form-control" placeholder="limit">
@@ -49,7 +49,7 @@
             <div class="checker-list">
                 <div class="checker" *ngFor="let checker of pathModel.checker; let i = index;" (click)="openChecker(checker,i)">
                     {{checker.title}}
-                    <div class="checker-toobar">
+                    <div class="checker-toobar" (click)="delChecker(i)">
                         <i class="fa fa-trash"></i>
                     </div>
                 </div>
@@ -63,8 +63,10 @@
                       <input name="type" type="radio"  value="{{type}}" (click)="checkChange(type)"> {{type}}
                     </label>
                 </div>
-                <div class="form-inline form-group"  *ngIf="checkFieldSet.has('selector')">
-                  <input type="text" [(ngModel)]="checkerModel.selector" class="form-control" placeholder="selector">
+                <div class="form-inline form-group radio"  *ngIf="checkFieldSet.has('selector')">
+                  <label  *ngFor="let selector of selectors">
+                    <input  name="checkerelector"  [(ngModel)]="checkerModel.selector"  type="radio" value="{{selector}}"> {{selector}}
+                  </label>S
                 </div>
                 <div class="form-inline form-group" *ngIf="checkFieldSet.has('element')">
                     <input type="text" [(ngModel)]="checkerModel.element"  class="form-control" placeholder="element">
@@ -84,11 +86,6 @@
                 <div class="form-inline form-group" *ngIf="checkFieldSet.has('paths')">
                       <input type="text" [(ngModel)]="checkerModel.paths"  class="form-control" placeholder="paths">
                 </div>
-                <!--<div class="form-group">-->
-                    <!--<span class="right-btn" (click)="checkSave()">-->
-                        <!--<i class="fa fa-save"></i>-->
-                    <!--</span>-->
-                <!--</div>-->
             </div>
         </div>
     </div>
@@ -114,7 +111,7 @@
 <mv-nav [title]="'路径'" [topBottom]="true" [rightBtnConf]="pathRightBtnConf"></mv-nav>
 <div class="step-container">
     <div class="step-list">
-        <div *ngFor="let path of nodeModel.paths" class="step" (click)="openPath(path)">
+        <div *ngFor="let path of nodeModel.paths ; let i = index;" class="step" (click)="openPath(path,i)">
             {{path.title}}
             <div class="step-toobar">
                 <i class="fa fa-trash"></i>

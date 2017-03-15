@@ -41,6 +41,7 @@ export class NodeComponent implements OnInit {
 	checks: Array<String> = CheckHelper.getTypes();
 	groupId: string = "";
 	ucId: string = "";
+	nodeId: string = "";
   checkIndex:number
 	nodeRightBtnConf: Object = {
 		save: {
@@ -68,9 +69,14 @@ export class NodeComponent implements OnInit {
 	pathRightBtnConf: Object = {
 		add: {
 			click: () => {
-			  debugger
+        this.pathModel = new PathModel();
+        this.pathModel.nodeId = this.nodeId
 				this.modalService.open(this.pathContent, { backdrop: "static", size: "lg" }).result.then((result) => {
-					// debugger
+          this.pathModel  = PathHelper.setFilter(this.pathModel )
+          this.pathService.addPath(this.pathModel )
+            .subscribe((newPath: PathModel) => {
+              this.nodeModel.paths.push(newPath)
+            });
 				}, (reason) => {
 					// debugger
 				});
@@ -84,6 +90,7 @@ export class NodeComponent implements OnInit {
 		});
 		this.route.params.subscribe((params: Params) => {
 			let nodeId = params["nodeId"];
+      this.nodeId = params["nodeId"];
 			this.ucId = params["ucId"];
 			if (nodeId) {
 				this.nodeService.getNodes(nodeId)
@@ -91,6 +98,7 @@ export class NodeComponent implements OnInit {
 						this.nodeModel = nodes[0];
 						this.nodeTitle = this.nodeModel.title;
 						this.ucId = this.nodeModel.ucId;
+						this.	nodeId = nodeId;
 						this.navagate = ["/ucgroups", this.groupId, "ucs", this.ucId];
 						return this.pathService.getPaths(nodeId);
 					})
@@ -114,14 +122,26 @@ export class NodeComponent implements OnInit {
   openChecker(checker:CheckerModel,index:number){
     this.checkerModel = checker
     this.checkIndex= index
+    this.checkChange(checker.type)
+	}
+  delChecker(index:number){
+    this.pathModel.checker.splice(index,1)
 	}
 
-	openPath(path: PathModel) {
-		this.pathModel = path;
-		this.modalService.open(this.pathContent).result.then((result) => {
-			// debugger
+	openPath(path: PathModel,index:number) {
+    this.pathModel = path
+    this.typeChange(path.type)
+    this.pathService.getChecker(this.pathModel )
+      .subscribe((checkers:Array<CheckerModel>) => {
+        this.pathModel.checker = checkers
+      });
+    this.modalService.open(this.pathContent, { backdrop: "static", size: "lg" }).result.then(() => {
+      this.pathModel  = PathHelper.setFilter(this.pathModel )
+      this.pathService.updatePath(this.pathModel )
+        .subscribe((newPath: PathModel) => {
+            this.nodeModel.paths[index] =  this.pathModel ;
+        });
 		}, (reason) => {
-			// debugger
 		});
 	}
 
@@ -131,6 +151,9 @@ export class NodeComponent implements OnInit {
         if(this.checkIndex&&this.checkIndex>=0){
           this.pathModel.checker[this.checkIndex] = this.checkerModel
         }else{
+          if(!this.pathModel.checker){
+            this.pathModel.checker =  []
+          }
           this.pathModel.checker.push(this.checkerModel)
         }
         this.checkerModel = new CheckerModel()
