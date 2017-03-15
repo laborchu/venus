@@ -44,28 +44,13 @@ export class MenuComponent implements OnInit {
 	newProjectJs: ProjectJsModel = new ProjectJsModel();
 
 	ngOnInit(): void {
-		let projectObservable = this.projectService.getProjects();
-		let mapUcGroup = projectObservable.concatMap(projects => {
+		//初始化项目
+		this.projectService.getProjects().subscribe(projects=>{
 			this.projects = projects;
-			this.selectProject = projects[0];
-			this.projectService.setProjectChangeSubject(this.selectProject);
-			return this.ucGroupService.getUcGroups(projects[0]._id);
-		});
-		mapUcGroup.subscribe((ucGroups: Array<UcGroupModel>) => {
-			this.groupArray = ucGroups;
-			this.selectGroup = ucGroups[0];
-		});
+			this.doSelectProject(projects[0]);
+		})
 
-		let mapProjectJs = projectObservable.concatMap(projects => {
-			return this.projectJsService.getProjectJsList(projects[0]._id);
-		});
-		mapProjectJs.subscribe((array: Array<ProjectJsModel>) => {
-			this.projectJsArray = array;
-			if (array.length > 0) {
-				this.selectJs = array[0];
-			}
-		});
-
+		//监听ucGroup变化
 		this.ucGroupService.getUpdateGroupSubject().subscribe((group: UcGroupModel) => {
 			this.groupArray.every((e: UcGroupModel, index: number) => {
 				if (group._id == e._id) {
@@ -108,7 +93,7 @@ export class MenuComponent implements OnInit {
 	doSelectProject(project: ProjectModel) {
 		this.selectProject = project;
 		this.projectService.setProjectChangeSubject(this.selectProject);
-		this.router.navigate(["/projects", project._id, "ucgroups"])
+		this.router.navigate(["/projects", project._id]);
 		this.ucGroupService
 			.getUcGroups(project._id)
 			.concatMap((ucGroups: Array<UcGroupModel>) => {
@@ -123,10 +108,11 @@ export class MenuComponent implements OnInit {
 			});
 	}
 
+
 	doSelectGroup(group: UcGroupModel) {
 		this.selectJs = null;
 		this.selectGroup = group;
-		this.router.navigate(["/ucgroups", group._id]);
+		this.router.navigate(["/projects", this.selectProject._id, "ucgroups", group._id]);
 	}
 
 	openUcGroup(content: any) {
@@ -195,6 +181,8 @@ export class MenuComponent implements OnInit {
 	doSelectJs(js: ProjectJsModel) {
 		this.selectGroup = null;
 		this.selectJs = js;
+		this.router.navigate(["/projects", this.selectProject._id, "/projectjs", js._id]);
+
 	}
 
 }

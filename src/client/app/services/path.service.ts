@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Response, Http } from '@angular/http';
+import { Router } from '@angular/router';
+import { NotificationsService } from 'angular2-notifications';
 
 import { Observable } from 'rxjs/Observable';
 
@@ -8,8 +10,10 @@ import { MvService } from './mv.service';
 
 @Injectable()
 export class PathService extends MvService {
-	constructor(protected http: Http) {
-		super(http);
+	constructor(protected router: Router,
+		protected http: Http,
+		protected _notificationsService: NotificationsService) {
+		super(router, http, _notificationsService);
 	}
 
 	getPaths(nodeId: string): Observable<PathModel[]> {

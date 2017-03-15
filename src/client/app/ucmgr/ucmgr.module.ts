@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { CustomFormsModule } from 'ng2-validation';
 
-import { UcmgrComponent } from './ucmgr.component';
+import { UcmgrComponent,ProjectComponent } from './index';
 import { ProjectJsComponent } from './projectjs/projectjs.component';
 import { UcGroupComponent, GroupInfoComponent } from './uc-group/index';
 import { UcComponent } from './uc/index';
@@ -23,7 +23,7 @@ import { ConfirmationPopoverModule } from 'angular-confirmation-popover';
 			confirmText: '确认'
 		}),
 		 CustomFormsModule, CommonModule, UcMgrRoutingModule, SharedModule],
-	declarations: [UcGroupComponent, UcmgrComponent, ProjectJsComponent, 
+	declarations: [UcGroupComponent, UcmgrComponent, ProjectComponent, ProjectJsComponent, 
 					GroupInfoComponent, UcComponent, NodeComponent],
 	exports: [],
 	providers: []

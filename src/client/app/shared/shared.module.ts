@@ -4,7 +4,6 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ConfirmationPopoverModule } from 'angular-confirmation-popover';
-import { SimpleNotificationsModule } from 'angular2-notifications';
 
 import { AceEditorDirective, AceEditorComponent } from 'ng2-ace-editor';
 
@@ -22,8 +21,7 @@ import { MvProjectJsFormContent } from './projectjs/index';
       confirmButtonType: 'danger',
       cancelText: '取消',
       confirmText: '确认'
-    }),
-    SimpleNotificationsModule.forRoot()],
+    })],
   declarations: [MenuComponent, NavbarComponent, MvNavComponent,
     AceEditorDirective, AceEditorComponent, MvProjectJsFormContent],
   exports: [MenuComponent, NavbarComponent, MvNavComponent,

@@ -7,12 +7,14 @@ import UcGroupController from "./controllers/UcGroupController";
 import UcController from "./controllers/UcController";
 import NodeController from "./controllers/NodeController";
 import PathController from "./controllers/PathController";
+import SessionController from "./controllers/SessionController";
 new ProjectController();
 new ProjectJsController();
 new UcGroupController();
 new UcController();
 new NodeController();
 new PathController();
+new SessionController();
 
 export function init(app:any) {
 	RouterMap.__DecoratedRouters.forEach((controller: any, config: any) => {
