@@ -93,6 +93,8 @@ export class MenuComponent implements OnInit {
 
 	doSelectProject(project: ProjectModel) {
 		this.selectProject = project;
+		this.selectJs = null;
+		this.selectGroup = null;
 		this.projectService.setProjectChangeSubject(this.selectProject);
 		this.router.navigate(["/projects", project._id]);
 		this.ucGroupService
@@ -103,9 +105,6 @@ export class MenuComponent implements OnInit {
 			})
 			.subscribe((array: Array<ProjectJsModel>) => {
 				this.projectJsArray = array;
-				if (array.length > 0) {
-					this.selectJs = array[0];
-				}
 			});
 	}
 

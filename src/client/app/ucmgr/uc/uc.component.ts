@@ -25,6 +25,7 @@ export class UcComponent implements OnInit {
 	) { }
 	ucMode: UcModel = new UcModel();
 	ucKeyStr: string = "";
+	projectId: string = "";
 
 	@ViewChild('form') public form: NgForm;
 
@@ -44,7 +45,7 @@ export class UcComponent implements OnInit {
 				this.ucService.deleteUc(this.ucMode._id)
 					.subscribe(() => {
 						this.ucService.setUcChangeSubject(this.ucMode);
-						this.router.navigate(['/ucgroups', this.ucMode.groupId])
+						this.router.navigate(["/projects", this.projectId, 'ucgroups', this.ucMode.groupId])
 					});
 			}
 		},
@@ -76,12 +77,16 @@ export class UcComponent implements OnInit {
 	nodeRightBtnConf: Object = {
 		add: {
 			click: () => {
-				this.router.navigate(['/ucgroups', this.ucMode.groupId, 'ucs', this.ucMode._id, 'nodes'])
+				this.router.navigate(["/projects", this.projectId, 'ucgroups', this.ucMode.groupId, 'ucs', this.ucMode._id, 'nodes'])
 			}
 		}
 	};
 
 	ngOnInit() {
+		this.route.parent.parent.params.subscribe(params => {
+			this.projectId = params["projectId"];
+		});
+
 		this.route.params
 			.switchMap((params: Params) => this.ucService.getUc(params["ucId"]))
 			.switchMap((ucs: Array<UcModel>) => {
@@ -95,7 +100,7 @@ export class UcComponent implements OnInit {
 	}
 
 	showNode(node: NodeModel) {
-		this.router.navigate(['/ucgroups', this.ucMode.groupId, 'nodes', node._id]);
+		this.router.navigate(["/projects", this.projectId, 'ucgroups', this.ucMode.groupId, 'nodes', node._id]);
 	}
 
 	delNode(delNode: NodeModel) {

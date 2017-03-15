@@ -8,21 +8,22 @@ import 'rxjs/add/operator/switchMap';
  * This class represents the navigation bar component.
  */
 @Component({
-  moduleId: module.id,
-  selector: 'mv-uc-group',
-  templateUrl: 'uc-group.component.html',
-  styleUrls: ['uc-group.component.css'],
+	moduleId: module.id,
+	selector: 'mv-uc-group',
+	templateUrl: 'uc-group.component.html',
+	styleUrls: ['uc-group.component.css'],
 })
-export class UcGroupComponent implements OnInit{ 
+export class UcGroupComponent implements OnInit {
 	constructor(
-	  private router: Router,
-	  private route: ActivatedRoute,
-	  private ucService: UcService,
-	  private ucGroupService: UcGroupService
+		private router: Router,
+		private route: ActivatedRoute,
+		private ucService: UcService,
+		private ucGroupService: UcGroupService
 	) { }
 	ucArray: Array<UcModel>;
 	selectUc: UcModel;
-	ngOnInit():void{
+	projectId: string;
+	ngOnInit(): void {
 		this.refresh();
 		this.ucService.getUcChangeSubject().subscribe((uc: UcModel) => {
 			this.refresh();
@@ -34,6 +35,9 @@ export class UcGroupComponent implements OnInit{
 		this.route.firstChild.params.subscribe((params: Params) => {
 			ucId = params["ucId"];
 		})
+		this.route.parent.params.subscribe((params: Params) => {
+			this.projectId = params["projectId"];
+		})
 		this.route.params
 			.switchMap((params: Params) => {
 				let updateGroup: UcGroupModel = new UcGroupModel();
@@ -43,15 +47,15 @@ export class UcGroupComponent implements OnInit{
 			})
 			.subscribe((ucs: Array<UcModel>) => {
 				this.ucArray = ucs;
-				if (ucId){
-					this.ucArray.every((e: UcModel)=>{
-						if(e._id==ucId){
+				if (ucId) {
+					this.ucArray.every((e: UcModel) => {
+						if (e._id == ucId) {
 							this.selectUc = e;
 							return false;
 						}
 						return true;
 					})
-				}else{
+				} else {
 					this.selectUc = null;
 				}
 				ucId = null;
@@ -60,6 +64,6 @@ export class UcGroupComponent implements OnInit{
 
 	showUc(uc: UcModel) {
 		this.selectUc = uc;
-		this.router.navigate(['/ucgroups', uc.groupId, 'ucs', uc._id]);
+		this.router.navigate(['/projects', this.projectId, 'ucgroups', uc.groupId, 'ucs', uc._id]);
 	}
 }

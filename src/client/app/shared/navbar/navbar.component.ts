@@ -56,7 +56,7 @@ export class NavbarComponent implements OnInit {
 				.switchMap((params: Params) => this.ucService.addUc(uc))
 				.subscribe((result: UcModel) => {
 					this.ucService.setUcChangeSubject(result);
-					this.router.navigate(['/ucgroups', uc.groupId, 'ucs', result._id]);
+					this.router.navigate(["/projects", this.projectId, 'ucgroups', uc.groupId, 'ucs', result._id]);
 				});
 			newUcView.close();
 		}
