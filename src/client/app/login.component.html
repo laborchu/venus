@@ -2,7 +2,7 @@
     <div class="content">
         <div class="logo"></div>
         <div class="login-box">
-            <form #loginForm="ngForm">
+            <form #loginForm="ngForm" (keyup.enter)="loginForm.form.valid&&login()">
                 <div class="form-group">
                     <span class="fa fa-user" [ngClass]="{'fa-valid':!username.valid}"></span>
                     <input type="text" class="form-control" placeholder="用户名" required [(ngModel)]="uname" name="username" #username="ngModel">

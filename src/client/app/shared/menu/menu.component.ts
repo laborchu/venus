@@ -87,6 +87,7 @@ export class MenuComponent implements OnInit {
 			if (projectJs.dataStatus === 1 && this.selectJs._id == projectJs._id) {
 				this.selectJs = projectJs;
 			}
+			debugger
 		})
 	}
 
@@ -181,7 +182,7 @@ export class MenuComponent implements OnInit {
 	doSelectJs(js: ProjectJsModel) {
 		this.selectGroup = null;
 		this.selectJs = js;
-		this.router.navigate(["/projects", this.selectProject._id, "/projectjs", js._id]);
+		this.router.navigate(["/projects", this.selectProject._id, "projectjs", js._id]);
 
 	}
 

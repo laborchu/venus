@@ -27,7 +27,7 @@ app.use(session({
     host: '192.168.1.188',
     port: 32769
   }),
-  cookie: { path: '/', httpOnly: true, secure: false, maxAge: 60000 },
+  cookie: { path: '/', httpOnly: true, secure: false, maxAge: 3600000 },
   rolling: false,//每次请求都重会重置cookie的 maxAge，默认值为 false
   resave: true,//即使 session 没有被修改，也保存 session 值，默认为 true
   saveUninitialized: true
