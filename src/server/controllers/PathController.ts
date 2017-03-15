@@ -38,7 +38,7 @@ class PathController extends BaseController {
   async deletePath(req: e.Request, res: e.Response) {
     if (req.params.nodeId) {
       Checker.remove({ pathId: req.params.pathId });
-      let result = await Path.remove({pathId:req.params.pathId});
+      let result = await Path.remove({_id:req.params.pathId});
       res.send(super.wrapperRes(result));
     } else {
       res.send(super.wrapperRes([]));

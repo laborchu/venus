@@ -132,7 +132,12 @@ export class NodeComponent implements OnInit {
 	delChecker(index: number) {
 		this.pathModel.checker.splice(index, 1)
 	}
-
+  delPath(path: PathModel, index: number) {
+    this.pathService.delPath(path)
+      .subscribe((path: PathModel) => {
+        this.nodeModel.paths.splice(index,1)
+      });
+  }
 	openPath(path: PathModel, index: number) {
 		this.pathModel = path
 		this.typeChange(path.type)

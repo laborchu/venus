@@ -111,11 +111,11 @@
 <mv-nav [title]="'路径'" [topBottom]="true" [rightBtnConf]="pathRightBtnConf"></mv-nav>
 <div class="step-container">
     <div class="step-list">
-        <div *ngFor="let path of nodeModel.paths ; let i = index;" class="step" (click)="openPath(path,i)">
+        <div *ngFor="let path of nodeModel.paths ; let i = index;" class="step" >
             {{path.title}}
             <div class="step-toobar">
-                <i class="fa fa-trash"></i>
-                <i class="fa fa-plus"></i>
+                <i class="fa fa-trash" (click)="delPath(path,i)"></i>
+                <i class="fa fa-plus" (click)="openPath(path,i)"></i>
             </div>
         </div>
     </div>
