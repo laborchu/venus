@@ -1,7 +1,7 @@
 import e = require('express');
 import BaseController from "./BaseController";
 import { router } from "../decorators/Web";
-import { Node } from '../models/Node';
+import { Node, UserModel } from '../models/index';
 
 class NodeController extends BaseController {
 
@@ -36,11 +36,12 @@ class NodeController extends BaseController {
 		path: '/api/ucs/:ucId/nodes'
 	})
 	async saveNode(req: e.Request, res: e.Response) {
+		let user: UserModel = super.getUser(req);
 		if (req.body._id) {
-			let result = await Node.update(req.body);
+			let result = await Node.update(req.body, user._id);
 			res.send(super.wrapperRes(result));
 		} else {
-			let result = await Node.insert(req.body);
+			let result = await Node.insert(req.body, user._id);
 			res.send(super.wrapperRes(result));
 		}
 	}
@@ -51,8 +52,9 @@ class NodeController extends BaseController {
 		path: '/api/nodes/:nodeId'
 	})
 	async deleteNode(req: e.Request, res: e.Response) {
+		let user: UserModel = super.getUser(req);
 		if (req.params.nodeId) {
-			let result = await Node.delete(req.params.nodeId);
+			let result = await Node.delete(req.params.nodeId, user._id);
 			res.send(super.wrapperRes(result));
 		} else {
 			res.send(super.wrapperRes([]));

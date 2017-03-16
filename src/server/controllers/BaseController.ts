@@ -1,4 +1,5 @@
 import e = require('express');
+import { MvSession } from '../models/index';
 
 enum RespCode {
 	SESSION_OUT=2,
@@ -7,6 +8,12 @@ enum RespCode {
 }
 
 class BaseController {
+
+	getUser(req: e.Request) {
+		let mvSession: MvSession = <MvSession>req.session;
+		return mvSession.user;
+	}
+
 	wrapperRes(data: any) {
 		return { code: RespCode.SUCCESS, data: data };
 	}

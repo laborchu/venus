@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute, Params, RoutesRecognized } from '@angular/router';
 
 import { NotificationsService } from 'angular2-notifications';
@@ -26,6 +26,7 @@ export class NavbarComponent implements OnInit {
 	) { }
 	groupId: string;
 	projectId: string;
+	@ViewChild('newUcView') newUcView: any;
 
 	ngOnInit(): void {
 		this.ucGroupService.getSelectGroupSubject().subscribe((ucGroupModel: UcGroupModel) => {
@@ -34,6 +35,16 @@ export class NavbarComponent implements OnInit {
 		this.projectService.getProjectChangeSubject().subscribe((project: ProjectModel) => {
 			this.projectId = project._id;
 		})
+	}
+
+	@HostListener('document:keydown', ['$event'])
+	handleKeyboardEvent(event: any) {
+		if (event.target.tagName == "BODY") {
+			if (event.keyCode == 110 || event.keyCode ==78){
+				this.newUcView.open();
+				this.popNewUcClick();
+			}
+		}
 	}
 
 	popNewUcClick(): void {
@@ -50,6 +61,7 @@ export class NavbarComponent implements OnInit {
 			let uc: UcModel = new UcModel();
 			uc.title = value;
 			uc.groupId = this.groupId;
+			uc.projectId = this.projectId;
 			uc.build = true;
 			uc.dataStatus = 1;
 			this.route.params

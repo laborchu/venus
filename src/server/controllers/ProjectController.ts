@@ -6,7 +6,7 @@ let fs = require("fs");
 let _ = require('lodash');
 
 import {
-	Project, UcGroup, Uc, Node, Path, Checker,ProjectJs,
+	Project, UcGroup, Uc, Node, Path, Checker, ProjectJs, UserModel,
 	ProjectModel, ProjectJsModel, UcGroupModel, UcModel, NodeModel, PathModel, CheckerModel,
 	ProjectHelper, UcGroupHelper, UcHelper, NodeHelper, PathHelper, CheckHelper
 } from '../models/index';
@@ -155,20 +155,21 @@ class ProjectController extends BaseController {
 		path: '/api/projects'
 	})
 	async create(req: e.Request, res: e.Response) {
-		let project:ProjectModel = await Project.insert(req.body);
+		let user:  UserModel = super.getUser(req);
+		let project: ProjectModel = await Project.insert(req.body, user._id);
 		let jsModel: ProjectJsModel = new ProjectJsModel();
 		jsModel.name = "页面映射";
 		jsModel.jsName = "page.map";
 		jsModel.fixed = true;
 		jsModel.projectId = project._id;
 		jsModel.dataStatus = 1;
-		ProjectJs.insert(jsModel);
+		ProjectJs.insert(jsModel,user._id);
 		jsModel.name = "全局参数";
 		jsModel.jsName = "global.uc";
-		ProjectJs.insert(jsModel);
+		ProjectJs.insert(jsModel, user._id);
 		jsModel.name = "工具脚本";
 		jsModel.jsName = "helper.uc";
-		ProjectJs.insert(jsModel);
+		ProjectJs.insert(jsModel, user._id);
 
 		//初始化文件夹
 		let rootPath = path.join(process.cwd(), "projects");
@@ -192,7 +193,8 @@ class ProjectController extends BaseController {
 		path: '/api/projects/:id'
 	})
 	async update(req: e.Request, res: e.Response) {
-		let result = await Project.update(req.body);
+		let user: UserModel = super.getUser(req);
+		let result = await Project.update(req.body, user._id);
 		res.send(super.wrapperRes(result));
 	}
 }

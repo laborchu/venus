@@ -1,4 +1,5 @@
-export class ProjectJsModel {
+import { BaseHelper, BaseModel } from './base.model';
+export class ProjectJsModel extends BaseModel{
 	_id: string;
 	projectId: string;
 	fixed: boolean;
@@ -6,6 +7,4 @@ export class ProjectJsModel {
 	jsName: string;
 	script: string;
 	requires: Array<string>;
-	order: number;
-	dataStatus: number;
 }

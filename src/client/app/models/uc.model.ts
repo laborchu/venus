@@ -1,7 +1,7 @@
 import { NodeModel } from './node.model';
-import { BaseHelper } from './base.model';
+import { BaseHelper, BaseModel } from './base.model';
 
-export class UcModel {
+export class UcModel extends BaseModel {
 	_id: string = null;
 	projectId: string = null;
 	groupId: string = null;
@@ -11,9 +11,7 @@ export class UcModel {
 	build: boolean = true;
 	handler: boolean = false;
 	only: boolean = false;
-	dataStatus: number = 1;
 	code: string = null;
-	order: number = null;
 	nodes: Array<NodeModel>;
 }
 

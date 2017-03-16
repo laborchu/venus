@@ -17,7 +17,11 @@ const _schema = new mongoose.Schema({
   only: { type: Boolean },
   code: { type: String },
   order: { type: Number },
-  dataStatus: { type: Number }
+  dataStatus: { type: Number },
+  createdBy: { type: String },
+  createdDate: { type: Date },
+  modifiedBy: { type: String },
+  modifiedDate: { type: Date }
 });
 
 _schema.plugin(autoIncrement.plugin, { model: 'ucs', field: 'order', startAt: 1 });
@@ -36,12 +40,16 @@ class Uc extends BaseModel {
     params.dataStatus = 1;
     return new Promise<Array<UcModel>>((resolve, reject) => {
       _model.find(params).sort({ order: 1 }).exec((err: any, ucs: Array<UcModel>) => {
-          err ? reject(err) : resolve(ucs)
+        err ? reject(err) : resolve(ucs)
       })
     });
   }
 
-  static insert(uc: UcModel): Promise<UcModel> {
+  static insert(uc: UcModel, createBy: string): Promise<UcModel> {
+    uc.createdBy = createBy;
+    uc.createdDate = new Date();
+    uc.modifiedBy = createBy;
+    uc.modifiedDate = new Date();
     return new Promise<UcModel>((resolve, reject) => {
       _model.create(uc, (err: any, result: UcModel) => {
         err ? reject(err) : resolve(result)
@@ -49,7 +57,9 @@ class Uc extends BaseModel {
     });
   }
 
-  static update(uc: any): Promise<UcModel> {
+  static update(uc: UcModel, modifiedBy: string): Promise<UcModel> {
+    uc.modifiedBy = modifiedBy;
+    uc.modifiedDate = new Date();
     return new Promise<UcModel>((resolve, reject) => {
       _model.update({ _id: uc._id }, uc, {}, (err, rawResponse) => {
         err ? reject(err) : resolve(rawResponse)
@@ -57,11 +67,13 @@ class Uc extends BaseModel {
     });
   }
 
-  static delete(ucId: string): Promise<UcModel> {
+  static delete(ucId: string, modifiedBy: string): Promise<UcModel> {
     return new Promise<UcModel>((resolve, reject) => {
-      _model.findOneAndUpdate({ _id: ucId }, { dataStatus: 0 }, (err, rawResponse) => {
-        err ? reject(err) : resolve(rawResponse)
-      });
+      _model.findOneAndUpdate({ _id: ucId },
+        { dataStatus: 0, modifiedBy: modifiedBy, modifiedDate: new Date() },
+        (err, rawResponse) => {
+          err ? reject(err) : resolve(rawResponse)
+        });
     });
   }
 

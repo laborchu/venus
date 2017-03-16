@@ -1,5 +1,5 @@
 import { CheckerModel } from './checker.model';
-import { BaseHelper } from './base.model';
+import { BaseHelper, BaseModel } from './base.model';
 
 enum Selector {
 	xpath,
@@ -18,7 +18,9 @@ export enum PathType {
 	keys,
 	press,
 	pope,
-	cmd
+	cmd,
+	drag,
+	alert
 }
 
 export namespace PathHelper {
@@ -79,6 +81,12 @@ export namespace PathHelper {
 		} else if (type == PathType[PathType.cmd]) {
 			newMode = new CmdPathModel();
 			field = getField(newMode);
+		} else if (type == PathType[PathType.drag]) {
+			newMode = new DragPathModel();
+			field = getField(newMode);
+		} else if (type == PathType[PathType.alert]) {
+			newMode = new AlertPathModel();
+			field = getField(newMode);
 		}
 
 		if (newMode) {
@@ -102,7 +110,7 @@ export namespace PathHelper {
 	}
 }
 
-export class PathModel {
+export class PathModel extends BaseModel {
 
 	_id: string = null;
 	projectId: string = null;
@@ -114,8 +122,6 @@ export class PathModel {
 	canNull: boolean = false;
 	cacheElement: boolean = false;
 	cacheDesc: boolean = false;
-	dataStatus: number = 1;
-	order: number = null;
 	checker: Array<CheckerModel>
 
 }
@@ -181,6 +187,19 @@ export class CmdPathModel extends PathModel {
 	type: string = PathType[PathType.cmd];
 	cmdCode: string = null;
 	subType: string = null;
+}
+
+export class DragPathModel extends PathModel {
+	type: string = PathType[PathType.drag];
+	fromX: number = null;
+	fromY: number = null;
+	toX: number = null;
+	toY: number = null;
+}
+
+export class AlertPathModel extends PathModel {
+	type: string = PathType[PathType.drag];
+	target: string = null;
 }
 
 

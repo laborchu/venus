@@ -21,7 +21,11 @@ const _schema = new mongoose.Schema({
 	eexist: { type: String },
 	paths: { type: String },
 	order: { type: Number },
-	dataStatus: { type: Number }
+	dataStatus: { type: Number },
+	createdBy: { type: String },
+	createdDate: { type: Date },
+	modifiedBy: { type: String },
+	modifiedDate: { type: Date }
 });
 _schema.plugin(autoIncrement.plugin, { model: 'ucs.checkers', field: 'order', startAt: 1 });
 interface CheckerDocument extends CheckerModel, mongoose.Document {
@@ -52,22 +56,28 @@ class Checker extends BaseModel {
 		});
 	}
 
-	static insert(path: any): Promise<CheckerModel> {
-		path._id = new mongoose.Types.ObjectId();
-    	return new Promise<CheckerModel>((resolve, reject) => {
-			_model.create(path, (err: any, result: CheckerModel) => {
+	static insert(checker: any, createBy: string): Promise<CheckerModel> {
+		checker._id = new mongoose.Types.ObjectId();
+		checker.createdBy = createBy;
+		checker.createdDate = new Date();
+		checker.modifiedBy = createBy;
+		checker.modifiedDate = new Date();
+		return new Promise<CheckerModel>((resolve, reject) => {
+			_model.create(checker, (err: any, result: CheckerModel) => {
 				err ? reject(err) : resolve(result)
 			})
 		});
 	}
 
-  static update(js: any): Promise<CheckerModel> {
-    return new Promise<CheckerModel>((resolve, reject) => {
-      _model.update({ _id: js._id }, js, {}, (err, rawResponse) => {
-        err ? reject(err) : resolve(rawResponse)
-      })
-    });
-  }
+	static update(checker: CheckerModel, modifiedBy: string): Promise<CheckerModel> {
+		checker.modifiedBy = modifiedBy;
+		checker.modifiedDate = new Date();
+		return new Promise<CheckerModel>((resolve, reject) => {
+			_model.update({ _id: checker._id }, checker, {}, (err, rawResponse) => {
+				err ? reject(err) : resolve(rawResponse)
+			})
+		});
+	}
 }
 
 export { Checker }

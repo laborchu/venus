@@ -11,7 +11,11 @@ const _schema = new mongoose.Schema({
   name: { type: String },
   email: { type: String },
   mobile: { type: String },
-  dataStatus: { type: Number }
+  dataStatus: { type: Number },
+  createdBy: { type: String },
+  createdDate: { type: Date },
+  modifiedBy: { type: String },
+  modifiedDate: { type: Date }
 });
 
 _schema.plugin(autoIncrement.plugin, { model: 'users', field: 'order', startAt: 1 });
@@ -35,7 +39,11 @@ class User extends BaseModel {
     });
   }
 
-  static insert(uc: UserModel): Promise<UserModel> {
+  static insert(uc: UserModel, createBy: string): Promise<UserModel> {
+    uc.createdBy = createBy;
+    uc.createdDate = new Date();
+    uc.modifiedBy = createBy;
+    uc.modifiedDate = new Date();
     return new Promise<UserModel>((resolve, reject) => {
       _model.insertMany([uc], (err: any, ucGroups: Array<UserModel>) => {
         err ? reject(err) : resolve(ucGroups[0])
@@ -43,7 +51,9 @@ class User extends BaseModel {
     });
   }
 
-  static update(uc: any): Promise<UserModel> {
+  static update(uc: UserModel, modifiedBy: string): Promise<UserModel> {
+    uc.modifiedBy = modifiedBy;
+    uc.modifiedDate = new Date();
     return new Promise<UserModel>((resolve, reject) => {
       _model.update({ _id: uc._id }, uc, {}, (err, rawResponse) => {
         err ? reject(err) : resolve(rawResponse)
@@ -51,11 +61,13 @@ class User extends BaseModel {
     });
   }
 
-  static delete(ucId: string): Promise<UserModel> {
+  static delete(ucId: string, modifiedBy: string): Promise<UserModel> {
     return new Promise<UserModel>((resolve, reject) => {
-      _model.findOneAndUpdate({ _id: ucId }, { dataStatus: 0 }, (err, rawResponse) => {
-        err ? reject(err) : resolve(rawResponse)
-      });
+      _model.findOneAndUpdate({ _id: ucId },
+        { dataStatus: 0, modifiedBy: modifiedBy, modifiedDate: new Date() },
+        (err, rawResponse) => {
+          err ? reject(err) : resolve(rawResponse)
+        });
     });
   }
 

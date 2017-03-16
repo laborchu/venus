@@ -12,7 +12,11 @@ const _schema = new mongoose.Schema({
   sleep: { type: Number },
   isParent: { type: Boolean },
   dataStatus: { type: Number },
-  order: { type: Number }
+  order: { type: Number },
+  createdBy: { type: String },
+  createdDate: { type: Date },
+  modifiedBy: { type: String },
+  modifiedDate: { type: Date }
 });
 
 _schema.plugin(autoIncrement.plugin, { model: 'ucs.nodes', field: 'order', startAt: 1 });
@@ -35,8 +39,12 @@ class Node extends BaseModel {
     });
   }
 
-  static insert(node: any): Promise<NodeModel> {
+  static insert(node: any, createBy: string): Promise<NodeModel> {
     node._id = new mongoose.Types.ObjectId();
+    node.createdBy = createBy;
+    node.createdDate = new Date();
+    node.modifiedBy = createBy;
+    node.modifiedDate = new Date();
     return new Promise<NodeModel>((resolve, reject) => {
       _model.create(node, (err: any, result: NodeModel) => {
         err ? reject(err) : resolve(result)
@@ -44,7 +52,9 @@ class Node extends BaseModel {
     });
   }
 
-  static update(node: any): Promise<NodeModel> {
+  static update(node: NodeModel, modifiedBy: string): Promise<NodeModel> {
+    node.modifiedBy = modifiedBy;
+    node.modifiedDate = new Date();
     return new Promise<NodeModel>((resolve, reject) => {
       _model.update({ _id: node._id }, node, {}, (err, rawResponse) => {
         err ? reject(err) : resolve(rawResponse)
@@ -61,11 +71,13 @@ class Node extends BaseModel {
     });
   }
 
-  static delete(nodeId: string): Promise<NodeModel> {
+  static delete(nodeId: string, modifiedBy: string): Promise<NodeModel> {
     return new Promise<NodeModel>((resolve, reject) => {
-      _model.update({ _id: nodeId }, { dataStatus: 0 }, {}, (err, rawResponse) => {
-        err ? reject(err) : resolve(rawResponse)
-      })
+      _model.update({ _id: nodeId },
+        { dataStatus: 0, modifiedBy: modifiedBy, modifiedDate: new Date() },
+        {}, (err, rawResponse) => {
+          err ? reject(err) : resolve(rawResponse)
+        })
     });
   }
 

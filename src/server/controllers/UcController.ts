@@ -4,7 +4,7 @@ let fs = require("fs");
 let _ = require('lodash');
 import BaseController from "./BaseController";
 import { router } from "../decorators/Web";
-import { Project,Uc,UcGroup, Node, Path, Checker, 
+import { Project,Uc,UcGroup, Node, Path, Checker, UserModel,
 	UcModel,ProjectModel, NodeModel, PathModel, CheckerModel, 
 	UcHelper, NodeHelper, PathHelper, CheckHelper} from '../models/index';
 import ErrorCode from '../ErrorCode';
@@ -30,7 +30,8 @@ class UcController extends BaseController {
 		path: '/api/ucs/:ucId'
 	})
 	async update(req: e.Request, res: e.Response) {
-		let result = await Uc.update(req.body);
+		let user: UserModel = super.getUser(req);
+		let result = await Uc.update(req.body, user._id);
 		res.send(super.wrapperRes(result));
 	}
 
@@ -40,6 +41,7 @@ class UcController extends BaseController {
 	})
 	async updateScript(req: e.Request, res: e.Response) {
 		try {
+			let user: UserModel = super.getUser(req);
 			//加载db数据
 			let dbUcModels: Array<UcModel> = await Uc.find({ _id: req.params.ucId });
 			if (dbUcModels.length!=1){
@@ -60,7 +62,6 @@ class UcController extends BaseController {
 			let tempFile = path.join(rootPath, dbProjectModel.name,"src","temp",fileName);
 			fs.writeFileSync(tempFile, req.body.code);
 			let ucConfig = require(tempFile);
-			console.log(ucConfig);
 			fs.unlinkSync(tempFile); 
 
 			//解析UC
@@ -69,7 +70,8 @@ class UcController extends BaseController {
 			ucModel._id = req.params.ucId;
 			ucModel.groupId = req.body.groupId;
 			ucModel.projectId = dbProjectModel._id;
-			await Uc.update(ucModel);
+			ucModel.order = dbUcModel.order;
+			await Uc.update(ucModel,user._id);
 
 			let eachNode = async (nodes: Array<any>, parentId: string) => {
 				//解析node
@@ -86,7 +88,7 @@ class UcController extends BaseController {
 						}else{
 							nodeModel.isParent = false;
 						}
-						nodeModel = await Node.insert(nodeModel);
+						nodeModel = await Node.insert(nodeModel,user._id);
 						if (node.children && Array.isArray(ucConfig.children)) {
 							await eachNode(node.children, nodeModel._id);
 						} else {
@@ -102,7 +104,7 @@ class UcController extends BaseController {
 									pathModel.projectId = dbProjectModel._id;
 									pathModel.nodeId = nodeModel._id;
 									pathModel.ucId = req.params.ucId;
-									pathModel = await Path.insert(pathModel);
+									pathModel = await Path.insert(pathModel, user._id);
 									//处理checker
 									if (path.checker) {
 										if (Array.isArray(path.checker)) {
@@ -115,7 +117,7 @@ class UcController extends BaseController {
 												checkerModel.ucId = req.params.ucId;
 												checkerModel.nodeId = nodeModel._id;
 												checkerModel.pathId = pathModel._id;
-												checkerModel = await Checker.insert(checkerModel);
+												checkerModel = await Checker.insert(checkerModel, user._id);
 											})
 										}
 									}
@@ -142,7 +144,8 @@ class UcController extends BaseController {
 		path: '/api/ucs/:ucId'
 	})
 	async delete(req: e.Request, res: e.Response) {
-		let result = await Uc.delete(req.params.ucId);
+		let user: UserModel = super.getUser(req);
+		let result = await Uc.delete(req.params.ucId, user._id);
 		res.send(super.wrapperRes(result));
 	}
 }

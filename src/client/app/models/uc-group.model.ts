@@ -1,12 +1,10 @@
 import { UcModel } from './uc.model';
-import { BaseHelper } from './base.model';
+import { BaseHelper, BaseModel } from './base.model';
 
-export class UcGroupModel{
+export class UcGroupModel extends BaseModel {
 	_id: string = null;
 	projectId: string = null;
 	name: string = null;
-	order: number = null;
-	dataStatus: number = null;
 	ucs: Array<UcModel>;
 }
 

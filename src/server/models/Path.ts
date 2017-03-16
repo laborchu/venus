@@ -14,7 +14,6 @@ const _schema = new mongoose.Schema({
 	canNull: { type: Boolean },
 	cacheElement: { type: Boolean },
 	cacheDesc: { type: Boolean },
-	dataStatus: { type: Number },
 	type: { type: String },
 	selector: { type: String },
 	element: { type: String },
@@ -26,7 +25,17 @@ const _schema = new mongoose.Schema({
 	value: { type: String },
 	cmdCode: { type: String },
 	subType: { type: String },
-  	order: { type: Number }
+	target: { type: String },
+	fromX: { type: Number },
+	fromY: { type: Number },
+	toX: { type: Number },
+	toY: { type: Number },
+	order: { type: Number },
+	dataStatus: { type: Number },
+	createdBy: { type: String },
+	createdDate: { type: Date },
+	modifiedBy: { type: String },
+	modifiedDate: { type: Date }
 });
 _schema.plugin(autoIncrement.plugin, { model: 'ucs.paths', field: 'order', startAt: 1 });
 interface PathDocument extends PathModel, mongoose.Document {
@@ -56,9 +65,14 @@ class Path extends BaseModel {
 			})
 		});
 	}
+	
 
-	static insert(path: any): Promise<PathModel> {
+	static insert(path: any, createBy: string): Promise<PathModel> {
 		path._id = new mongoose.Types.ObjectId();
+		path.createdBy = createBy;
+		path.createdDate = new Date();
+		path.modifiedBy = createBy;
+		path.modifiedDate = new Date();
 		return new Promise<PathModel>((resolve, reject) => {
 			_model.create(path, (err: any, result: PathModel) => {
 				err ? reject(err) : resolve(result)
@@ -66,13 +80,15 @@ class Path extends BaseModel {
 		});
 	}
 
-  static updatePath(js: any): Promise<PathModel> {
-    return new Promise<PathModel>((resolve, reject) => {
-      _model.update({ _id: js._id }, js, {}, (err, rawResponse) => {
-        err ? reject(err) : resolve(rawResponse)
-      })
-    });
-  }
+	static updatePath(path: PathModel, modifiedBy: string): Promise<PathModel> {
+		path.modifiedBy = modifiedBy;
+		path.modifiedDate = new Date();
+		return new Promise<PathModel>((resolve, reject) => {
+			_model.update({ _id: path._id }, path, {}, (err, rawResponse) => {
+				err ? reject(err) : resolve(rawResponse)
+			})
+		});
+	}
 }
 
 export { Path }
