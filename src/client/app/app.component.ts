@@ -17,6 +17,7 @@ import { SessionService } from './services/index';
       <div>加载中...</div>
     </div>
     <simple-notifications [options]="options" ></simple-notifications>
+    <ng2-slim-loading-bar></ng2-slim-loading-bar>
   	<router-outlet></router-outlet>
   `
 })

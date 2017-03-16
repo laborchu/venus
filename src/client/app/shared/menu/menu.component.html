@@ -85,7 +85,7 @@
     </header>
     <div class="menu-group">
         <div class="group-title">
-            <i class="fa fa-book"></i> UC组列表
+            <i class="fa fa-bars"></i> UC组列表
         </div>
         <a class="group-item" *ngFor="let group of groupArray" (click)="doSelectGroup(group)" [ngClass]="{select:group==selectGroup}">
             {{group.name}}
@@ -94,7 +94,7 @@
     </div>
     <div class="menu-group">
         <div class="group-title">
-            <i class="fa fa-file-code-o"></i> 全局脚本
+            <i class="fa fa-code"></i> 全局脚本
         </div>
         <a class="group-item" *ngFor="let projectJs of projectJsArray" (click)="doSelectJs(projectJs)" [ngClass]="{select:projectJs==selectJs}">
             {{projectJs.name}}
@@ -109,7 +109,7 @@
     <div class="pop-item" (click)="projectP.close();doSelectProject(project)" [class.pop-select]="project==selectProject" *ngFor="let project of projects">{{project.name}}</div>
 </template>
 <template #popPlus>
-    <div class="pop-item" (click)="plusP.close();openUcGroup(ucGroupAddContent)">新增UC组</div>
-    <div class="pop-item" (click)="plusP.close();openNewProject(projectAddContent)">新增Project</div>
-    <div class="pop-item" (click)="plusP.close();openNewProjectJs()">新增ProjectJs</div>
+    <div class="pop-item" (click)="plusP.close();openNewProject(projectAddContent)">项目</div>
+    <div class="pop-item" (click)="plusP.close();openUcGroup(ucGroupAddContent)">UC组</div>
+    <div class="pop-item" (click)="plusP.close();openNewProjectJs()">脚本</div>
 </template>

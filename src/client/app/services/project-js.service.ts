@@ -1,7 +1,4 @@
-import { Injectable } from '@angular/core';
-import { Response, Http } from '@angular/http';
-import { Router } from '@angular/router';
-import { NotificationsService } from 'angular2-notifications';
+import { Injectable, Injector } from '@angular/core';
 
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
@@ -13,10 +10,8 @@ import { MvService } from './mv.service';
 export class ProjectJsService extends MvService {
   private projectJsChangeSubject: Subject<ProjectJsModel> = new Subject<ProjectJsModel>();
 
-  constructor(protected router: Router,
-    protected http: Http,
-    protected _notificationsService: NotificationsService) {
-    super(router, http, _notificationsService);
+  constructor(protected injector: Injector) {
+    super(injector);
   }
 
   setProjectJsChangeSubject(projectJs: ProjectJsModel): void {
