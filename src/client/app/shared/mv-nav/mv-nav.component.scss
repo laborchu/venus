@@ -1,14 +1,4 @@
 @import "../../../css/variable";
-:host /deep/ {
-    .modal-dialog {
-        max-width: 1000px;
-    }
-   
-    .ace_editor {
-        height: 100%;
-    }
-}
-
 .top-bottom {
     border-top: 2px solid $split-color;
 }
@@ -22,7 +12,7 @@
 .mv-nav {
     height: 40px;
     border-bottom: 2px solid $split-color;
-    
+
     .nav-left {
         float: left;
         margin-left: 15px;

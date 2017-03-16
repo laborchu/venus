@@ -1,15 +1,4 @@
 @import "../../../css/variable";
-:host /deep/ {
-    .modal-dialog {
-        .modal-body {
-            padding: 0;
-            .right-btn{
-                text-align: right;
-                display:block
-            }
-        }
-    }
-}
 .form-inline .form-control{
     width:100%
 }
