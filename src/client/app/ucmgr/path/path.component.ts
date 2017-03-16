@@ -60,4 +60,27 @@ export class PathComponent {
   delChecker(index: number) {
     this.pathModel.checker.splice(index, 1);
   }
+
+  rightBtnConf: Object = {
+    save: {
+      click: () => {
+        if (this.checkIndex && this.checkIndex >= 0) {
+          this.pathModel.checker[this.checkIndex] = this.checkerModel
+        } else {
+          if (!this.pathModel.checker) {
+            this.pathModel.checker = []
+          }
+          this.pathModel.checker.push(this.checkerModel)
+        }
+        this.checkerModel = new CheckerModel();
+        this.checkIndex = -1
+      }
+    },
+    add: {
+      click: () => {
+        this.checkerModel = new CheckerModel();
+        this.checkIndex = -1
+      }
+    }
+  };
 }

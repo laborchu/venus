@@ -26,10 +26,10 @@ import { MvProjectJsFormContent } from './projectjs/index';
     })],
   declarations: [MenuComponent, NavbarComponent, MvNavComponent,MvCodeJsFormContent,
     AceEditorDirective, AceEditorComponent, MvProjectJsFormContent],
-  exports: [MenuComponent, NavbarComponent, MvNavComponent, DragulaModule,,MvCodeJsFormContent,
+  exports: [MenuComponent, NavbarComponent, MvNavComponent, DragulaModule,MvCodeJsFormContent,
     CommonModule, FormsModule, RouterModule, NgbModule, AceEditorDirective, AceEditorComponent,
     MvProjectJsFormContent],
-  entryComponents: [MvProjectJsFormContent,MvCodeJsFormContent]
+  entryComponents: [MvProjectJsFormContent,MvCodeJsFormContent],
   providers: [DragulaService]
 
 })

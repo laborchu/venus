@@ -35,16 +35,10 @@ export class NodeComponent implements OnInit {
 
 	pathModel: PathModel = new PathModel();
 	checkerModel: CheckerModel = new CheckerModel();
-	pathFieldSet: Set<String> = new Set();
-	checkFieldSet: Set<String> = new Set();
-	pathTypes: Array<String> = PathHelper.getTypes();
-	selectors: Array<String> = PathHelper.getSelector();
-	checks: Array<String> = CheckHelper.getTypes();
 	groupId: string = "";
 	projectId: string = "";
 	ucId: string = "";
 	nodeId: string = "";
-	checkIndex: number;
 	nodeRightBtnConf: Object = {
 		save: {
 			click: () => {
@@ -141,28 +135,5 @@ export class NodeComponent implements OnInit {
 		});
     modalRef.componentInstance.pathModel =this.pathModel;
 	}
-
-	rightBtnConf: Object = {
-		save: {
-			click: () => {
-				if (this.checkIndex && this.checkIndex >= 0) {
-					this.pathModel.checker[this.checkIndex] = this.checkerModel
-				} else {
-					if (!this.pathModel.checker) {
-						this.pathModel.checker = []
-					}
-					this.pathModel.checker.push(this.checkerModel)
-				}
-				this.checkerModel = new CheckerModel();
-				this.checkIndex = -1
-			}
-		},
-		add: {
-			click: () => {
-				this.checkerModel = new CheckerModel()
-				this.checkIndex = -1
-			}
-		}
-	};
 
 }
