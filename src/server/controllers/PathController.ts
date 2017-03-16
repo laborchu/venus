@@ -1,7 +1,7 @@
 import e = require('express');
 import BaseController from "./BaseController";
 import { router } from "../decorators/Web";
-import { Path, PathModel, Checker, CheckerModel, UserModel } from '../models/index';
+import { Path, PathModel, Checker, CheckerModel, UserModel ,PathHelper} from '../models/index';
 import ErrorCode from '../ErrorCode';
 
 class PathController extends BaseController {
@@ -51,7 +51,8 @@ class PathController extends BaseController {
   })
   async create(req: e.Request, res: e.Response) {
     let user: UserModel = super.getUser(req);
-    let pathModel: PathModel = req.body;
+    let pathModel: PathModel
+    [pathModel]  = PathHelper.buildModel(req.body.type,req.body);
     pathModel.setCreatedInfo(user);
     let result = await Path.insert(pathModel);
     req.body.checker.forEach(function(data: CheckerModel) {
@@ -78,7 +79,8 @@ class PathController extends BaseController {
       data.setCreatedInfo(user);
       Checker.insert(data);
     })
-    let pathModel: PathModel = req.body;
+    let pathModel: PathModel
+    [pathModel]  = PathHelper.buildModel(req.body.type,req.body);
     pathModel.setModifiedInfo(user);
     let result = await Path.updatePath(req.body);
     res.send(super.wrapperRes(result));
