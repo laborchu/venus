@@ -51,12 +51,15 @@ class PathController extends BaseController {
   })
   async create(req: e.Request, res: e.Response) {
     let user: UserModel = super.getUser(req);
-    let result = await Path.insert(req.body, user._id);
+    let pathModel: PathModel = req.body;
+    pathModel.setCreatedInfo(user);
+    let result = await Path.insert(pathModel);
     req.body.checker.forEach(function(data: CheckerModel) {
       data.pathId = result._id;
       data.nodeId = result.nodeId;
       data.ucId = result.ucId;
-      Checker.insert(data, user._id);
+      data.setCreatedInfo(user);
+      Checker.insert(data);
     })
     res.send(super.wrapperRes(result));
   }
@@ -72,10 +75,13 @@ class PathController extends BaseController {
       data.pathId = req.body._id;
       data.nodeId = req.body.nodeId;
       data.ucId = req.body.ucId;
-      Checker.insert(data, user._id);
+      data.setCreatedInfo(user);
+      Checker.insert(data);
     })
-     let result = await Path.updatePath(req.body, user._id);
-     res.send(super.wrapperRes(result));
+    let pathModel: PathModel = req.body;
+    pathModel.setModifiedInfo(user);
+    let result = await Path.updatePath(req.body);
+    res.send(super.wrapperRes(result));
   }
 }
 

@@ -1,7 +1,7 @@
 import e = require('express');
 import BaseController from "./BaseController";
 import { router } from "../decorators/Web";
-import { Node, UserModel } from '../models/index';
+import { Node,NodeModel, UserModel } from '../models/index';
 
 class NodeController extends BaseController {
 
@@ -37,11 +37,14 @@ class NodeController extends BaseController {
 	})
 	async saveNode(req: e.Request, res: e.Response) {
 		let user: UserModel = super.getUser(req);
+		let node: NodeModel = req.body;
 		if (req.body._id) {
-			let result = await Node.update(req.body, user._id);
+			node.setModifiedInfo(user);
+			let result = await Node.update(node);
 			res.send(super.wrapperRes(result));
 		} else {
-			let result = await Node.insert(req.body, user._id);
+			node.setCreatedInfo(user);
+			let result = await Node.insert(node);
 			res.send(super.wrapperRes(result));
 		}
 	}

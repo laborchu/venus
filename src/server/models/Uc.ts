@@ -45,11 +45,7 @@ class Uc extends BaseModel {
     });
   }
 
-  static insert(uc: UcModel, createBy: string): Promise<UcModel> {
-    uc.createdBy = createBy;
-    uc.createdDate = new Date();
-    uc.modifiedBy = createBy;
-    uc.modifiedDate = new Date();
+  static insert(uc: UcModel): Promise<UcModel> {
     return new Promise<UcModel>((resolve, reject) => {
       _model.create(uc, (err: any, result: UcModel) => {
         err ? reject(err) : resolve(result)
@@ -57,9 +53,7 @@ class Uc extends BaseModel {
     });
   }
 
-  static update(uc: UcModel, modifiedBy: string): Promise<UcModel> {
-    uc.modifiedBy = modifiedBy;
-    uc.modifiedDate = new Date();
+  static update(uc: UcModel): Promise<UcModel> {
     return new Promise<UcModel>((resolve, reject) => {
       _model.update({ _id: uc._id }, uc, {}, (err, rawResponse) => {
         err ? reject(err) : resolve(rawResponse)

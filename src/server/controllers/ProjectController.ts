@@ -156,20 +156,23 @@ class ProjectController extends BaseController {
 	})
 	async create(req: e.Request, res: e.Response) {
 		let user:  UserModel = super.getUser(req);
-		let project: ProjectModel = await Project.insert(req.body, user._id);
+		let projectModel: ProjectModel = req.body;
+		projectModel.setCreatedInfo(user);
+		let project: ProjectModel = await Project.insert(projectModel);
 		let jsModel: ProjectJsModel = new ProjectJsModel();
 		jsModel.name = "页面映射";
 		jsModel.jsName = "page.map";
 		jsModel.fixed = true;
 		jsModel.projectId = project._id;
 		jsModel.dataStatus = 1;
-		ProjectJs.insert(jsModel,user._id);
+		jsModel.setCreatedInfo(user);
+		ProjectJs.insert(jsModel);
 		jsModel.name = "全局参数";
 		jsModel.jsName = "global.uc";
-		ProjectJs.insert(jsModel, user._id);
+		ProjectJs.insert(jsModel);
 		jsModel.name = "工具脚本";
 		jsModel.jsName = "helper.uc";
-		ProjectJs.insert(jsModel, user._id);
+		ProjectJs.insert(jsModel);
 
 		//初始化文件夹
 		let rootPath = path.join(process.cwd(), "projects");
@@ -194,7 +197,9 @@ class ProjectController extends BaseController {
 	})
 	async update(req: e.Request, res: e.Response) {
 		let user: UserModel = super.getUser(req);
-		let result = await Project.update(req.body, user._id);
+		let projectModel: ProjectModel = req.body;
+		projectModel.setModifiedInfo(user);
+		let result = await Project.update(req.body);
 		res.send(super.wrapperRes(result));
 	}
 }

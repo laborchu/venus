@@ -1,7 +1,7 @@
 import e = require('express');
 import BaseController from "./BaseController";
 import { router } from "../decorators/Web";
-import { ProjectJs, UserModel } from '../models/index';
+import { ProjectJs,ProjectJsModel, UserModel } from '../models/index';
 
 class ProjectController extends BaseController {
 	@router({
@@ -46,7 +46,9 @@ class ProjectController extends BaseController {
 	})
 	async create(req: e.Request, res: e.Response) {
 		let user: UserModel = super.getUser(req);
-		let result = await ProjectJs.insert(req.body, user._id);
+		let projectJsModel: ProjectJsModel = req.body;
+		projectJsModel.setCreatedInfo(user);
+		let result = await ProjectJs.insert(projectJsModel);
 		res.send(super.wrapperRes(result));
 	}
 
@@ -56,7 +58,9 @@ class ProjectController extends BaseController {
 	})
 	async updateScript(req: e.Request, res: e.Response) {
 		let user: UserModel = super.getUser(req);
-		let result = await ProjectJs.update(req.body, user._id);
+		let projectJsModel: ProjectJsModel = req.body;
+		projectJsModel.setModifiedInfo(user);
+		let result = await ProjectJs.update(projectJsModel);
 		res.send(super.wrapperRes(result));
 	}
 
@@ -66,7 +70,9 @@ class ProjectController extends BaseController {
 	})
 	async updateJs(req: e.Request, res: e.Response) {
 		let user: UserModel = super.getUser(req);
-		let result = await ProjectJs.update(req.body, user._id);
+		let projectJsModel: ProjectJsModel = req.body;
+		projectJsModel.setModifiedInfo(user);
+		let result = await ProjectJs.update(projectJsModel);
 		res.send(super.wrapperRes(result));
 	}
 

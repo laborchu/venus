@@ -67,12 +67,8 @@ class Path extends BaseModel {
 	}
 	
 
-	static insert(path: any, createBy: string): Promise<PathModel> {
+	static insert(path: any): Promise<PathModel> {
 		path._id = new mongoose.Types.ObjectId();
-		path.createdBy = createBy;
-		path.createdDate = new Date();
-		path.modifiedBy = createBy;
-		path.modifiedDate = new Date();
 		return new Promise<PathModel>((resolve, reject) => {
 			_model.create(path, (err: any, result: PathModel) => {
 				err ? reject(err) : resolve(result)
@@ -80,9 +76,7 @@ class Path extends BaseModel {
 		});
 	}
 
-	static updatePath(path: PathModel, modifiedBy: string): Promise<PathModel> {
-		path.modifiedBy = modifiedBy;
-		path.modifiedDate = new Date();
+	static updatePath(path: PathModel): Promise<PathModel> {
 		return new Promise<PathModel>((resolve, reject) => {
 			_model.update({ _id: path._id }, path, {}, (err, rawResponse) => {
 				err ? reject(err) : resolve(rawResponse)

@@ -39,11 +39,7 @@ class User extends BaseModel {
     });
   }
 
-  static insert(uc: UserModel, createBy: string): Promise<UserModel> {
-    uc.createdBy = createBy;
-    uc.createdDate = new Date();
-    uc.modifiedBy = createBy;
-    uc.modifiedDate = new Date();
+  static insert(uc: UserModel): Promise<UserModel> {
     return new Promise<UserModel>((resolve, reject) => {
       _model.insertMany([uc], (err: any, ucGroups: Array<UserModel>) => {
         err ? reject(err) : resolve(ucGroups[0])
@@ -51,8 +47,7 @@ class User extends BaseModel {
     });
   }
 
-  static update(uc: UserModel, modifiedBy: string): Promise<UserModel> {
-    uc.modifiedBy = modifiedBy;
+  static update(uc: UserModel): Promise<UserModel> {
     uc.modifiedDate = new Date();
     return new Promise<UserModel>((resolve, reject) => {
       _model.update({ _id: uc._id }, uc, {}, (err, rawResponse) => {

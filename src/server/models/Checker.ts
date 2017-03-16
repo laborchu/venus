@@ -56,12 +56,8 @@ class Checker extends BaseModel {
 		});
 	}
 
-	static insert(checker: any, createBy: string): Promise<CheckerModel> {
+	static insert(checker: any): Promise<CheckerModel> {
 		checker._id = new mongoose.Types.ObjectId();
-		checker.createdBy = createBy;
-		checker.createdDate = new Date();
-		checker.modifiedBy = createBy;
-		checker.modifiedDate = new Date();
 		return new Promise<CheckerModel>((resolve, reject) => {
 			_model.create(checker, (err: any, result: CheckerModel) => {
 				err ? reject(err) : resolve(result)
@@ -69,9 +65,7 @@ class Checker extends BaseModel {
 		});
 	}
 
-	static update(checker: CheckerModel, modifiedBy: string): Promise<CheckerModel> {
-		checker.modifiedBy = modifiedBy;
-		checker.modifiedDate = new Date();
+	static update(checker: CheckerModel): Promise<CheckerModel> {
 		return new Promise<CheckerModel>((resolve, reject) => {
 			_model.update({ _id: checker._id }, checker, {}, (err, rawResponse) => {
 				err ? reject(err) : resolve(rawResponse)

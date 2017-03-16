@@ -39,12 +39,8 @@ class Node extends BaseModel {
     });
   }
 
-  static insert(node: any, createBy: string): Promise<NodeModel> {
+  static insert(node: any): Promise<NodeModel> {
     node._id = new mongoose.Types.ObjectId();
-    node.createdBy = createBy;
-    node.createdDate = new Date();
-    node.modifiedBy = createBy;
-    node.modifiedDate = new Date();
     return new Promise<NodeModel>((resolve, reject) => {
       _model.create(node, (err: any, result: NodeModel) => {
         err ? reject(err) : resolve(result)
@@ -52,9 +48,7 @@ class Node extends BaseModel {
     });
   }
 
-  static update(node: NodeModel, modifiedBy: string): Promise<NodeModel> {
-    node.modifiedBy = modifiedBy;
-    node.modifiedDate = new Date();
+  static update(node: NodeModel): Promise<NodeModel> {
     return new Promise<NodeModel>((resolve, reject) => {
       _model.update({ _id: node._id }, node, {}, (err, rawResponse) => {
         err ? reject(err) : resolve(rawResponse)

@@ -4,9 +4,11 @@ let fs = require("fs");
 let _ = require('lodash');
 import BaseController from "./BaseController";
 import { router } from "../decorators/Web";
-import { Project,Uc,UcGroup, Node, Path, Checker, UserModel,
-	UcModel,ProjectModel, NodeModel, PathModel, CheckerModel, 
-	UcHelper, NodeHelper, PathHelper, CheckHelper} from '../models/index';
+import {
+	Project, Uc, UcGroup, Node, Path, Checker, UserModel,
+	UcModel, ProjectModel, NodeModel, PathModel, CheckerModel,
+	UcHelper, NodeHelper, PathHelper, CheckHelper
+} from '../models/index';
 import ErrorCode from '../ErrorCode';
 var requireFromString = require('require-from-string');
 
@@ -24,14 +26,15 @@ class UcController extends BaseController {
 		}
 	}
 
-
 	@router({
 		method: 'patch',
 		path: '/api/ucs/:ucId'
 	})
 	async update(req: e.Request, res: e.Response) {
 		let user: UserModel = super.getUser(req);
-		let result = await Uc.update(req.body, user._id);
+		let ucModel: UcModel = req.body;
+		ucModel.setModifiedInfo(user);
+		let result = await Uc.update(ucModel);
 		res.send(super.wrapperRes(result));
 	}
 
@@ -44,7 +47,7 @@ class UcController extends BaseController {
 			let user: UserModel = super.getUser(req);
 			//加载db数据
 			let dbUcModels: Array<UcModel> = await Uc.find({ _id: req.params.ucId });
-			if (dbUcModels.length!=1){
+			if (dbUcModels.length != 1) {
 				res.send(super.wrapperErrorRes(ErrorCode.UC_NOT_FOUND));
 				return;
 			}
@@ -59,10 +62,10 @@ class UcController extends BaseController {
 			//require脚本
 			let fileName = new Date().getTime() + ".js";
 			let rootPath = path.join(process.cwd(), "projects");
-			let tempFile = path.join(rootPath, dbProjectModel.name,"src","temp",fileName);
+			let tempFile = path.join(rootPath, dbProjectModel.name, "src", "temp", fileName);
 			fs.writeFileSync(tempFile, req.body.code);
 			let ucConfig = require(tempFile);
-			fs.unlinkSync(tempFile); 
+			fs.unlinkSync(tempFile);
 
 			//解析UC
 			let ucModel: UcModel = UcHelper.buildModel(ucConfig);
@@ -71,13 +74,14 @@ class UcController extends BaseController {
 			ucModel.groupId = req.body.groupId;
 			ucModel.projectId = dbProjectModel._id;
 			ucModel.order = dbUcModel.order;
-			await Uc.update(ucModel,user._id);
+			ucModel.setModifiedInfo(user);
+			await Uc.update(ucModel);
 
 			let eachNode = async (nodes: Array<any>, parentId: string) => {
 				//解析node
 				if (Array.isArray(nodes)) {
 					//处理nodes
-					for (let i = 0; i < nodes.length; i++){
+					for (let i = 0; i < nodes.length; i++) {
 						let node: any = nodes[i];
 						let nodeModel: NodeModel = NodeHelper.buildModel(node);
 						nodeModel.ucId = req.params.ucId;
@@ -85,10 +89,11 @@ class UcController extends BaseController {
 						nodeModel.parentId = parentId;
 						if (node.children && Array.isArray(ucConfig.children)) {
 							nodeModel.isParent = true;
-						}else{
+						} else {
 							nodeModel.isParent = false;
 						}
-						nodeModel = await Node.insert(nodeModel,user._id);
+						nodeModel.setCreatedInfo(user);
+						nodeModel = await Node.insert(nodeModel);
 						if (node.children && Array.isArray(ucConfig.children)) {
 							await eachNode(node.children, nodeModel._id);
 						} else {
@@ -104,7 +109,8 @@ class UcController extends BaseController {
 									pathModel.projectId = dbProjectModel._id;
 									pathModel.nodeId = nodeModel._id;
 									pathModel.ucId = req.params.ucId;
-									pathModel = await Path.insert(pathModel, user._id);
+									pathModel.setCreatedInfo(user);
+									pathModel = await Path.insert(pathModel);
 									//处理checker
 									if (path.checker) {
 										if (Array.isArray(path.checker)) {
@@ -117,7 +123,8 @@ class UcController extends BaseController {
 												checkerModel.ucId = req.params.ucId;
 												checkerModel.nodeId = nodeModel._id;
 												checkerModel.pathId = pathModel._id;
-												checkerModel = await Checker.insert(checkerModel, user._id);
+												checkerModel.setCreatedInfo(user);
+												checkerModel = await Checker.insert(checkerModel);
 											})
 										}
 									}

@@ -33,11 +33,7 @@ class UcGroup extends BaseModel {
   }
 
 
-  static insert(ucGroup: UcGroupModel, createBy: string): Promise<UcGroupModel> {
-    ucGroup.createdBy = createBy;
-    ucGroup.createdDate = new Date();
-    ucGroup.modifiedBy = createBy;
-    ucGroup.modifiedDate = new Date();
+  static insert(ucGroup: UcGroupModel): Promise<UcGroupModel> {
     return new Promise<UcGroupModel>((resolve, reject) => {
       _model.insertMany([ucGroup], (err: any, ucGroups: Array<UcGroupModel>) => {
         err ? reject(err) : resolve(ucGroups[0])
@@ -45,9 +41,7 @@ class UcGroup extends BaseModel {
     });
   }
 
-  static update(ucGroup: UcGroupModel, modifiedBy: string): Promise<UcGroupModel> {
-    ucGroup.modifiedBy = modifiedBy;
-    ucGroup.modifiedDate = new Date();
+  static update(ucGroup: UcGroupModel): Promise<UcGroupModel> {
     return new Promise<UcGroupModel>((resolve, reject) => {
       _model.update({ _id: ucGroup._id }, ucGroup, {}, (err, rawResponse) => {
         err ? reject(err) : resolve(rawResponse)

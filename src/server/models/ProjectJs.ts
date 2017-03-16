@@ -40,11 +40,7 @@ class ProjectJs extends BaseModel {
     });
   }
 
-  static insert(js: ProjectJsModel, createBy: string): Promise<ProjectJsModel> {
-    js.createdBy = createBy;
-    js.createdDate = new Date();
-    js.modifiedBy = createBy;
-    js.modifiedDate = new Date();
+  static insert(js: ProjectJsModel): Promise<ProjectJsModel> {
     return new Promise<ProjectJsModel>((resolve, reject) => {
       _model.create(js, (err: any, result: ProjectJsModel) => {
         err ? reject(err) : resolve(result)
@@ -52,9 +48,7 @@ class ProjectJs extends BaseModel {
     });
   }
 
-  static update(js: ProjectJsModel, modifiedBy: string): Promise<ProjectJsModel> {
-    js.modifiedBy = modifiedBy;
-    js.modifiedDate = new Date();
+  static update(js: ProjectJsModel): Promise<ProjectJsModel> {
     return new Promise<ProjectJsModel>((resolve, reject) => {
       _model.update({ _id: js._id }, js, {}, (err, rawResponse) => {
         err ? reject(err) : resolve(rawResponse)

@@ -41,12 +41,8 @@ class Project extends BaseModel {
       });
    }
 
-   static insert(project: any, createBy: string): Promise<ProjectModel> {
+   static insert(project: any): Promise<ProjectModel> {
       project._id = new mongoose.Types.ObjectId();
-      project.createdBy = createBy;
-      project.createdDate = new Date();
-      project.modifiedBy = createBy;
-      project.modifiedDate = new Date();
       return new Promise<ProjectModel>((resolve, reject) => {
          _model.create(project, (err: any, result: ProjectModel) => {
             err ? reject(err) : resolve(result)
@@ -54,9 +50,7 @@ class Project extends BaseModel {
       });
    }
 
-   static update(project: ProjectModel, modifiedBy: string): Promise<ProjectModel> {
-      project.modifiedBy = modifiedBy;
-      project.modifiedDate = new Date();
+   static update(project: ProjectModel): Promise<ProjectModel> {
       return new Promise<ProjectModel>((resolve, reject) => {
          _model.update({ _id: project._id }, project, {}, (err, rawResponse) => {
             err ? reject(err) : resolve(rawResponse)
