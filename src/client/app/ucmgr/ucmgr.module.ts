@@ -8,6 +8,7 @@ import { ProjectJsComponent } from './projectjs/projectjs.component';
 import { UcGroupComponent, GroupInfoComponent } from './uc-group/index';
 import { UcComponent } from './uc/index';
 import { NodeComponent } from './node/index';
+import { PathComponent } from './path/index';
 
 import { UcMgrRoutingModule } from './ucmgr-routing.module';
 import { SharedModule } from '../shared/shared.module';
@@ -23,9 +24,10 @@ import { ConfirmationPopoverModule } from 'angular-confirmation-popover';
 			confirmText: '确认'
 		}),
 		 CustomFormsModule, CommonModule, UcMgrRoutingModule, SharedModule],
-	declarations: [UcGroupComponent, UcmgrComponent, ProjectComponent, ProjectJsComponent, 
+	declarations: [UcGroupComponent, UcmgrComponent, ProjectComponent, ProjectJsComponent, PathComponent,
 					GroupInfoComponent, UcComponent, NodeComponent],
 	exports: [],
-	providers: []
+	providers: [],
+  entryComponents: [PathComponent]
 })
 export class UcMgrModule { }

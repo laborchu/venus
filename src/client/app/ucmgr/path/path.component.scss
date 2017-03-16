@@ -1,0 +1,81 @@
+@import "../../../css/variable";
+//
+
+.form-inline .form-control{
+    width:100%
+}
+.node-container{
+    padding: 10px;
+}
+.radio{
+    label{
+        margin-right:5px
+    }
+}
+
+.step-container {
+    padding: 10px;
+    .step-list {
+        .step {
+            padding: 5px;
+            cursor: pointer;
+            &:hover {
+                background-color: $select-color;
+            }
+            .step-toobar {
+                float: right;
+                i {
+                    margin-right: 5px;
+                }
+            }
+        }
+    }
+}
+
+.modal-body {
+    .body-left {
+        width: 50%;
+        float: left;
+        padding: 10px;
+    }
+    .body-line {
+        width: 3px;
+        height: 100%;
+        background-color: #e1e1e1;
+        display: inline-block;
+        position: absolute;
+    }
+    .body-right {
+        width: 50%;
+        float: left;
+        padding: 10px;
+        height: 100%;
+        .checker-list {
+            .checker {
+                padding: 5px;
+                cursor: pointer;
+                &:hover {
+                    background-color: $select-color;
+                }
+                .checker-toobar {
+                    float: right;
+                    i {
+                        margin-right: 5px;
+                    }
+                }
+            }
+        }
+        .checker-form{
+		    width: 100%;
+		    right: 0;
+	        padding: 10px;
+        	border-top:1px solid $split-color;
+        	.row{
+        		margin: 0;
+        	}
+        	.col-xs-6{
+        		padding:0;
+        	}
+        }
+    }
+}

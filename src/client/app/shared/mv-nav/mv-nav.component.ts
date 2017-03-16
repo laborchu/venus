@@ -1,6 +1,5 @@
 import { Component, Input, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
 	moduleId:module.id,
@@ -11,7 +10,6 @@ import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 export class MvNavComponent{
 	constructor(
 		private router: Router,
-		private modalService: NgbModal
 	){}
 	@Input() title:string;
 	@Input() navigate: Array<any>;
@@ -22,7 +20,6 @@ export class MvNavComponent{
 	@Input() code: string = "";
 
 	@ViewChild('editor') editor:any;
-
 	canBack(){
 		return this.navigate!=null;
 	}
@@ -31,13 +28,13 @@ export class MvNavComponent{
 			this.router.navigate(this.navigate);
 		}
 	}
-	onChange(code:string) {
-		this.code = code;
-	}
-	codeClick(content:any) {
-		this.modalService.open(content, { backdrop: "static" }).result.then(() => {
-			this.rightBtnConf.code.finish(this.code);
-		}, () => {
-		});
-	}
+	// onChange(code:string) {
+	// 	this.code = code;
+	// }
+	// codeClick(content:any) {
+	// 	this.modalService.open(MvCodeJsFormContent, { backdrop: "static" }).result.then(() => {
+	// 		this.rightBtnConf.code.finish(this.code);
+	// 	}, () => {
+	// 	});
+	// }
 }

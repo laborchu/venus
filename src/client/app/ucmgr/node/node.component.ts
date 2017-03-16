@@ -1,10 +1,11 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild} from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
-import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal,NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { NgForm } from '@angular/forms';
 
 import { NodeModel, PathModel, PathHelper, CheckHelper, CheckerModel } from '../../models/index';
 import { PathService, NodeService } from '../../services/index';
+import { PathComponent } from  '../path/index';
 import 'rxjs/add/operator/switchMap';
 
 
@@ -43,13 +44,13 @@ export class NodeComponent implements OnInit {
 	projectId: string = "";
 	ucId: string = "";
 	nodeId: string = "";
-	checkIndex: number
+	checkIndex: number;
 	nodeRightBtnConf: Object = {
 		save: {
 			click: () => {
 				this.nodeModel.dataStatus = 1;
 				this.nodeModel.ucId = this.ucId;
-				this.nodeService.saveNode(this.nodeModel).subscribe((result) => {
+				this.nodeService.saveNode(this.nodeModel).subscribe(() => {
 					if (this.nodeModel._id) {
 						this.form.form.markAsPristine();
 					} else {
@@ -71,16 +72,19 @@ export class NodeComponent implements OnInit {
 		add: {
 			click: () => {
 				this.pathModel = new PathModel();
-				this.pathModel.nodeId = this.nodeId
-				this.modalService.open(this.pathContent, { backdrop: "static", size: "lg" }).result.then((result) => {
-					this.pathModel = PathHelper.setFilter(this.pathModel)
+				this.pathModel.nodeId = this.nodeId;
+        const modalRef: NgbModalRef = 	this.modalService.open(PathComponent, { backdrop: "static", size: "lg" });
+        modalRef.result.then((result) => {
+          this.pathModel =  result;
+					this.pathModel = PathHelper.setFilter(this.pathModel);
 					this.pathService.addPath(this.pathModel)
 						.subscribe((newPath: PathModel) => {
 							this.nodeModel.paths.push(newPath)
 						});
-				}, (reason) => {
+				}, () => {
 					// debugger
 				});
+        modalRef.componentInstance.pathModel =this.pathModel;
 			}
 		}
 	};
@@ -117,21 +121,6 @@ export class NodeComponent implements OnInit {
 		// alert(JSON.stringify(Object.getOwnPropertyNames(this.pathModel)));
 	}
 
-	typeChange(type: string) {
-		[this.pathModel, this.pathFieldSet] = PathHelper.buildModel(type, this.pathModel);
-	}
-
-	checkChange(type: string) {
-		[this.checkerModel, this.checkFieldSet] = CheckHelper.buildModel(type, this.checkerModel);
-	}
-	openChecker(checker: CheckerModel, index: number) {
-		this.checkerModel = checker
-		this.checkIndex = index
-		this.checkChange(checker.type)
-	}
-	delChecker(index: number) {
-		this.pathModel.checker.splice(index, 1)
-	}
   delPath(path: PathModel, index: number) {
     this.pathService.delPath(path)
       .subscribe((path: PathModel) => {
@@ -140,19 +129,17 @@ export class NodeComponent implements OnInit {
   }
 	openPath(path: PathModel, index: number) {
 		this.pathModel = path
-		this.typeChange(path.type)
-		this.pathService.getChecker(this.pathModel)
-			.subscribe((checkers: Array<CheckerModel>) => {
-				this.pathModel.checker = checkers
-			});
-		this.modalService.open(this.pathContent, { backdrop: "static", size: "lg" }).result.then(() => {
-			this.pathModel = PathHelper.setFilter(this.pathModel)
+    const modalRef: NgbModalRef = this.modalService.open(PathComponent, { backdrop: "static", size: "lg" });
+    modalRef.result.then((pathModel) => {
+      this.pathModel = pathModel;
+			this.pathModel = PathHelper.setFilter(this.pathModel);
 			this.pathService.updatePath(this.pathModel)
 				.subscribe((newPath: PathModel) => {
 					this.nodeModel.paths[index] = this.pathModel;
 				});
-		}, (reason) => {
+		}, () => {
 		});
+    modalRef.componentInstance.pathModel =this.pathModel;
 	}
 
 	rightBtnConf: Object = {
@@ -166,7 +153,7 @@ export class NodeComponent implements OnInit {
 					}
 					this.pathModel.checker.push(this.checkerModel)
 				}
-				this.checkerModel = new CheckerModel()
+				this.checkerModel = new CheckerModel();
 				this.checkIndex = -1
 			}
 		},

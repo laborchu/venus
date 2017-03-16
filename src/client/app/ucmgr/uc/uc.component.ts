@@ -1,7 +1,9 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component,Input, OnInit, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { NgForm } from '@angular/forms';
 import { NotificationsService } from 'angular2-notifications';
+import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
+import { MvCodeJsFormContent } from  '../../shared/mv-nav/index';
 
 import { UcModel, NodeModel,UcHelper } from '../../models/index';
 import { UcService, NodeService } from '../../services/index';
@@ -21,14 +23,20 @@ export class UcComponent implements OnInit {
 		private route: ActivatedRoute,
 		private ucService: UcService,
 		private nodeService: NodeService,
-		private _notificationsService: NotificationsService
+		private _notificationsService: NotificationsService,
+    private modalService: NgbModal
 	) { }
+
+  @Input() code: string = "";
 	ucMode: UcModel = new UcModel();
 	ucKeyStr: string = "";
 	projectId: string = "";
 
 	@ViewChild('form') public form: NgForm;
 
+  onChange(code:string) {
+    this.code = code;
+  }
 	rightBtnConf: Object = {
 		save: {
 			click: () => {
@@ -50,27 +58,30 @@ export class UcComponent implements OnInit {
 			}
 		},
 		code: {
-			finish: (text: string) => {
-				this.ucMode.code = text;
-				this.ucService.updateUcScript(this.ucMode)
-					.concatMap(()=>{
-						return this.ucService.getUc(this.ucMode._id);
-					})
-					.subscribe((ucs: Array<UcModel>) => {
-						this.form.form.markAsPristine();
-						this.ucMode = ucs[0];
-						this.ucService.setUcChangeSubject(this.ucMode);
-						this._notificationsService.success(
-							'UC操作',
-							"操作成功"
-						);
-					}, (msg) => {
-						this._notificationsService.error(
-							'UC操作',
-							msg
-						);
-					});
-			}
+      codeClick:() =>{
+        this.modalService.open(MvCodeJsFormContent, { backdrop: "static" }).result.then(() => {
+          this.ucMode.code = this.code;
+          this.ucService.updateUcScript(this.ucMode)
+            .concatMap(()=>{
+              return this.ucService.getUc(this.ucMode._id);
+            })
+            .subscribe((ucs: Array<UcModel>) => {
+              this.form.form.markAsPristine();
+              this.ucMode = ucs[0];
+              this.ucService.setUcChangeSubject(this.ucMode);
+              this._notificationsService.success(
+                'UC操作',
+                "操作成功"
+              );
+            }, (msg) => {
+              this._notificationsService.error(
+                'UC操作',
+                msg
+              );
+            });
+        }, () => {
+        });
+      }
 		}
 	};
 

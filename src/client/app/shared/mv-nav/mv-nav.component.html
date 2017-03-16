@@ -1,22 +1,22 @@
-<template #codeContent ngbModalContainer let-c="close" let-d="dismiss">
-    <div class="modal-header">
-        <button type="button" class="close" (click)="d()">
-            <span>&times;</span>
-        </button>
-        <h4 class="modal-title">编辑UC脚本</h4>
-    </div>
-    <div class="modal-body clearfix pd0">
-	    <div ace-editor
-	    	#editor
-	       [(text)]="code"
-	       [mode]="'javascript'"
-	       (textChanged)="onChange($event)"
-	       ></div>
-    </div>
-    <div class="modal-footer">
-        <button type="button" class="btn btn-success" (click)="c()">保存</button>
-    </div>
-</template>
+<!--<template #codeContent ngbModalContainer let-c="close" let-d="dismiss">-->
+    <!--<div class="modal-header">-->
+        <!--<button type="button" class="close" (click)="d()">-->
+            <!--<span>&times;</span>-->
+        <!--</button>-->
+        <!--<h4 class="modal-title">编辑UC脚本</h4>-->
+    <!--</div>-->
+    <!--<div class="modal-body clearfix pd0">-->
+	    <!--<div ace-editor-->
+	    	<!--#editor-->
+	       <!--[(text)]="code"-->
+	       <!--[mode]="'javascript'"-->
+	       <!--(textChanged)="onChange($event)"-->
+	       <!--&gt;</div>-->
+    <!--</div>-->
+    <!--<div class="modal-footer">-->
+        <!--<button type="button" class="btn btn-success" (click)="c()">保存</button>-->
+    <!--</div>-->
+<!--</template>-->
 
 <div class="mv-nav clearfix" [ngClass]="{'top-bottom':topBottom,'margin-menu':marginMenu}">
 	<div class="nav-left" [ngClass]="{'can-click':canBack()}" (click)="back()">
@@ -31,7 +31,7 @@
 
 		<span class="right-btn"
 			*ngIf="rightBtnConf?.code&&rightBtnConf.code.hidden!=true"
-			(click)="codeClick(codeContent)">
+			(click)="rightBtnConf.code.codeClick()">
 			<i class="fa fa-code"></i>
 		</span>
 
