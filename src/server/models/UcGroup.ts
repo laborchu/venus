@@ -7,7 +7,11 @@ import { UcGroupModel } from './index';
 const _schema = new mongoose.Schema({
   name: { type: String },
   projectId: { type: String },
-  dataStatus: { type: Number }
+  dataStatus: { type: Number },
+  createdBy: { type: String },
+  createdDate: { type: Date },
+  modifiedBy: { type: String },
+  modifiedDate: { type: Date }
 });
 
 interface UcGroupDocument extends UcGroupModel, mongoose.Document {

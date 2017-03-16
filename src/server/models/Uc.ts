@@ -3,10 +3,11 @@ import BaseModel from "./BaseModel";
 import mongoose = require('mongoose');
 import autoIncrement = require('mongoose-auto-increment');
 
-import { UcModel,Node } from './index';
+import { UcModel, Node } from './index';
 
 const _schema = new mongoose.Schema({
   title: { type: String },
+  projectId: { type: String },
   groupId: { type: String },
   ucKey: { type: String },
   sleep: { type: Number },
@@ -16,7 +17,11 @@ const _schema = new mongoose.Schema({
   only: { type: Boolean },
   code: { type: String },
   order: { type: Number },
-  dataStatus: { type: Number }
+  dataStatus: { type: Number },
+  createdBy: { type: String },
+  createdDate: { type: Date },
+  modifiedBy: { type: String },
+  modifiedDate: { type: Date }
 });
 
 _schema.plugin(autoIncrement.plugin, { model: 'ucs', field: 'order', startAt: 1 });
@@ -34,21 +39,21 @@ class Uc extends BaseModel {
   static find(params: any): Promise<Array<UcModel>> {
     params.dataStatus = 1;
     return new Promise<Array<UcModel>>((resolve, reject) => {
-      _model.find(params, (err: any, ucs: Array<UcModel>) => {
-        err ? reject(err) : resolve(ucs);
+      _model.find(params).sort({ order: 1 }).exec((err: any, ucs: Array<UcModel>) => {
+        err ? reject(err) : resolve(ucs)
       })
     });
   }
 
   static insert(uc: UcModel): Promise<UcModel> {
     return new Promise<UcModel>((resolve, reject) => {
-      _model.insertMany([uc], (err: any, ucGroups: Array<UcModel>) => {
-        err ? reject(err) : resolve(ucGroups[0])
+      _model.create(uc, (err: any, result: UcModel) => {
+        err ? reject(err) : resolve(result)
       })
     });
   }
 
-  static update(uc: any): Promise<UcModel> {
+  static update(uc: UcModel): Promise<UcModel> {
     return new Promise<UcModel>((resolve, reject) => {
       _model.update({ _id: uc._id }, uc, {}, (err, rawResponse) => {
         err ? reject(err) : resolve(rawResponse)
@@ -56,11 +61,13 @@ class Uc extends BaseModel {
     });
   }
 
-  static delete(ucId: string): Promise<UcModel> {
+  static delete(ucId: string, modifiedBy: string): Promise<UcModel> {
     return new Promise<UcModel>((resolve, reject) => {
-      _model.findOneAndUpdate({ _id: ucId }, { dataStatus: 0 }, (err, rawResponse) => {
-        err ? reject(err) : resolve(rawResponse)
-      });
+      _model.findOneAndUpdate({ _id: ucId },
+        { dataStatus: 0, modifiedBy: modifiedBy, modifiedDate: new Date() },
+        (err, rawResponse) => {
+          err ? reject(err) : resolve(rawResponse)
+        });
     });
   }
 

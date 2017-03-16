@@ -20,6 +20,8 @@ export class ProjectConfig extends SeedConfig {
     this.SYSTEM_CONFIG_DEV.paths['angular-in-memory-web-api'] = 'node_modules/angular-in-memory-web-api/index.js';
 
     this.SYSTEM_CONFIG_DEV.paths['angular2-notifications'] = 'node_modules/angular2-notifications/components.js';
+    this.SYSTEM_CONFIG_DEV.paths['ng2-dragula'] = 'node_modules/ng2-dragula/index.js';
+    this.SYSTEM_CONFIG_DEV.paths['dragula'] = 'node_modules/dragula/dist/dragula.js';
 
     this.SYSTEM_CONFIG_DEV.paths['ng2-validation'] = 'node_modules/ng2-validation/bundles/ng2-validation.umd.js';
 
@@ -48,7 +50,8 @@ export class ProjectConfig extends SeedConfig {
     // Add `NPM` third-party libraries to be injected/bundled.
     this.NPM_DEPENDENCIES = [
       ...this.NPM_DEPENDENCIES,
-      { src: 'font-awesome/css/font-awesome.min.css', inject: true }
+      { src: 'font-awesome/css/font-awesome.min.css', inject: true },
+      { src: 'dragula/dist/dragula.css', inject: true }
       // {src: 'lodash/lodash.min.js', inject: 'libs'},
     ];
 

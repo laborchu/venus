@@ -13,7 +13,11 @@ const _schema = new mongoose.Schema({
   script: { type: String },
   requires: { type: Array },
   order: { type: Number },
-  dataStatus: { type: Number }
+  dataStatus: { type: Number },
+  createdBy: { type: String },
+  createdDate: { type: Date },
+  modifiedBy: { type: String },
+  modifiedDate: { type: Date }
 });
 
 _schema.plugin(autoIncrement.plugin, { model: 'projects.js', field: 'order', startAt: 1 });
@@ -44,7 +48,7 @@ class ProjectJs extends BaseModel {
     });
   }
 
-  static update(js: any): Promise<ProjectJsModel> {
+  static update(js: ProjectJsModel): Promise<ProjectJsModel> {
     return new Promise<ProjectJsModel>((resolve, reject) => {
       _model.update({ _id: js._id }, js, {}, (err, rawResponse) => {
         err ? reject(err) : resolve(rawResponse)
@@ -52,11 +56,13 @@ class ProjectJs extends BaseModel {
     });
   }
 
-  static delete(jsId: string): Promise<any> {
+  static delete(jsId: string, modifiedBy: string): Promise<any> {
     return new Promise<ProjectJsModel>((resolve, reject) => {
-      _model.findOneAndUpdate({ _id: jsId }, { dataStatus: 0 }, (err, rawResponse) => {
-        err ? reject(err) : resolve(rawResponse)
-      });
+      _model.findOneAndUpdate({ _id: jsId },
+        { dataStatus: 0, modifiedBy: modifiedBy, modifiedDate: new Date() },
+        (err, rawResponse) => {
+          err ? reject(err) : resolve(rawResponse)
+        });
     });
   }
 

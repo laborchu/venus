@@ -6,7 +6,7 @@ let fs = require("fs");
 let _ = require('lodash');
 
 import {
-	Project, UcGroup, Uc, Node, Path, Checker,ProjectJs,
+	Project, UcGroup, Uc, Node, Path, Checker, ProjectJs, UserModel,
 	ProjectModel, ProjectJsModel, UcGroupModel, UcModel, NodeModel, PathModel, CheckerModel,
 	ProjectHelper, UcGroupHelper, UcHelper, NodeHelper, PathHelper, CheckHelper
 } from '../models/index';
@@ -105,24 +105,13 @@ class ProjectController extends BaseController {
 
 			/**********产生项目文件 Start**********/
 			let rootPath = path.join(process.cwd(), "projects");
-			if (!fs.existsSync(rootPath)) {
-				fs.mkdirSync(rootPath);
-			}
-			//初始化文件夹
 			let projectPath = path.join(rootPath, project.name);
 			let projectSrc = path.join(projectPath, "src");
 			let ucPath = path.join(projectSrc, "uc");
 			let handlerPath = path.join(projectSrc, "handler");
-			if (fs.existsSync(projectPath)) {
-				await emptyDir(projectPath);
-			}else{
-				fs.mkdirSync(projectPath);
-			}
-			if (!fs.existsSync(projectSrc)) {
-				fs.mkdirSync(projectSrc);
-			}
-			fs.mkdirSync(ucPath);
-			fs.mkdirSync(handlerPath);
+			
+			await emptyDir(ucPath);
+			await emptyDir(handlerPath);
 
 			let packageTpl = _.template(fs.readFileSync(path.join(rootPath, "package.tpl.json")));
 			fs.writeFileSync(path.join(projectPath, "package.json"), packageTpl({
@@ -166,13 +155,17 @@ class ProjectController extends BaseController {
 		path: '/api/projects'
 	})
 	async create(req: e.Request, res: e.Response) {
-		let project:ProjectModel = await Project.insert(req.body);
+		let user:  UserModel = super.getUser(req);
+		let projectModel: ProjectModel = req.body;
+		projectModel.setCreatedInfo(user);
+		let project: ProjectModel = await Project.insert(projectModel);
 		let jsModel: ProjectJsModel = new ProjectJsModel();
 		jsModel.name = "页面映射";
 		jsModel.jsName = "page.map";
 		jsModel.fixed = true;
 		jsModel.projectId = project._id;
 		jsModel.dataStatus = 1;
+		jsModel.setCreatedInfo(user);
 		ProjectJs.insert(jsModel);
 		jsModel.name = "全局参数";
 		jsModel.jsName = "global.uc";
@@ -180,6 +173,21 @@ class ProjectController extends BaseController {
 		jsModel.name = "工具脚本";
 		jsModel.jsName = "helper.uc";
 		ProjectJs.insert(jsModel);
+
+		//初始化文件夹
+		let rootPath = path.join(process.cwd(), "projects");
+		if (!fs.existsSync(rootPath)) {
+			fs.mkdirSync(rootPath);
+		}
+		let projectPath = path.join(rootPath, project.name);
+		if (!fs.existsSync(projectPath)) {
+			fs.mkdirSync(projectPath);
+			fs.mkdirSync(path.join(projectPath, "src"));
+			fs.mkdirSync(path.join(projectPath, "uc"));
+			fs.mkdirSync(path.join(projectPath, "handler"));
+			fs.mkdirSync(path.join(projectPath, "temp"));
+		}
+
 		res.send(super.wrapperRes(project));
 	}
 
@@ -188,6 +196,9 @@ class ProjectController extends BaseController {
 		path: '/api/projects/:id'
 	})
 	async update(req: e.Request, res: e.Response) {
+		let user: UserModel = super.getUser(req);
+		let projectModel: ProjectModel = req.body;
+		projectModel.setModifiedInfo(user);
 		let result = await Project.update(req.body);
 		res.send(super.wrapperRes(result));
 	}

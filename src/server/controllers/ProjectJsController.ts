@@ -1,7 +1,7 @@
 import e = require('express');
 import BaseController from "./BaseController";
 import { router } from "../decorators/Web";
-import { ProjectJs } from '../models/ProjectJs';
+import { ProjectJs,ProjectJsModel, UserModel } from '../models/index';
 
 class ProjectController extends BaseController {
 	@router({
@@ -12,10 +12,10 @@ class ProjectController extends BaseController {
 		if (req.params.projectId) {
 			let result = await ProjectJs.find({
 				"projectId": req.params.projectId
-			},{
-				_id:true,
-				name:true
-			}
+			}, {
+					_id: true,
+					name: true
+				}
 			);
 			res.send(super.wrapperRes(result));
 		} else {
@@ -45,7 +45,10 @@ class ProjectController extends BaseController {
 		path: '/api/projects/:projectId/js'
 	})
 	async create(req: e.Request, res: e.Response) {
-		let result = await ProjectJs.insert(req.body);
+		let user: UserModel = super.getUser(req);
+		let projectJsModel: ProjectJsModel = req.body;
+		projectJsModel.setCreatedInfo(user);
+		let result = await ProjectJs.insert(projectJsModel);
 		res.send(super.wrapperRes(result));
 	}
 
@@ -54,7 +57,10 @@ class ProjectController extends BaseController {
 		path: '/api/projectjs/:jsId/script'
 	})
 	async updateScript(req: e.Request, res: e.Response) {
-		let result = await ProjectJs.update(req.body);
+		let user: UserModel = super.getUser(req);
+		let projectJsModel: ProjectJsModel = req.body;
+		projectJsModel.setModifiedInfo(user);
+		let result = await ProjectJs.update(projectJsModel);
 		res.send(super.wrapperRes(result));
 	}
 
@@ -63,7 +69,10 @@ class ProjectController extends BaseController {
 		path: '/api/projectjs/:jsId'
 	})
 	async updateJs(req: e.Request, res: e.Response) {
-		let result = await ProjectJs.update(req.body);
+		let user: UserModel = super.getUser(req);
+		let projectJsModel: ProjectJsModel = req.body;
+		projectJsModel.setModifiedInfo(user);
+		let result = await ProjectJs.update(projectJsModel);
 		res.send(super.wrapperRes(result));
 	}
 
@@ -72,7 +81,8 @@ class ProjectController extends BaseController {
 		path: '/api/projectjs/:jsId'
 	})
 	async delete(req: e.Request, res: e.Response) {
-		let result = await ProjectJs.delete(req.params.jsId);
+		let user: UserModel = super.getUser(req);
+		let result = await ProjectJs.delete(req.params.jsId, user._id);
 		res.send(super.wrapperRes(result));
 	}
 }

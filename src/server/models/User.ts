@@ -11,7 +11,11 @@ const _schema = new mongoose.Schema({
   name: { type: String },
   email: { type: String },
   mobile: { type: String },
-  dataStatus: { type: Number }
+  dataStatus: { type: Number },
+  createdBy: { type: String },
+  createdDate: { type: Date },
+  modifiedBy: { type: String },
+  modifiedDate: { type: Date }
 });
 
 _schema.plugin(autoIncrement.plugin, { model: 'users', field: 'order', startAt: 1 });
@@ -43,7 +47,8 @@ class User extends BaseModel {
     });
   }
 
-  static update(uc: any): Promise<UserModel> {
+  static update(uc: UserModel): Promise<UserModel> {
+    uc.modifiedDate = new Date();
     return new Promise<UserModel>((resolve, reject) => {
       _model.update({ _id: uc._id }, uc, {}, (err, rawResponse) => {
         err ? reject(err) : resolve(rawResponse)
@@ -51,11 +56,13 @@ class User extends BaseModel {
     });
   }
 
-  static delete(ucId: string): Promise<UserModel> {
+  static delete(ucId: string, modifiedBy: string): Promise<UserModel> {
     return new Promise<UserModel>((resolve, reject) => {
-      _model.findOneAndUpdate({ _id: ucId }, { dataStatus: 0 }, (err, rawResponse) => {
-        err ? reject(err) : resolve(rawResponse)
-      });
+      _model.findOneAndUpdate({ _id: ucId },
+        { dataStatus: 0, modifiedBy: modifiedBy, modifiedDate: new Date() },
+        (err, rawResponse) => {
+          err ? reject(err) : resolve(rawResponse)
+        });
     });
   }
 

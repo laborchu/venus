@@ -7,13 +7,13 @@ import { PathModel } from './index';
 
 const _schema = new mongoose.Schema({
 	title: { type: String },
+	projectId: { type: String },
 	ucId: { type: String },
 	nodeId: { type: String },
 	sleep: { type: Number },
 	canNull: { type: Boolean },
 	cacheElement: { type: Boolean },
 	cacheDesc: { type: Boolean },
-	dataStatus: { type: Number },
 	type: { type: String },
 	selector: { type: String },
 	element: { type: String },
@@ -23,7 +23,19 @@ const _schema = new mongoose.Schema({
 	filter: { type: Object },
 	limit: { type: Number },
 	value: { type: String },
-  	order: { type: Number }
+	cmdCode: { type: String },
+	subType: { type: String },
+	target: { type: String },
+	fromX: { type: Number },
+	fromY: { type: Number },
+	toX: { type: Number },
+	toY: { type: Number },
+	order: { type: Number },
+	dataStatus: { type: Number },
+	createdBy: { type: String },
+	createdDate: { type: Date },
+	modifiedBy: { type: String },
+	modifiedDate: { type: Date }
 });
 _schema.plugin(autoIncrement.plugin, { model: 'ucs.paths', field: 'order', startAt: 1 });
 interface PathDocument extends PathModel, mongoose.Document {
@@ -53,6 +65,7 @@ class Path extends BaseModel {
 			})
 		});
 	}
+	
 
 	static insert(path: any): Promise<PathModel> {
 		path._id = new mongoose.Types.ObjectId();
@@ -63,13 +76,13 @@ class Path extends BaseModel {
 		});
 	}
 
-  static updatePath(js: any): Promise<PathModel> {
-    return new Promise<PathModel>((resolve, reject) => {
-      _model.update({ _id: js._id }, js, {}, (err, rawResponse) => {
-        err ? reject(err) : resolve(rawResponse)
-      })
-    });
-  }
+	static updatePath(path: PathModel): Promise<PathModel> {
+		return new Promise<PathModel>((resolve, reject) => {
+			_model.update({ _id: path._id }, path, {}, (err, rawResponse) => {
+				err ? reject(err) : resolve(rawResponse)
+			})
+		});
+	}
 }
 
 export { Path }

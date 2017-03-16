@@ -1,16 +1,15 @@
 import { UcGroupModel } from './uc-group.model';
-import { BaseHelper } from './base.model';
+import { BaseHelper,BaseModel } from './base.model';
 
 export enum Platform {
 	ios,
 	android
 }
 
-export class ProjectModel {
+export class ProjectModel extends BaseModel {
 	_id: string = null;
 	name: string = null;
 	platform: string = null;
-	order: number = null;
 	ucGroups: Array<UcGroupModel>;
 }
 

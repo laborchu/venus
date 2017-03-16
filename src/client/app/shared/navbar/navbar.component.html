@@ -39,6 +39,7 @@
 <template #popNewUc>
    <input #newUcInput id="newUcInput" type="text" class="form-control" 
    		  (click)="$event.stopPropagation()" 
+   		  (keyup.escape)="newUcView.close()"
    		  (keyup.enter)="addUc(newUcInput.value,newUcView)">
 </template>
 
@@ -47,7 +48,7 @@
         <button type="button" class="close" (click)="d()">
             <span>&times;</span>
         </button>
-        <h4 class="modal-title">新增UC组</h4>
+        <h4 class="modal-title">个人资料</h4>
     </div>
     <div class="modal-body clearfix">
         <form #newUserSettingForm="ngForm" class="form-horizontal">
@@ -56,12 +57,6 @@
 	            <input type="text" class="form-control" placeholder="用户名" [(ngModel)]="user.username"  required  name="username" 
 	                #username="ngModel" disabled>
 	            <div [hidden]="username.valid || username.pristine" class="valid-error">用户名不能为空</div>
-            </div>
-            <div class="form-group">
-                <label class="control-label">密码</label>
-                <input type="password" class="form-control" placeholder="密码" [(ngModel)]="user.password"  required  name="password" 
-                #password="ngModel">
-                <div [hidden]="password.valid || password.pristine" class="valid-error">密码不能为空</div>
             </div>
             <div class="form-group">
                 <label class="control-label">名称</label>

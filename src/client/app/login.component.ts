@@ -36,6 +36,7 @@ export class LoginComponent implements OnInit {
 	  user.password = Md5.hashStr(this.pwd).toString();
 	  this.sessionService.postSession(user).subscribe((result)=>{
 		  if(result){
+		  	  this.sessionService.setSessionChangeSubject(result);
 			  this.router.navigate(['/projects']);
 		  }
 	  })

@@ -5,11 +5,18 @@ import mongoose = require('mongoose');
 import autoIncrement = require('mongoose-auto-increment');
 import { NodeModel } from './index';
 const _schema = new mongoose.Schema({
+  projectId: { type: String },
+  ucId: { type: String },
+  parentId: { type: String },
   title: { type: String },
   sleep: { type: Number },
+  isParent: { type: Boolean },
   dataStatus: { type: Number },
   order: { type: Number },
-  ucId: { type: String }
+  createdBy: { type: String },
+  createdDate: { type: Date },
+  modifiedBy: { type: String },
+  modifiedDate: { type: Date }
 });
 
 _schema.plugin(autoIncrement.plugin, { model: 'ucs.nodes', field: 'order', startAt: 1 });
@@ -41,7 +48,7 @@ class Node extends BaseModel {
     });
   }
 
-  static update(node: any): Promise<NodeModel> {
+  static update(node: NodeModel): Promise<NodeModel> {
     return new Promise<NodeModel>((resolve, reject) => {
       _model.update({ _id: node._id }, node, {}, (err, rawResponse) => {
         err ? reject(err) : resolve(rawResponse)
@@ -58,11 +65,13 @@ class Node extends BaseModel {
     });
   }
 
-  static delete(nodeId: string): Promise<NodeModel> {
+  static delete(nodeId: string, modifiedBy: string): Promise<NodeModel> {
     return new Promise<NodeModel>((resolve, reject) => {
-      _model.update({ _id: nodeId }, { dataStatus: 0 }, {}, (err, rawResponse) => {
-        err ? reject(err) : resolve(rawResponse)
-      })
+      _model.update({ _id: nodeId },
+        { dataStatus: 0, modifiedBy: modifiedBy, modifiedDate: new Date() },
+        {}, (err, rawResponse) => {
+          err ? reject(err) : resolve(rawResponse)
+        })
     });
   }
 

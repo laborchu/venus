@@ -1,4 +1,4 @@
-import { BaseHelper } from './base.model';
+import { BaseHelper, BaseModel } from './base.model';
 
 export enum CheckType {
   eq,
@@ -70,15 +70,14 @@ export namespace CheckHelper {
   }
 }
 
-export class CheckerModel {
+export class CheckerModel extends BaseModel{
   _id: string;
   title: string;
+  projectId: string = null;
   type: string = null;
   ucId: string = null;
   nodeId: string = null;
   pathId: string = null;
-  order: number = null;
-  dataStatus: number = 1;
 }
 export class EqCheckerModel extends CheckerModel {
   type: string = CheckType[CheckType.eq];
