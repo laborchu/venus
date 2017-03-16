@@ -2,11 +2,13 @@ import { PathModel } from './path.model';
 import { BaseHelper } from './base.model';
 export class NodeModel {
 	_id: string = null;
+	projectId: string = null;
 	ucId: string = null;
 	title: string = null;
 	parentId: string = null;
 	dataStatus: number = 1;
 	order: number = null;
+	isParent: boolean = false;
 	paths: Array<PathModel>;
 }
 

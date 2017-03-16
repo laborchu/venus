@@ -7,6 +7,7 @@ import { PathModel } from './index';
 
 const _schema = new mongoose.Schema({
 	title: { type: String },
+	projectId: { type: String },
 	ucId: { type: String },
 	nodeId: { type: String },
 	sleep: { type: Number },
@@ -23,6 +24,8 @@ const _schema = new mongoose.Schema({
 	filter: { type: Object },
 	limit: { type: Number },
 	value: { type: String },
+	cmdCode: { type: String },
+	subType: { type: String },
   	order: { type: Number }
 });
 _schema.plugin(autoIncrement.plugin, { model: 'ucs.paths', field: 'order', startAt: 1 });

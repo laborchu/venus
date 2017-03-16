@@ -3,6 +3,7 @@ import { BaseHelper } from './base.model';
 
 export class UcModel {
 	_id: string = null;
+	projectId: string = null;
 	groupId: string = null;
 	title: string = null;
 	ucKey: string = null;

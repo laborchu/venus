@@ -1,21 +1,20 @@
 <div class="uc-group">
-	<div class="group-list">
-		<table class="table">
-		  <thead>
-		  	<tr class="group-header">
-		  		<td>UC名称</td><td>负责人</td>
-		  	</tr>
-		  </thead>
-		  	<tr *ngFor="let uc of ucArray" 
-		  		(click)="showUc(uc)"
-		  		[ngClass]="{select:uc==selectUc}">
-		  		<td>{{uc.title}}</td> 
-		  		<td class="director-cell">{{uc.director}}</td>
-		  	</tr>
-		</table>
-	</div>
-	<div class="line pull-left"></div>
-	<div class="group-info">
-		<router-outlet></router-outlet>
-	</div>
-</div>	
+    <div class="group-list">
+        <div class="mv-list">
+            <div class="list-header row">
+                <div class="col-8">UC名称</div>
+                <div class="col-4">负责人</div>
+            </div>
+            <div class="list-body" [dragula]='"uc-list"' [dragulaModel]='ucArray'>
+                <div class="list-item row" *ngFor="let uc of ucArray" (click)="showUc(uc)" [ngClass]="{select:uc==selectUc}">
+                    <div class="col-8">{{uc.title}}</div>
+                    <div class="col-4">{{uc.director}}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="line pull-left"></div>
+    <div class="group-info">
+        <router-outlet></router-outlet>
+    </div>
+</div>

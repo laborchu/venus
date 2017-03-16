@@ -3,9 +3,7 @@
     .modal-dialog {
         max-width: 1000px;
     }
-    // .modal-body {
-    //     height: 350px;
-    // }
+   
     .ace_editor {
         height: 100%;
     }
@@ -18,10 +16,13 @@
 .margin-menu {
     margin-left: 205px;
 }
-
+.modal-body {
+    height: 350px;
+}
 .mv-nav {
     height: 40px;
     border-bottom: 2px solid $split-color;
+    
     .nav-left {
         float: left;
         margin-left: 15px;

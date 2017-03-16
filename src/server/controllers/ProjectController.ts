@@ -105,24 +105,13 @@ class ProjectController extends BaseController {
 
 			/**********产生项目文件 Start**********/
 			let rootPath = path.join(process.cwd(), "projects");
-			if (!fs.existsSync(rootPath)) {
-				fs.mkdirSync(rootPath);
-			}
-			//初始化文件夹
 			let projectPath = path.join(rootPath, project.name);
 			let projectSrc = path.join(projectPath, "src");
 			let ucPath = path.join(projectSrc, "uc");
 			let handlerPath = path.join(projectSrc, "handler");
-			if (fs.existsSync(projectPath)) {
-				await emptyDir(projectPath);
-			}else{
-				fs.mkdirSync(projectPath);
-			}
-			if (!fs.existsSync(projectSrc)) {
-				fs.mkdirSync(projectSrc);
-			}
-			fs.mkdirSync(ucPath);
-			fs.mkdirSync(handlerPath);
+			
+			await emptyDir(ucPath);
+			await emptyDir(handlerPath);
 
 			let packageTpl = _.template(fs.readFileSync(path.join(rootPath, "package.tpl.json")));
 			fs.writeFileSync(path.join(projectPath, "package.json"), packageTpl({
@@ -180,6 +169,21 @@ class ProjectController extends BaseController {
 		jsModel.name = "工具脚本";
 		jsModel.jsName = "helper.uc";
 		ProjectJs.insert(jsModel);
+
+		//初始化文件夹
+		let rootPath = path.join(process.cwd(), "projects");
+		if (!fs.existsSync(rootPath)) {
+			fs.mkdirSync(rootPath);
+		}
+		let projectPath = path.join(rootPath, project.name);
+		if (!fs.existsSync(projectPath)) {
+			fs.mkdirSync(projectPath);
+			fs.mkdirSync(path.join(projectPath, "src"));
+			fs.mkdirSync(path.join(projectPath, "uc"));
+			fs.mkdirSync(path.join(projectPath, "handler"));
+			fs.mkdirSync(path.join(projectPath, "temp"));
+		}
+
 		res.send(super.wrapperRes(project));
 	}
 

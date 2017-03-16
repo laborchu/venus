@@ -5,11 +5,14 @@ import mongoose = require('mongoose');
 import autoIncrement = require('mongoose-auto-increment');
 import { NodeModel } from './index';
 const _schema = new mongoose.Schema({
+  projectId: { type: String },
+  ucId: { type: String },
+  parentId: { type: String },
   title: { type: String },
   sleep: { type: Number },
+  isParent: { type: Boolean },
   dataStatus: { type: Number },
-  order: { type: Number },
-  ucId: { type: String }
+  order: { type: Number }
 });
 
 _schema.plugin(autoIncrement.plugin, { model: 'ucs.nodes', field: 'order', startAt: 1 });
