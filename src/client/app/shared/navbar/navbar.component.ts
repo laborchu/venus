@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, Params, RoutesRecognized } from '@angular/router';
+import { NgbModal, NgbModalRef, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 
 import { NotificationsService } from 'angular2-notifications';
 
 import { UcService, UcGroupService, ProjectService } from '../../services/index';
-import { UcModel, ProjectModel, UcGroupModel } from '../../models/index';
+import { UcModel, ProjectModel, UcGroupModel ,UserModel} from '../../models/index';
 
 /**
  * This class represents the navigation bar component.
@@ -22,11 +23,13 @@ export class NavbarComponent implements OnInit {
 		private ucService: UcService,
 		private ucGroupService: UcGroupService,
 		private projectService: ProjectService,
-		private _notificationsService: NotificationsService
+		private _notificationsService: NotificationsService,
+		private modalService:NgbModal
+
 	) { }
 	groupId: string;
 	projectId: string;
-
+	user:UserModel=new UserModel();	
 	ngOnInit(): void {
 		this.ucGroupService.getSelectGroupSubject().subscribe((ucGroupModel: UcGroupModel) => {
 			this.groupId = ucGroupModel._id;
@@ -34,6 +37,8 @@ export class NavbarComponent implements OnInit {
 		this.projectService.getProjectChangeSubject().subscribe((project: ProjectModel) => {
 			this.projectId = project._id;
 		})
+		
+
 	}
 
 	popNewUcClick(): void {
@@ -70,4 +75,24 @@ export class NavbarComponent implements OnInit {
 			);
 		});
 	}
+
+	openUserSetting(content: any) {
+			this.modalService.open(content, { backdrop: "static" }).result.then(() => {
+				
+		}, () => {
+
+			//保存
+			this.user
+
+				
+
+
+
+			
+		});
+	}
+
+
+
+
 }
