@@ -32,7 +32,7 @@ class UcController extends BaseController {
 	})
 	async update(req: e.Request, res: e.Response) {
 		let user: UserModel = super.getUser(req);
-		let ucModel: UcModel = req.body;
+    let ucModel: UcModel = UcHelper.buildModel(req.body);
 		ucModel.setModifiedInfo(user);
 		let result = await Uc.update(ucModel);
 		res.send(super.wrapperRes(result));
@@ -138,7 +138,7 @@ class UcController extends BaseController {
 			await Node.remove({ ucId: req.params.ucId });
 			await Path.remove({ ucId: req.params.ucId });
 			await Checker.remove({ ucId: req.params.ucId });
-			// 
+			//
 			await eachNode(ucConfig.children, null);
 			res.send(super.wrapperRes([]));
 		} catch (e) {

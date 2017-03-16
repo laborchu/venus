@@ -147,11 +147,13 @@ export class MenuComponent implements OnInit {
 				projectObservable = this.projectService.addProjects(this.newProject);
 			}
 			let mapObservable = projectObservable.concatMap((result: any) => {
-				this._notificationsService.success(
-					'project操作',
-					'保存成功'
-				);
-				return this.projectService.getProjects();
+			    if(!result){
+            this._notificationsService.success(
+              'project操作',
+              '保存成功'
+            );
+          }
+          return this.projectService.getProjects();
 			});
 			mapObservable.subscribe((projects: Array<ProjectModel>) => {
 				this.projects = projects;

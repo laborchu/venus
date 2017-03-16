@@ -1,7 +1,7 @@
 import e = require('express');
 import BaseController from "./BaseController";
 import { router } from "../decorators/Web";
-import { Node,NodeModel, UserModel } from '../models/index';
+import { Node,NodeModel, UserModel,NodeHelper } from '../models/index';
 
 class NodeController extends BaseController {
 
@@ -37,7 +37,7 @@ class NodeController extends BaseController {
 	})
 	async saveNode(req: e.Request, res: e.Response) {
 		let user: UserModel = super.getUser(req);
-		let node: NodeModel = req.body;
+    let node: NodeModel  = NodeHelper.buildModel(req.body);
 		if (req.body._id) {
 			node.setModifiedInfo(user);
 			let result = await Node.update(node);

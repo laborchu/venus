@@ -109,7 +109,7 @@ class ProjectController extends BaseController {
 			let projectSrc = path.join(projectPath, "src");
 			let ucPath = path.join(projectSrc, "uc");
 			let handlerPath = path.join(projectSrc, "handler");
-			
+
 			await emptyDir(ucPath);
 			await emptyDir(handlerPath);
 
@@ -156,39 +156,50 @@ class ProjectController extends BaseController {
 	})
 	async create(req: e.Request, res: e.Response) {
 		let user:  UserModel = super.getUser(req);
-		let projectModel: ProjectModel = req.body;
+		let projectModel: ProjectModel;
+    [projectModel]  = ProjectHelper.buildModel(req.body.platform,req.body);
 		projectModel.setCreatedInfo(user);
-		let project: ProjectModel = await Project.insert(projectModel);
-		let jsModel: ProjectJsModel = new ProjectJsModel();
-		jsModel.name = "页面映射";
-		jsModel.jsName = "page.map";
-		jsModel.fixed = true;
-		jsModel.projectId = project._id;
-		jsModel.dataStatus = 1;
-		jsModel.setCreatedInfo(user);
-		ProjectJs.insert(jsModel);
-		jsModel.name = "全局参数";
-		jsModel.jsName = "global.uc";
-		ProjectJs.insert(jsModel);
-		jsModel.name = "工具脚本";
-		jsModel.jsName = "helper.uc";
-		ProjectJs.insert(jsModel);
+    let projectArray = await Project.find({ name: projectModel.name });
+    console.log(projectArray.length )
+    if (projectArray.length == 0) {
+      let project: ProjectModel = await Project.insert(projectModel);
+      let jsModel: ProjectJsModel = new ProjectJsModel();
+      jsModel.name = "页面映射";
+      jsModel.jsName = "page.map";
+      jsModel.fixed = true;
+      jsModel.projectId = project._id;
+      jsModel.dataStatus = 1;
+      jsModel.setCreatedInfo(user);
+      ProjectJs.insert(jsModel);
+      jsModel.name = "全局参数";
+      jsModel.jsName = "global.uc";
+      ProjectJs.insert(jsModel);
+      jsModel.name = "工具脚本";
+      jsModel.jsName = "helper.uc";
+      ProjectJs.insert(jsModel);
 
-		//初始化文件夹
-		let rootPath = path.join(process.cwd(), "projects");
-		if (!fs.existsSync(rootPath)) {
-			fs.mkdirSync(rootPath);
-		}
-		let projectPath = path.join(rootPath, project.name);
-		if (!fs.existsSync(projectPath)) {
-			fs.mkdirSync(projectPath);
-			fs.mkdirSync(path.join(projectPath, "src"));
-			fs.mkdirSync(path.join(projectPath, "uc"));
-			fs.mkdirSync(path.join(projectPath, "handler"));
-			fs.mkdirSync(path.join(projectPath, "temp"));
-		}
+      //初始化文件夹
+      let rootPath = path.join(process.cwd(), "projects");
+      if (!fs.existsSync(rootPath)) {
+        fs.mkdirSync(rootPath);
+      }
+      let projectPath = path.join(rootPath, project.name);
+      if (!fs.existsSync(projectPath)) {
+        fs.mkdirSync(projectPath);
+        fs.mkdirSync(path.join(projectPath, "src"));
+        fs.mkdirSync(path.join(projectPath, "uc"));
+        fs.mkdirSync(path.join(projectPath, "handler"));
+        fs.mkdirSync(path.join(projectPath, "temp"));
+      }
 
-		res.send(super.wrapperRes(project));
+      res.send(super.wrapperRes(project));
+    }else {
+      console.log('right')
+
+      res.send(super.wrapperErrorRes(ErrorCode.PROJECT_FOUND));
+      return;
+    }
+
 	}
 
 	@router({
@@ -197,7 +208,8 @@ class ProjectController extends BaseController {
 	})
 	async update(req: e.Request, res: e.Response) {
 		let user: UserModel = super.getUser(req);
-		let projectModel: ProjectModel = req.body;
+    let projectModel: ProjectModel;
+    [projectModel]  = ProjectHelper.buildModel(req.body.platform,req.body);
 		projectModel.setModifiedInfo(user);
 		let result = await Project.update(req.body);
 		res.send(super.wrapperRes(result));

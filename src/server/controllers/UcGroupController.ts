@@ -1,7 +1,7 @@
 import e = require('express');
 import BaseController from "./BaseController";
 import { router } from "../decorators/Web";
-import { Uc, UcGroup, UcGroupModel, UserModel } from '../models/index';
+import { Uc, UcGroup, UcGroupModel, UserModel ,UcGroupHelper} from '../models/index';
 
 class UcGroupController extends BaseController {
 	@router({
@@ -23,7 +23,7 @@ class UcGroupController extends BaseController {
 	})
 	async create(req: e.Request, res: e.Response) {
 		let user: UserModel = super.getUser(req);
-		let ucGroupModel: UcGroupModel = req.body;
+    let ucGroupModel: UcGroupModel = UcGroupHelper.buildModel(req.body);
 		ucGroupModel.setCreatedInfo(user);
 		let result = await UcGroup.insert(req.body);
 		res.send(super.wrapperRes(result));
@@ -36,7 +36,7 @@ class UcGroupController extends BaseController {
 	})
 	async update(req: e.Request, res: e.Response) {
 		let user: UserModel = super.getUser(req);
-		let ucGroupModel: UcGroupModel = req.body;
+    let ucGroupModel: UcGroupModel = UcGroupHelper.buildModel(req.body);
 		ucGroupModel.setModifiedInfo(user);
 		let result = await UcGroup.update(req.body);
 		res.send(super.wrapperRes(result));
