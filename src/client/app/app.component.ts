@@ -38,6 +38,7 @@ export class AppComponent implements OnInit {
       if (!user._id) {
         this.router.navigate(['/login']);
       } else {
+        this.sessionService.setSessionChangeSubject(user);
         if (this.router.url == "/") {
           this.router.navigate(['/projects']);
         }

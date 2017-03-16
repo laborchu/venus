@@ -3,8 +3,8 @@ import { Router, ActivatedRoute, Params, RoutesRecognized } from '@angular/route
 
 import { NotificationsService } from 'angular2-notifications';
 
-import { UcService, UcGroupService, ProjectService } from '../../services/index';
-import { UcModel, ProjectModel, UcGroupModel } from '../../models/index';
+import { UcService, UcGroupService, ProjectService,SessionService } from '../../services/index';
+import { UcModel, ProjectModel, UcGroupModel,UserModel } from '../../models/index';
 
 /**
  * This class represents the navigation bar component.
@@ -22,7 +22,8 @@ export class NavbarComponent implements OnInit {
 		private ucService: UcService,
 		private ucGroupService: UcGroupService,
 		private projectService: ProjectService,
-		private _notificationsService: NotificationsService
+		private _notificationsService: NotificationsService,
+		private sessionService:SessionService
 	) { }
 	groupId: string;
 	projectId: string;
@@ -35,6 +36,10 @@ export class NavbarComponent implements OnInit {
 		this.projectService.getProjectChangeSubject().subscribe((project: ProjectModel) => {
 			this.projectId = project._id;
 		})
+
+		this.sessionService.getSessionChangeSubject().subscribe((user:UserModel)=>{
+		});
+
 	}
 
 	@HostListener('document:keydown', ['$event'])
