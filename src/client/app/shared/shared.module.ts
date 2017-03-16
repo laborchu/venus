@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ConfirmationPopoverModule } from 'angular-confirmation-popover';
+import { DragulaModule, DragulaService } from 'ng2-dragula';
 
 import { AceEditorDirective, AceEditorComponent } from 'ng2-ace-editor';
 
@@ -16,7 +17,8 @@ import { MvProjectJsFormContent } from './projectjs/index';
  */
 
 @NgModule({
-  imports: [FormsModule, CommonModule, RouterModule, NgbModule.forRoot(),
+  imports: [FormsModule, CommonModule,
+    DragulaModule, RouterModule, NgbModule.forRoot(),
     ConfirmationPopoverModule.forRoot({
       confirmButtonType: 'danger',
       cancelText: '取消',
@@ -24,10 +26,12 @@ import { MvProjectJsFormContent } from './projectjs/index';
     })],
   declarations: [MenuComponent, NavbarComponent, MvNavComponent,
     AceEditorDirective, AceEditorComponent, MvProjectJsFormContent],
-  exports: [MenuComponent, NavbarComponent, MvNavComponent,
+  exports: [MenuComponent, NavbarComponent, MvNavComponent, DragulaModule,
     CommonModule, FormsModule, RouterModule, NgbModule, AceEditorDirective, AceEditorComponent,
     MvProjectJsFormContent],
-  entryComponents: [MvProjectJsFormContent]
+  entryComponents: [MvProjectJsFormContent],
+  providers: [DragulaService]
+
 })
 export class SharedModule {
   static forRoot(): ModuleWithProviders {

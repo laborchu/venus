@@ -73,6 +73,7 @@ export namespace CheckHelper {
 export class CheckerModel {
   _id: string;
   title: string;
+  projectId: string = null;
   type: string = null;
   ucId: string = null;
   nodeId: string = null;

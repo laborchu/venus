@@ -1,25 +1,29 @@
 @import "../../../css/variable";
-.uc-container{
-	padding:10px;
+.uc-container {
+    padding: 10px;
 }
-.node-container{
-	.node-list{
-		.leve2{
-			margin-left: 15px;
-		}
-		.node{
-			padding: 10px;
-			cursor: pointer;
-			&:hover{
-				background-color: $select-color;
-			}
-			.node-toobar{
-				float: right;
-				i{
-					margin-right: 5px;
-				}
-			}
-		}
-		
-	}
+
+.uc-content {
+    overflow: auto;
+}
+
+.node-container {
+    .node-list {
+        .level2 {
+            margin-left: 15px;
+        }
+        .node {
+            padding: 10px;
+            cursor: pointer;
+            &:hover {
+                background-color: $select-color;
+            }
+            .node-toobar {
+                float: right;
+                i {
+                    margin-right: 5px;
+                }
+            }
+        }
+    }
 }

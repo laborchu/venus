@@ -3,10 +3,11 @@ import BaseModel from "./BaseModel";
 import mongoose = require('mongoose');
 import autoIncrement = require('mongoose-auto-increment');
 
-import { UcModel,Node } from './index';
+import { UcModel, Node } from './index';
 
 const _schema = new mongoose.Schema({
   title: { type: String },
+  projectId: { type: String },
   groupId: { type: String },
   ucKey: { type: String },
   sleep: { type: Number },
@@ -34,16 +35,16 @@ class Uc extends BaseModel {
   static find(params: any): Promise<Array<UcModel>> {
     params.dataStatus = 1;
     return new Promise<Array<UcModel>>((resolve, reject) => {
-      _model.find(params, (err: any, ucs: Array<UcModel>) => {
-        err ? reject(err) : resolve(ucs);
+      _model.find(params).sort({ order: 1 }).exec((err: any, ucs: Array<UcModel>) => {
+          err ? reject(err) : resolve(ucs)
       })
     });
   }
 
   static insert(uc: UcModel): Promise<UcModel> {
     return new Promise<UcModel>((resolve, reject) => {
-      _model.insertMany([uc], (err: any, ucGroups: Array<UcModel>) => {
-        err ? reject(err) : resolve(ucGroups[0])
+      _model.create(uc, (err: any, result: UcModel) => {
+        err ? reject(err) : resolve(result)
       })
     });
   }

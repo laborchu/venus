@@ -1,5 +1,6 @@
 <mv-nav [title]="ucMode?.name" [formObj]="form" [rightBtnConf]="rightBtnConf" [code]="ucMode?.code"></mv-nav>
-<div class="uc-container">
+<div class="uc-content" [style.height.px]="groupInfoHeight" (window:resize)="onResize($event)">
+    <div class="uc-container">
     <form #form="ngForm">
         <div class="form-group">
             <input type="text" name="title" class="form-control" placeholder="uc名称" #title="ngModel" [(ngModel)]="ucMode.title" required>
@@ -31,8 +32,8 @@
 </div>
 <mv-nav [title]="'节点'" [rightBtnConf]="nodeRightBtnConf" [topBottom]="true"></mv-nav>
 <div class="node-container">
-    <div class="node-list">
-        <div class="node leve1" *ngFor="let node of ucMode?.nodes" (click)="showNode(node)">
+    <div class="node-list"  [dragula]='"node-list"' [dragulaModel]='nodes'>
+        <div class="node level1" [ngClass]="{level2:node.parentId,'is-parent':node.isParent}" *ngFor="let node of nodes" (click)="showNode(node)">
             {{node.title}}
             <div class="node-toobar" (click)="$event.stopPropagation()">
                 <i class="fa fa-trash"
@@ -45,3 +46,5 @@
         </div>
     </div>
 </div>
+</div>
+

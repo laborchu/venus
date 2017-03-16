@@ -17,7 +17,8 @@ export enum PathType {
 	input,
 	keys,
 	press,
-	pope
+	pope,
+	cmd
 }
 
 export namespace PathHelper {
@@ -37,15 +38,15 @@ export namespace PathHelper {
 		})
 		return propertyMap;
 	}
-    export function setFilter(oldModel: any): PathModel {
-      if(oldModel.filterStr){
-        oldModel.filter = JSON.parse(oldModel.filterStr);
-        return oldModel
-      }
-      return oldModel
-    }
+	export function setFilter(oldModel: any): PathModel {
+		if (oldModel.filterStr) {
+			oldModel.filter = JSON.parse(oldModel.filterStr);
+			return oldModel
+		}
+		return oldModel
+	}
 
-	export function buildModel(type: string, oldModel: any, clean: boolean = false,filter:any = {}): [PathModel, Set<String>] {
+	export function buildModel(type: string, oldModel: any, clean: boolean = false, filter: any = {}): [PathModel, Set<String>] {
 		let newMode: any;
 		let field: Set<String>;
 		if (type == PathType[PathType.click]) {
@@ -66,14 +67,17 @@ export namespace PathHelper {
 		} else if (type == PathType[PathType.input]) {
 			newMode = new InputPathModel();
 			field = getField(newMode);
-		}else if (type == PathType[PathType.keys]) {
-      newMode = new KeysPathModel();
-      field = getField(newMode);
-    } else if (type == PathType[PathType.press]) {
+		} else if (type == PathType[PathType.keys]) {
+			newMode = new KeysPathModel();
+			field = getField(newMode);
+		} else if (type == PathType[PathType.press]) {
 			newMode = new PressPathModel();
 			field = getField(newMode);
 		} else if (type == PathType[PathType.pope]) {
 			newMode = new PopePathModel();
+			field = getField(newMode);
+		} else if (type == PathType[PathType.cmd]) {
+			newMode = new CmdPathModel();
 			field = getField(newMode);
 		}
 
@@ -85,10 +89,10 @@ export namespace PathHelper {
 				propertyNames = Object.getOwnPropertyNames(oldModel);
 			}
 			propertyNames.forEach((key: string) => {
-                newMode[key] = oldModel[key];
-                if(key=='filter'){
-                    newMode.filterStr = JSON.stringify(newMode.filter)
-                }
+				newMode[key] = oldModel[key];
+				if (key == 'filter') {
+					newMode.filterStr = JSON.stringify(newMode.filter)
+				}
 				if ((clean && !BaseHelper.has(newMode[key])) || filter[key]) {
 					delete newMode[key];
 				}
@@ -101,6 +105,7 @@ export namespace PathHelper {
 export class PathModel {
 
 	_id: string = null;
+	projectId: string = null;
 	type: string = null;
 	ucId: string = null;
 	nodeId: string = null;
@@ -135,7 +140,7 @@ export class ClicksPathModel extends PathModel {
 export class GetPathModel extends PathModel {
 	type: string = PathType[PathType.get];
 	selector: string = null;
-  filterStr: string = null;
+	filterStr: string = null;
 	element: string = null;
 	index: number = null;
 	mode: string = null;
@@ -172,5 +177,10 @@ export class PopePathModel extends PathModel {
 	type: string = PathType[PathType.pope];
 }
 
+export class CmdPathModel extends PathModel {
+	type: string = PathType[PathType.cmd];
+	cmdCode: string = null;
+	subType: string = null;
+}
 
 

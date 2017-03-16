@@ -6,6 +6,7 @@ import autoIncrement = require('mongoose-auto-increment');
 import { CheckerModel } from './index';
 
 const _schema = new mongoose.Schema({
+	projectId: { type: String },
 	ucId: { type: String },
 	nodeId: { type: String },
 	pathId: { type: String },
