@@ -1,7 +1,7 @@
 import { Injectable, Injector } from '@angular/core';
 
 import { Observable } from 'rxjs/Observable';
-import { Subject } from 'rxjs/Subject';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 import { UserModel } from '../models/index';
 import { MvService } from './mv.service';
@@ -9,7 +9,7 @@ import { MvService } from './mv.service';
 @Injectable()
 export class SessionService extends MvService {
 	private sessionUrl: string = 'open/session';
-	private sessionChangeSubject: Subject<UserModel> = new Subject<UserModel>();
+	private sessionChangeSubject: BehaviorSubject<UserModel> = new BehaviorSubject<UserModel>(null);
 
 	constructor(protected injector: Injector) {
 		super(injector);
@@ -26,7 +26,15 @@ export class SessionService extends MvService {
 	getSession(): Observable<UserModel> {
 		return this.getHttp(this.sessionUrl);
 	}
-	postSession(user:UserModel): Observable<UserModel> {
+	postSession(user:UserModel): Observable<Array<UserModel>> {
 		return this.postHttp(this.sessionUrl, user);
 	}
+
+    deleteSession(): Observable<UserModel> {
+    	let url = `/logout`;
+		return this.delHttp(url);
+	}
+
+
+
 }

@@ -38,7 +38,7 @@ export class MenuComponent implements OnInit {
 	platformTypes: Array<String> = ProjectHelper.getTypes();
 	platformFieldSet: Set<String> = ProjectHelper.getField(this.newProject);
 
-	groupArray: Array<UcGroupModel>;
+	groupArray: Array<UcGroupModel> = [];
 	selectGroup: UcGroupModel;
 	newUcGroup: UcGroupModel = new UcGroupModel();
 
@@ -92,7 +92,7 @@ export class MenuComponent implements OnInit {
 				this.selectJs = projectJs;
 			}
 		})
-    this.dragulaService.drop.subscribe((value: any) => {
+    this.dragulaService.dropModel.subscribe((value: any) => {
       if(value[0]=="group-list"){
         this.onDrop(value.slice(1));
       }

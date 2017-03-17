@@ -36,6 +36,18 @@ class SessionController extends BaseController {
 		}
 		
 	}
+
+
+	@router({
+		method: 'delete',
+		path: '/logout'
+	})
+	async logout(req: e.Request, res: e.Response) {
+		let mvSession: MvSession = <MvSession>req.session;
+	    delete mvSession.user;
+		res.send(super.wrapperRes("logout"));
+		
+	}
 }
 
 export default SessionController
