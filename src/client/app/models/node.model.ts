@@ -25,7 +25,7 @@ export namespace NodeHelper{
 			if ((clean && !BaseHelper.has(newMode[key])) || filter[key]) {
 				delete newMode[key];
 			}
-		})
+		});
 		return newMode;
 	}
 }

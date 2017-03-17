@@ -38,7 +38,7 @@ class PathController extends BaseController {
   })
   async create(req: e.Request, res: e.Response) {
     let user: UserModel = super.getUser(req);
-    let pathModel: PathModel
+    let pathModel: PathModel;
     [pathModel]  = PathHelper.buildModel(req.body.type,req.body);
     pathModel.setCreatedInfo(user);
     let result = await Path.insert(pathModel);
@@ -75,7 +75,7 @@ class PathController extends BaseController {
     //   data.setCreatedInfo(user);
     //   Checker.insert(data);
     // })
-    let pathModel: PathModel
+    let pathModel: PathModel;
     [pathModel]  = PathHelper.buildModel(req.body.type,req.body);
     pathModel.setModifiedInfo(user);
     let result = await Path.updatePath(req.body);
