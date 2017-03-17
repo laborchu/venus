@@ -5,13 +5,11 @@
   <h4 class="modal-title">编辑UC脚本</h4>
 </div>
 <div class="modal-body clearfix pd0">
-  <div ace-editor
+ <ace-editor
        #editor
-       [(text)]="codeSTr"
-       [mode]="'javascript'"
-       (textChanged)="onChange($event)"
-  ></div>
+       [text]="code"
+       [mode]="'javascript'"></ace-editor>
 </div>
 <div class="modal-footer">
-  <button type="button" class="btn btn-success" (click)="activeModal.close(codeSTr)">保存</button>
+  <button type="button" class="btn btn-success" (click)="activeModal.close(editor.getEditor().getValue())">保存</button>
 </div>
