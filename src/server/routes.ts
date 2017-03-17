@@ -8,6 +8,7 @@ import UcController from "./controllers/UcController";
 import NodeController from "./controllers/NodeController";
 import PathController from "./controllers/PathController";
 import SessionController from "./controllers/SessionController";
+import CheckerController from "./controllers/CheckerController";
 new ProjectController();
 new ProjectJsController();
 new UcGroupController();
@@ -15,6 +16,7 @@ new UcController();
 new NodeController();
 new PathController();
 new SessionController();
+new CheckerController();
 
 export function init(app:any) {
 	RouterMap.__DecoratedRouters.forEach((controller: any, config: any) => {

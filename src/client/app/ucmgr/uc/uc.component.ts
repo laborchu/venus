@@ -3,7 +3,7 @@ import { Router, ActivatedRoute, Params } from '@angular/router';
 import { NgForm } from '@angular/forms';
 import { NotificationsService } from 'angular2-notifications';
 import { DragulaService } from 'ng2-dragula';
-import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { MvCodeJsFormContent } from  '../../shared/mv-nav/index';
 
 import { UcModel, NodeModel,UcHelper } from '../../models/index';
@@ -62,8 +62,9 @@ export class UcComponent implements OnInit {
 		},
 		code: {
       codeClick:() =>{
-        this.modalService.open(MvCodeJsFormContent, { backdrop: "static" }).result.then(() => {
-          this.ucMode.code = this.code;
+        const modalRef: NgbModalRef =  this.modalService.open(MvCodeJsFormContent, { backdrop: "static" })
+        modalRef.result.then((code) => {
+          this.ucMode.code = code;
           this.ucService.updateUcScript(this.ucMode)
             .concatMap((result)=>{
               if(result){
@@ -86,6 +87,7 @@ export class UcComponent implements OnInit {
             });
         }, () => {
         });
+        modalRef.componentInstance.code = this.ucMode.code;
       }
 		}
 	};

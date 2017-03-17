@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { NgbModal, NgbModalRef, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { NotificationsService } from 'angular2-notifications';
+import { DragulaService } from 'ng2-dragula';
 
 import { ProjectModel, IosProjectModel, UcGroupModel, ProjectJsModel, ProjectHelper } from '../../models/index';
 import { ProjectService, UcGroupService, ProjectJsService } from '../../services/index';
@@ -27,6 +28,7 @@ export class MenuComponent implements OnInit {
 		private projectService: ProjectService,
 		private projectJsService: ProjectJsService,
 		private ucGroupService: UcGroupService,
+    private dragulaService: DragulaService,
 		private _notificationsService: NotificationsService
 	) { }
 
@@ -49,7 +51,7 @@ export class MenuComponent implements OnInit {
 		this.projectService.getProjects().subscribe(projects=>{
 			this.projects = projects;
 			this.doSelectProject(projects[0], this.router.url=="/projects");
-		})
+		});
 
 		//监听ucGroup变化
 		this.ucGroupService.getUpdateGroupSubject().subscribe((group: UcGroupModel) => {
@@ -65,6 +67,7 @@ export class MenuComponent implements OnInit {
 				this.selectGroup = group;
 			}
 		});
+
 
 		this.projectJsService.getProjectJsChangeSubject().subscribe((projectJs: ProjectJsModel) => {
 			this.projectJsArray.every((e: ProjectJsModel, index: number) => {
@@ -89,6 +92,11 @@ export class MenuComponent implements OnInit {
 				this.selectJs = projectJs;
 			}
 		})
+    this.dragulaService.drop.subscribe((value: any) => {
+      if(value[0]=="group-list"){
+        this.onDrop(value.slice(1));
+      }
+    });
 	}
 
 	doSelectProject(project: ProjectModel,route:boolean = true) {
@@ -192,4 +200,28 @@ export class MenuComponent implements OnInit {
 
 	}
 
+  onDrop(args: any) {
+    let [el, parents] = args;
+    let dragTo = [].slice.call(el.parentElement.children).indexOf(el);
+
+    let preOrder = 0;
+    let nextOrder = 0;
+    let curOrder = 0;
+    if(dragTo!=0){
+      let preUc:UcGroupModel = this.groupArray[dragTo - 1];
+      preOrder = preUc.order;
+    }
+    if(dragTo!=(this.groupArray.length-1)){
+      let nextUc: UcGroupModel = this.groupArray[dragTo + 1];
+      nextOrder = nextUc.order;
+    }else{
+      curOrder = +(preOrder + 1).toFixed(0);
+    }
+    if (curOrder==0){
+      curOrder = (preOrder + nextOrder) / 2;
+    }
+
+    this.groupArray[dragTo].order = curOrder;
+    this.ucGroupService.updateUcGroups(this.groupArray[dragTo]).subscribe(() => { });
+  }
 }

@@ -13,7 +13,7 @@ export enum CheckType {
 
 export namespace CheckHelper {
   export function getTypes(): Array < string > {
-    var keys = Object.keys(CheckType);
+    let keys = Object.keys(CheckType);
     return keys.slice(keys.length / 2, keys.length);
   }
   export function getField(model: CheckerModel): Set<String> {
@@ -21,7 +21,7 @@ export namespace CheckHelper {
     let propertyMap:Set<String> = new Set();
     propertyNames.forEach((value)=>{
       propertyMap.add(value);
-    })
+    });
     return propertyMap;
   }
   export function buildModel(typeStr: string, oldModel: any, clean: boolean = false, filter: any = {}): [CheckerModel, Set<String>] {
