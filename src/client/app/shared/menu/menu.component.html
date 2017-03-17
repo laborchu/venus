@@ -87,7 +87,7 @@
         <div class="group-title">
             <i class="fa fa-bars"></i> UC组列表
         </div>
-        <div [dragula]='"group-list"' [dragulaModel]='groupArray'>
+      <div  [dragula]='"group-list"' [dragulaModel]='groupArray'>
           <a class="group-item" *ngFor="let group of groupArray" (click)="doSelectGroup(group)" [ngClass]="{select:group==selectGroup}">
             {{group.name}}
             <span class="pull-right item-num">4</span>
@@ -95,6 +95,7 @@
         </div>
     </div>
     <div class="menu-group">
+
         <div class="group-title">
             <i class="fa fa-code"></i> 全局脚本
         </div>
