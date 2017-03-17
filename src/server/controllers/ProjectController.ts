@@ -14,7 +14,7 @@ import ErrorCode from '../ErrorCode';
 
 let emptyDir = async function(fileUrl: string) {
 	let files = fs.readdirSync(fileUrl); //读取该文件夹
-	for (let file of files){
+	for (let file of files) {
 		let fullPath = path.join(fileUrl, file);
 		let stats = fs.statSync(fullPath);
 		if (stats.isDirectory()) {
@@ -26,6 +26,7 @@ let emptyDir = async function(fileUrl: string) {
 	}
 };
 
+
 let copyFile = function(src: string, dist: string) {
 	if (!fs.existsSync(dist)) {
 		var sourceFile = path.join(src);
@@ -34,6 +35,30 @@ let copyFile = function(src: string, dist: string) {
 		readStream.pipe(writeStream);
 	}
 };
+
+let loadNodePath = async function(nodeModel: NodeModel, filterField: any): Promise<Array<PathModel>> {
+	let pathArray: Array<PathModel> = await Path.find({ "nodeId": nodeModel._id });
+	let paths: Array<PathModel> = [];
+	for (let pathModel of pathArray) {//path
+		let checkerArray: Array<CheckerModel> = await Checker.find({ "pathId": pathModel._id });
+		let checkers: Array<CheckerModel> = [];
+		for (let checker of checkerArray) {//checker
+			[checker] = CheckHelper.buildModel(checker.type, checker, true, filterField);
+			checkers.push(checker);
+		}
+		[pathModel] = PathHelper.buildModel(pathModel.type, pathModel, true, filterField);
+		if (checkers.length > 0) {
+			pathModel.checker = checkers;
+		} else {
+			delete pathModel.checker;
+		}
+		paths.push(pathModel);
+	}
+
+	return new Promise<Array<PathModel>>((resolve, reject) => {
+		resolve(paths);
+	});
+}
 
 class ProjectController extends BaseController {
 	@router({
@@ -58,9 +83,16 @@ class ProjectController extends BaseController {
 			}
 			/**********获取项目信息 Start**********/
 			let project: ProjectModel = projectArray[0];
-			[project] = ProjectHelper.buildModel(project.platform,project);
+			[project] = ProjectHelper.buildModel(project.platform, project);
 			let ucGroupArray: Array<UcGroupModel> = await UcGroup.find({ projectId: project._id });
-			let filterField = { "_id": true, "groupId": true, "dataStatus": true, "order": true, "ucId": true, "nodeId": true, "pathId": true };
+			let filterField = {
+				"_id": true, "projectId": true, "filterStr": true,
+				"groupId": true, "dataStatus": true, "order": true,
+				"ucId": true, "nodeId": true, "pathId": true, "parentId": true, 
+				"isParent": true,
+				"createdBy": true, "createdDate": true, "modifiedBy": true, "modifiedDate": true
+			};
+
 			let ucGroups: Array<UcGroupModel> = [];
 			for (let ucGroupModel of ucGroupArray) {//UcGroup
 				ucGroupModel = UcGroupHelper.buildModel(ucGroupModel);
@@ -69,33 +101,28 @@ class ProjectController extends BaseController {
 				let ucArray: Array<UcModel> = await Uc.find({ "groupId": ucGroupModel._id });
 				let ucs: Array<UcModel> = [];
 				for (let ucModel of ucArray) {//Uc
-					let nodeArray: Array<NodeModel> = await Node.find({ "ucId": ucModel._id });
-					let nodes: Array<NodeModel> = [];
+					let nodeArray: Array<NodeModel> = await Node.find({ "ucId": ucModel._id});
+					
+					let nodeTree: Array<NodeModel> = [];
+					let curNode:NodeModel = null;
 					for (let nodeModel of nodeArray) {//Node
-						let pathArray: Array<PathModel> = await Path.find({ "nodeId": nodeModel._id });
-						let paths: Array<PathModel> = [];
-						for (let pathModel of pathArray) {//path
-							let checkerArray: Array<CheckerModel> = await Checker.find({ "pathId": pathModel._id });
-							let checkers: Array<CheckerModel> = [];
-							for (let checker of checkerArray) {//checker
-								[checker] = CheckHelper.buildModel(checker.type, checker, true,filterField);
-								checkers.push(checker);
-							}
-							[pathModel] = PathHelper.buildModel(pathModel.type, pathModel, true, filterField);
-							if (checkers.length>0){
-								pathModel.checker = checkers;
-							}else{
-								delete pathModel.checker;
-							}
-							paths.push(pathModel);
+						if (nodeModel.parentId) {
+							let paths: Array<PathModel> = await loadNodePath(nodeModel, filterField);
+							nodeModel = NodeHelper.buildModel(nodeModel, true, filterField);
+							nodeModel.paths = paths;
+							curNode.children.push(nodeModel);
+						}else{
+							nodeModel = NodeHelper.buildModel(nodeModel, true, filterField);
+							curNode = nodeModel;
+							curNode.children = [];
+							nodeTree.push(nodeModel);
 						}
-						nodeModel = NodeHelper.buildModel(nodeModel, true, filterField);
-						nodes.push(nodeModel);
-						nodeModel.paths = paths;
+
 					}
+
 					ucModel = UcHelper.buildModel(ucModel, true, filterField);
 					ucs.push(ucModel);
-					ucModel.nodes = nodes;
+					ucModel.nodes = nodeTree;
 				}
 				ucGroupModel.ucs = ucs;
 			}
@@ -118,14 +145,14 @@ class ProjectController extends BaseController {
 				"name": project.name
 			}));
 
-			for (let ucGroup of project.ucGroups){
+			for (let ucGroup of project.ucGroups) {
 				let groupPath = path.join(ucPath, ucGroup.name);
 				fs.mkdirSync(groupPath);
-				for (let uc of ucGroup.ucs){
+				for (let uc of ucGroup.ucs) {
 					delete uc.code;
 					let ucTpl = _.template(fs.readFileSync(path.join(rootPath, "uc.tpl.js")));
 					fs.writeFileSync(path.join(groupPath, `${uc.ucKey}.uc.js`), ucTpl({
-						"content": JSON.stringify(uc).replace(/\\n/g, "").replace(/\\/g, "")
+						"content": JSON.stringify(uc)
 					}));
 				}
 			}
@@ -155,50 +182,50 @@ class ProjectController extends BaseController {
 		path: '/api/projects'
 	})
 	async create(req: e.Request, res: e.Response) {
-		let user:  UserModel = super.getUser(req);
+		let user: UserModel = super.getUser(req);
 		let projectModel: ProjectModel;
-    [projectModel]  = ProjectHelper.buildModel(req.body.platform,req.body);
+		[projectModel] = ProjectHelper.buildModel(req.body.platform, req.body);
 		projectModel.setCreatedInfo(user);
-    let projectArray = await Project.find({ name: projectModel.name });
-    console.log(projectArray.length )
-    if (projectArray.length == 0) {
-      let project: ProjectModel = await Project.insert(projectModel);
-      let jsModel: ProjectJsModel = new ProjectJsModel();
-      jsModel.name = "页面映射";
-      jsModel.jsName = "page.map";
-      jsModel.fixed = true;
-      jsModel.projectId = project._id;
-      jsModel.dataStatus = 1;
-      jsModel.setCreatedInfo(user);
-      ProjectJs.insert(jsModel);
-      jsModel.name = "全局参数";
-      jsModel.jsName = "global.uc";
-      ProjectJs.insert(jsModel);
-      jsModel.name = "工具脚本";
-      jsModel.jsName = "helper.uc";
-      ProjectJs.insert(jsModel);
+		let projectArray = await Project.find({ name: projectModel.name });
+		console.log(projectArray.length)
+		if (projectArray.length == 0) {
+			let project: ProjectModel = await Project.insert(projectModel);
+			let jsModel: ProjectJsModel = new ProjectJsModel();
+			jsModel.name = "页面映射";
+			jsModel.jsName = "page.map";
+			jsModel.fixed = true;
+			jsModel.projectId = project._id;
+			jsModel.dataStatus = 1;
+			jsModel.setCreatedInfo(user);
+			ProjectJs.insert(jsModel);
+			jsModel.name = "全局参数";
+			jsModel.jsName = "global.uc";
+			ProjectJs.insert(jsModel);
+			jsModel.name = "工具脚本";
+			jsModel.jsName = "helper.uc";
+			ProjectJs.insert(jsModel);
 
-      //初始化文件夹
-      let rootPath = path.join(process.cwd(), "projects");
-      if (!fs.existsSync(rootPath)) {
-        fs.mkdirSync(rootPath);
-      }
-      let projectPath = path.join(rootPath, project.name);
-      if (!fs.existsSync(projectPath)) {
-        fs.mkdirSync(projectPath);
-        fs.mkdirSync(path.join(projectPath, "src"));
-        fs.mkdirSync(path.join(projectPath, "uc"));
-        fs.mkdirSync(path.join(projectPath, "handler"));
-        fs.mkdirSync(path.join(projectPath, "temp"));
-      }
+			//初始化文件夹
+			let rootPath = path.join(process.cwd(), "projects");
+			if (!fs.existsSync(rootPath)) {
+				fs.mkdirSync(rootPath);
+			}
+			let projectPath = path.join(rootPath, project.name);
+			if (!fs.existsSync(projectPath)) {
+				fs.mkdirSync(projectPath);
+				fs.mkdirSync(path.join(projectPath, "src"));
+				fs.mkdirSync(path.join(projectPath, "uc"));
+				fs.mkdirSync(path.join(projectPath, "handler"));
+				fs.mkdirSync(path.join(projectPath, "temp"));
+			}
 
-      res.send(super.wrapperRes(project));
-    }else {
-      console.log('right')
+			res.send(super.wrapperRes(project));
+		} else {
+			console.log('right')
 
-      res.send(super.wrapperErrorRes(ErrorCode.PROJECT_FOUND));
-      return;
-    }
+			res.send(super.wrapperErrorRes(ErrorCode.PROJECT_FOUND));
+			return;
+		}
 
 	}
 
@@ -208,8 +235,8 @@ class ProjectController extends BaseController {
 	})
 	async update(req: e.Request, res: e.Response) {
 		let user: UserModel = super.getUser(req);
-    let projectModel: ProjectModel;
-    [projectModel]  = ProjectHelper.buildModel(req.body.platform,req.body);
+		let projectModel: ProjectModel;
+		[projectModel] = ProjectHelper.buildModel(req.body.platform, req.body);
 		projectModel.setModifiedInfo(user);
 		let result = await Project.update(req.body);
 		res.send(super.wrapperRes(result));

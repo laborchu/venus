@@ -99,7 +99,7 @@ export namespace PathHelper {
 			}
 			propertyNames.forEach((key: string) => {
 				newMode[key] = oldModel[key];
-				if (key == 'filter') {
+				if (key == 'filter' && newMode.filter && !filter["filterStr"]) {
 					newMode.filterStr = JSON.stringify(newMode.filter)
 				}
 				if ((clean && !BaseHelper.has(newMode[key])) || filter[key]) {

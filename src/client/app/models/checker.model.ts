@@ -102,6 +102,7 @@ export class EexistCheckerModel extends CheckerModel {
   type: string = CheckType[CheckType.eexist];
   eexist:string = void 0;
   element:string = void 0;
+  selector: string = void 0;
 }
 
 export class IftrueCheckerModel extends CheckerModel {
