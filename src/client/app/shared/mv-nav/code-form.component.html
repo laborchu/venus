@@ -7,11 +7,11 @@
 <div class="modal-body clearfix pd0">
   <div ace-editor
        #editor
-       [(text)]="code"
+       [(text)]="codeSTr"
        [mode]="'javascript'"
        (textChanged)="onChange($event)"
   ></div>
 </div>
 <div class="modal-footer">
-  <button type="button" class="btn btn-success" (click)="activeModal.close('Close click')">保存</button>
+  <button type="button" class="btn btn-success" (click)="activeModal.close(codeSTr)">保存</button>
 </div>

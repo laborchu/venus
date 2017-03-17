@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component,Input} from '@angular/core';
 
 import { NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
@@ -9,5 +9,10 @@ import { NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
   templateUrl: 'code-form.component.html'
 })
 export class MvCodeJsFormContent {
+  @Input() code:string;
+  codeSTr:string = this.code;
+  onChange(code:string) {
+  	this.codeSTr = code;
+  }
   constructor(public activeModal: NgbActiveModal) { }
 }

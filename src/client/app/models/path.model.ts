@@ -25,11 +25,11 @@ export enum PathType {
 
 export namespace PathHelper {
 	export function getTypes(): Array<string> {
-		var keys = Object.keys(PathType);
+    let keys = Object.keys(PathType);
 		return keys.slice(keys.length / 2, keys.length);
 	}
 	export function getSelector(): Array<string> {
-		var keys = Object.keys(Selector);
+    let keys = Object.keys(Selector);
 		return keys.slice(keys.length / 2, keys.length);
 	}
 	export function getField(model: PathModel): Set<String> {
@@ -37,12 +37,13 @@ export namespace PathHelper {
 		let propertyMap: Set<String> = new Set();
 		propertyNames.forEach((value) => {
 			propertyMap.add(value);
-		})
+		});
 		return propertyMap;
 	}
 	export function setFilter(oldModel: any): PathModel {
 		if (oldModel.filterStr) {
 			oldModel.filter = JSON.parse(oldModel.filterStr);
+			delete oldModel.filterStr;
 			return oldModel
 		}
 		return oldModel
@@ -98,7 +99,7 @@ export namespace PathHelper {
 			}
 			propertyNames.forEach((key: string) => {
 				newMode[key] = oldModel[key];
-				if (key == 'filter') {
+				if (key == 'filter' && newMode.filter && !filter["filterStr"]) {
 					newMode.filterStr = JSON.stringify(newMode.filter)
 				}
 				if ((clean && !BaseHelper.has(newMode[key])) || filter[key]) {

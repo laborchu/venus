@@ -1,7 +1,7 @@
 import e = require('express');
 import BaseController from "./BaseController";
 import { router } from "../decorators/Web";
-import { Path, PathModel, Checker, CheckerModel, UserModel ,PathHelper} from '../models/index';
+import { Path, PathModel, Checker, CheckerModel, UserModel ,PathHelper,CheckHelper} from '../models/index';
 import ErrorCode from '../ErrorCode';
 
 class PathController extends BaseController {
@@ -12,19 +12,6 @@ class PathController extends BaseController {
   async find(req: e.Request, res: e.Response) {
     if (req.params.nodeId) {
       let nodeArray = await Path.find({ nodeId: req.params.nodeId });
-      res.send(super.wrapperRes(nodeArray));
-    } else {
-      res.send(super.wrapperRes([]));
-    }
-  }
-
-  @router({
-    method: 'get',
-    path: '/api/nodes/:nodeId/paths/:pathId'
-  })
-  async findPaths(req: e.Request, res: e.Response) {
-    if (req.params.pathId) {
-      let nodeArray = await Checker.find({ pathId: req.params.pathId });
       res.send(super.wrapperRes(nodeArray));
     } else {
       res.send(super.wrapperRes([]));
@@ -51,17 +38,18 @@ class PathController extends BaseController {
   })
   async create(req: e.Request, res: e.Response) {
     let user: UserModel = super.getUser(req);
-    let pathModel: PathModel
+    let pathModel: PathModel;
     [pathModel]  = PathHelper.buildModel(req.body.type,req.body);
     pathModel.setCreatedInfo(user);
     let result = await Path.insert(pathModel);
-    req.body.checker.forEach(function(data: CheckerModel) {
-      data.pathId = result._id;
-      data.nodeId = result.nodeId;
-      data.ucId = result.ucId;
-      data.setCreatedInfo(user);
-      Checker.insert(data);
-    })
+    for (let checkerModel of  req.body.checker) {//UcGroup
+      [checkerModel] = CheckHelper.buildModel(checkerModel.type,checkerModel);
+      checkerModel.pathId = req.body._id;
+      checkerModel.nodeId = req.body.nodeId;
+      checkerModel.ucId = req.body.ucId;
+      checkerModel.setCreatedInfo(user);
+      Checker.insert(checkerModel);
+    }
     res.send(super.wrapperRes(result));
   }
 
@@ -72,14 +60,22 @@ class PathController extends BaseController {
   async updatePath(req: e.Request, res: e.Response) {
     let user: UserModel = super.getUser(req);
     Checker.remove({ pathId: req.body._id });
-    req.body.checker.forEach(function(data: CheckerModel) {
-      data.pathId = req.body._id;
-      data.nodeId = req.body.nodeId;
-      data.ucId = req.body.ucId;
-      data.setCreatedInfo(user);
-      Checker.insert(data);
-    })
-    let pathModel: PathModel
+    for (let checkerModel of  req.body.checker) {//UcGroup
+      [checkerModel] = CheckHelper.buildModel(checkerModel.type,checkerModel);
+      checkerModel.pathId = req.body._id;
+      checkerModel.nodeId = req.body.nodeId;
+      checkerModel.ucId = req.body.ucId;
+      checkerModel.setCreatedInfo(user);
+      Checker.insert(checkerModel);
+    }
+    // req.body.checker.forEach(function(data: CheckerModel) {
+    //   data.pathId = req.body._id;
+    //   data.nodeId = req.body.nodeId;
+    //   data.ucId = req.body.ucId;
+    //   data.setCreatedInfo(user);
+    //   Checker.insert(data);
+    // })
+    let pathModel: PathModel;
     [pathModel]  = PathHelper.buildModel(req.body.type,req.body);
     pathModel.setModifiedInfo(user);
     let result = await Path.updatePath(req.body);

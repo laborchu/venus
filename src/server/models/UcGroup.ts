@@ -7,6 +7,7 @@ import { UcGroupModel } from './index';
 const _schema = new mongoose.Schema({
   name: { type: String },
   projectId: { type: String },
+  order: { type: Number },
   dataStatus: { type: Number },
   createdBy: { type: String },
   createdDate: { type: Date },
@@ -26,8 +27,8 @@ class UcGroup extends BaseModel {
   }
   static find(params: Object): Promise<Array<UcGroupModel>> {
     return new Promise<Array<UcGroupModel>>((resolve, reject) => {
-      _model.find(params, (err: any, projects: Array<UcGroupModel>) => {
-        err ? reject(err) : resolve(projects)
+      _model.find(params).sort({ order: 1 }).exec((err: any, ucs: Array<UcGroupModel>) => {
+        err ? reject(err) : resolve(ucs)
       })
     });
   }
