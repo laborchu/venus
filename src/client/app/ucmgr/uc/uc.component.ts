@@ -62,7 +62,7 @@ export class UcComponent implements OnInit {
 		},
 		code: {
       codeClick:() =>{
-        const modalRef: NgbModalRef =  this.modalService.open(MvCodeJsFormContent, { backdrop: "static" })
+        const modalRef: NgbModalRef =  this.modalService.open(MvCodeJsFormContent, { backdrop: "static",size:'lg'})
         modalRef.result.then((code) => {
           this.ucMode.code = code;
           this.ucService.updateUcScript(this.ucMode)
