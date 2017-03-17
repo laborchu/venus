@@ -4,6 +4,7 @@ import { NgbModal, NgbModalRef, ModalDismissReasons } from '@ng-bootstrap/ng-boo
 
 import { NotificationsService } from 'angular2-notifications';
 
+import { Subscription} from  'rxjs/Subscription';
 
 import { UcService, UcGroupService,UserService,ProjectService,SessionService } from '../../services/index';
 import { UcModel, ProjectModel, UcGroupModel,UserModel } from '../../models/index';
@@ -27,8 +28,8 @@ export class NavbarComponent implements OnInit {
 		private projectService: ProjectService,
 		private _notificationsService: NotificationsService,
 		private modalService:NgbModal,
-		private sessionService:SessionService,
-		private userService:UserService
+		private userService:UserService,
+		private sessionService:SessionService
 
 		
 	) { }
@@ -36,7 +37,7 @@ export class NavbarComponent implements OnInit {
 	projectId: string;
 	user:UserModel=new UserModel();		
 	@ViewChild('newUcView') newUcView: any;
-
+	sessionSub:Subscription;
 	ngOnInit(): void {
 		this.ucGroupService.getSelectGroupSubject().subscribe((ucGroupModel: UcGroupModel) => {
 			this.groupId = ucGroupModel._id;
@@ -44,13 +45,15 @@ export class NavbarComponent implements OnInit {
 		this.projectService.getProjectChangeSubject().subscribe((project: ProjectModel) => {
 			this.projectId = project._id;
 		})
-
-
-		this.sessionService.getSessionChangeSubject().subscribe((user:UserModel)=>{
-
-			this.user=user;
+		this.sessionSub = this.sessionService.getSessionChangeSubject().subscribe((u:UserModel)=>{
 			
+			this.user=u;
 		});
+	}
+
+	ngOnDestroy() {
+		this.sessionSub.unsubscribe();
+			
 	}
 
 	@HostListener('document:keydown', ['$event'])
@@ -100,13 +103,25 @@ export class NavbarComponent implements OnInit {
 	}
 
 	openUserSetting(content: any) {
+			
 			this.modalService.open(content, { backdrop: "static" }).result.then(() => {
 				
 		}, () => {
 			//保存
-			this.userService.updateUser(this.user);
-			debugger
+			this.userService.updateUser(this.user).subscribe(() => {
+			this.sessionService.setSessionChangeSubject(this.user);
+			this._notificationsService.success(
+				'个性资料',
+				'保存成功'
+			);
+		});;
 		});
+	}
+
+	logout(){
+			this.sessionService.deleteSession().subscribe(() => {
+				this.router.navigate(['/login']);
+			});
 	}
 
 

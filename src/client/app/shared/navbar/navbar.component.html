@@ -15,23 +15,6 @@
 					<a href="javascript:void(0)"><img src="assets/img/avatar.png"></a>	 
 			</div>
 	</div>
-  
-
-<!-- 	<button type="button" class="btn btn-secondary" placement="bottom"
-        ngbPopover="Vivamus sagittis lacus vel augue laoreet rutrum faucibus." popoverTitle="Popover on bottom">
-    </button>			
- -->
-         
-
-		<!-- <div class="avatar" ngbDropdownToggle>
-			<img src="assets/img/avatar.png">	   
-	    </div>
-        <div class="dropdown-menu dropdown-menu-right">
-	        <div class="dropdown-item"><i class="iconfont prag-profile"></i>个人资料</div>
-	        <div class="dropdown-item"><i class="iconfont prag-logout"></i>退出</div>
-        </div>
-		 -->
-
 </div>
 
 	
@@ -45,7 +28,7 @@
 
 <template #userSettingContent ngbModalContainer let-c="close" let-d="dismiss">
     <div class="modal-header">
-        <button type="button" class="close" (click)="d()">
+        <button type="button" class="close" (click)="c()">
             <span>&times;</span>
         </button>
         <h4 class="modal-title">个人资料</h4>
@@ -83,5 +66,5 @@
 <template #popProject>
     <div class="pop-item" (click)="projectP.close();openUserSetting(userSettingContent)"><i class="fa fa-address-card" aria-hidden="true"></i>个人资料
     </div>
-    <div class="pop-item"><i class="fa fa-sign-out" aria-hidden="true"></i>退出</div>
+    <div class="pop-item" (click)="projectP.close();logout();"><i class="fa fa-sign-out" aria-hidden="true"></i>退出</div>
 </template>

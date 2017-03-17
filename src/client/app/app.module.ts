@@ -14,7 +14,7 @@ import { UcMgrModule } from './ucmgr/ucmgr.module';
 
 import {
   ProjectService, ProjectJsService, UcGroupService,
-  UcService, NodeService, PathService, SessionService
+  UcService, NodeService, PathService, SessionService,UserService
 } from './services/index';
 
 @NgModule({
@@ -35,7 +35,7 @@ import {
       useValue: '<%= APP_BASE %>'
     },
     ProjectService, UcGroupService, UcService, NodeService,
-    PathService, ProjectJsService, SessionService
+    PathService, ProjectJsService, SessionService,UserService
   ],
   bootstrap: [AppComponent]
 
