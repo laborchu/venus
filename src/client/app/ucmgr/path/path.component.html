@@ -67,7 +67,7 @@
       </div>
       <div class="form-group radio">
         <label *ngFor="let type of checks">
-          <input name="type" type="radio" value="{{type}}" (click)="checkChange(type)"> {{type}}
+          <input name="checkType" type="radio" value="{{type}}" [(ngModel)]="checkerModel.type" (click)="checkChange(type)"> {{type}}
         </label>
       </div>
       <div class="form-inline form-group radio" *ngIf="checkFieldSet.has('selector')">

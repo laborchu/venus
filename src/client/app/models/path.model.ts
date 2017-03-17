@@ -43,6 +43,7 @@ export namespace PathHelper {
 	export function setFilter(oldModel: any): PathModel {
 		if (oldModel.filterStr) {
 			oldModel.filter = JSON.parse(oldModel.filterStr);
+			delete oldModel.filterStr
 			return oldModel
 		}
 		return oldModel
