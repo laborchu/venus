@@ -75,6 +75,7 @@ class UcController extends BaseController {
 			ucModel.projectId = dbProjectModel._id;
 			ucModel.order = dbUcModel.order;
 			ucModel.setModifiedInfo(user);
+			console.log(ucModel);
 			await Uc.update(ucModel);
 
 			let eachNode = async (nodes: Array<any>, parentId: string) => {

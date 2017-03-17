@@ -7,6 +7,7 @@ export class NodeModel extends BaseModel {
 	title: string = null;
 	parentId: string = null;
 	isParent: boolean = false;
+	children: Array<NodeModel>;
 	paths: Array<PathModel>;
 }
 
