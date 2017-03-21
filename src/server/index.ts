@@ -11,6 +11,7 @@ import * as connectRedis from "connect-redis";
 let RedisStore = connectRedis(session);
 
 import { MvSession } from './models/index';
+let env = require("./env.json");
 
 /**
  * Client Dir
@@ -24,8 +25,8 @@ app.use(session({
   secret: 'keyboard cat',//通过设置的 secret 字符串，来计算 hash 值并放在 cookie 中，使产生的 signedCookie 防篡改
   name: 'connect.sid',
   store: new RedisStore({
-    host: '192.168.1.188',
-    port: 32769
+    host: env.redis.host,
+    port: env.redis.port
   }),
   cookie: { path: '/', httpOnly: true, secure: false, maxAge: 3600000 },
   rolling: false,//每次请求都重会重置cookie的 maxAge，默认值为 false

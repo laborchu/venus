@@ -1,6 +1,6 @@
 import mongoose = require('mongoose');
 import autoIncrement = require('mongoose-auto-increment');
-
+let env = require("./env.json");
 class Mongodb{
 
 	connect() {
@@ -12,7 +12,7 @@ class Mongodb{
 
 	connectDB() {
 		const options = { server: { socketOptions: { keepAlive: 1 } } };
-		var uri = 'mongodb://192.168.1.188:32768/mv';
+		var uri = `mongodb://${env.mongodb.host}:${env.mongodb.port}/mv`;
 		let connection:mongoose.Connection = mongoose.connect(uri, options).connection;
 		autoIncrement.initialize(connection);
 		return connection;
