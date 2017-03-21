@@ -67,7 +67,7 @@ class UcGroupController extends BaseController {
 	})
 	async addUc(req: e.Request, res: e.Response) {
 		let user: UserModel = super.getUser(req);
-		let ucGroupModel: UcGroupModel = req.body;
+		let ucGroupModel: UcGroupModel = UcGroupHelper.buildModel(req.body);
 		ucGroupModel.setCreatedInfo(user);
 		let result = await Uc.insert(req.body);
 		res.send(super.wrapperRes(result));
