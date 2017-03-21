@@ -20,7 +20,8 @@ export enum PathType {
 	pope,
 	cmd,
 	drag,
-	alert
+	alert,
+	context
 }
 
 export namespace PathHelper {
@@ -87,6 +88,9 @@ export namespace PathHelper {
 			field = getField(newMode);
 		} else if (type == PathType[PathType.alert]) {
 			newMode = new AlertPathModel();
+			field = getField(newMode);
+		} else if (type == PathType[PathType.context]) {
+			newMode = new ContextPathModel();
 			field = getField(newMode);
 		}
 
@@ -200,6 +204,11 @@ export class DragPathModel extends PathModel {
 
 export class AlertPathModel extends PathModel {
 	type: string = PathType[PathType.drag];
+	target: string = null;
+}
+
+export class ContextPathModel extends PathModel {
+	type: string = PathType[PathType.context];
 	target: string = null;
 }
 

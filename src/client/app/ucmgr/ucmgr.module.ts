@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { CustomFormsModule } from 'ng2-validation';
 
 import { UcmgrComponent,ProjectComponent } from './index';
 import { ProjectJsComponent } from './projectjs/projectjs.component';
@@ -23,7 +22,7 @@ import { ConfirmationPopoverModule } from 'angular-confirmation-popover';
 			cancelText: '取消',
 			confirmText: '确认'
 		}),
-		 CustomFormsModule, CommonModule, UcMgrRoutingModule, SharedModule],
+		CommonModule, UcMgrRoutingModule, SharedModule],
 	declarations: [UcGroupComponent, UcmgrComponent, ProjectComponent, ProjectJsComponent, PathComponent,
 					GroupInfoComponent, UcComponent, NodeComponent],
 	exports: [],

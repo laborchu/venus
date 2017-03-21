@@ -21,7 +21,6 @@ class ProjectController extends BaseController {
 		} else {
 			res.send(super.wrapperRes([]));
 		}
-
 	}
 
 	@router({
