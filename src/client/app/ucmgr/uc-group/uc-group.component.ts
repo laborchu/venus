@@ -25,6 +25,7 @@ export class UcGroupComponent implements OnInit {
 	public ucArray: Array<UcModel> = [];
 
 	selectUc: UcModel;
+  groupInfoHeight: number = window.innerHeight - 90;
 	projectId: string;
 	ngOnInit(): void {
 		this.refresh();
@@ -38,6 +39,10 @@ export class UcGroupComponent implements OnInit {
 			}
 		});
 	}
+
+  onResize(event: any) {
+    this.groupInfoHeight = event.target.innerHeight - 90;
+  }
 
 	refresh() {
 		let ucId: string;
@@ -84,7 +89,7 @@ export class UcGroupComponent implements OnInit {
 		let nextOrder = 0;
 		let curOrder = 0;
 		if(dragTo!=0){
-			let preUc:UcModel = this.ucArray[dragTo - 1];	
+			let preUc:UcModel = this.ucArray[dragTo - 1];
 			preOrder = preUc.order;
 		}
 		if(dragTo!=(this.ucArray.length-1)){

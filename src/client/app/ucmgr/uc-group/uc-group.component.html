@@ -14,7 +14,7 @@
         </div>
     </div>
     <div class="line pull-left"></div>
-    <div class="group-info">
+    <div class="group-info" [style.height.px]="groupInfoHeight" (window:resize)="onResize($event)">
         <router-outlet></router-outlet>
     </div>
 </div>
