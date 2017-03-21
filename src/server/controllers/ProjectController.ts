@@ -132,6 +132,7 @@ class ProjectController extends BaseController {
 
 			/**********产生项目文件 Start**********/
 			let rootPath = path.join(process.cwd(), "projects");
+			let tplPath = path.join(process.cwd(), "tpl");
 			let projectPath = path.join(rootPath, project.name);
 			let projectSrc = path.join(projectPath, "src");
 			let ucPath = path.join(projectSrc, "uc");
@@ -140,7 +141,7 @@ class ProjectController extends BaseController {
 			await emptyDir(ucPath);
 			await emptyDir(handlerPath);
 
-			let packageTpl = _.template(fs.readFileSync(path.join(rootPath, "package.tpl.json")));
+			let packageTpl = _.template(fs.readFileSync(path.join(tplPath, "package.tpl.json")));
 			fs.writeFileSync(path.join(projectPath, "package.json"), packageTpl({
 				"name": project.name
 			}));
@@ -150,7 +151,7 @@ class ProjectController extends BaseController {
 				fs.mkdirSync(groupPath);
 				for (let uc of ucGroup.ucs) {
 					delete uc.code;
-					let ucTpl = _.template(fs.readFileSync(path.join(rootPath, "uc.tpl.js")));
+					let ucTpl = _.template(fs.readFileSync(path.join(tplPath, "uc.tpl.js")));
 					fs.writeFileSync(path.join(groupPath, `${uc.ucKey}.uc.js`), ucTpl({
 						"content": JSON.stringify(uc)
 					}));
@@ -168,7 +169,7 @@ class ProjectController extends BaseController {
 			fs.writeFileSync(path.join(projectPath, `vtester.json`), JSON.stringify(project));
 
 			//复制文件
-			copyFile(path.join(rootPath, "vtester.uc.tpl.js"), path.join(projectSrc, "vtester.uc.js"));
+			copyFile(path.join(tplPath, "vtester.uc.tpl.js"), path.join(projectSrc, "vtester.uc.js"));
 			/**********产生项目文件 End**********/
 			res.send(super.wrapperRes([]));
 		} else {

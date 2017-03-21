@@ -18,7 +18,7 @@ const _schema = new mongoose.Schema({
   code: { type: String },
   order: { type: Number },
   dataStatus: { type: Number },
-  createdBy: { type: String },
+  createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'users' },
   createdDate: { type: Date },
   modifiedBy: { type: String },
   modifiedDate: { type: Date }
@@ -39,7 +39,7 @@ class Uc extends BaseModel {
   static find(params: any): Promise<Array<UcModel>> {
     params.dataStatus = 1;
     return new Promise<Array<UcModel>>((resolve, reject) => {
-      _model.find(params).sort({ order: 1 }).exec((err: any, ucs: Array<UcModel>) => {
+    _model.find(params).populate("createdBy", "name -_id").sort({ order: 1 }).exec((err: any, ucs: Array<UcModel>) => {
         err ? reject(err) : resolve(ucs)
       })
     });

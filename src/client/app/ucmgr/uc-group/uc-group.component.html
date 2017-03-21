@@ -7,8 +7,8 @@
             </div>
             <div class="list-body" [dragula]='"uc-list"' [dragulaModel]='ucArray'>
                 <div class="list-item row" *ngFor="let uc of ucArray" (click)="showUc(uc)" [ngClass]="{select:uc==selectUc}">
-                    <div class="col-8">{{uc.title}}</div>
-                    <div class="col-4">{{uc.director}}</div>
+                    <div class="col-9">{{uc.title}}</div>
+                    <div class="col-3">{{uc?.createdBy?.name}}</div>
                 </div>
             </div>
         </div>

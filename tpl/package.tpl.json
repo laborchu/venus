@@ -1,0 +1,35 @@
+{
+  "name": "<%=name%>",
+  "version": "1.0.14",
+  "description": "<%=name%>",
+  "keywords": [
+    "macaca",
+    "sample"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/laborchu/<%=name%>.git"
+  },
+  "dependencies": {
+    "macaca-utils": "^0.1.8",
+    "xmldom": "^0.1.27",
+    "xpath.js": "^1.0.7"
+  },
+  "devDependencies": {
+    "jshint": "*",
+    "macaca-cli": "^1.1.0",
+    "macaca-simple-reportor": "*",
+    "pre-commit": "1.1.1",
+    "webdriver-client": "~1.0.0",
+    "xml2map": "^1.0.2",
+    "should": "^11.1.1"
+  },
+  "scripts": {
+    "test": "make test-pc",
+    "jshint": "make jshint"
+  },
+  "pre-commit": [
+    "jshint"
+  ],
+  "license": "MIT"
+}
