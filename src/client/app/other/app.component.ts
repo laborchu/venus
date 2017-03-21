@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
-import './operators';
+import '../operators';
 
-import { UserModel } from './models/index';
-import { SessionService } from './services/index';
+import { UserModel } from '../models/index';
+import { SessionService } from '../services/index';
 /**
  * This class represents the main application component.
  */
@@ -36,9 +36,9 @@ export class AppComponent implements OnInit {
   ngOnInit() {
     this.sessionService.getSession().subscribe((user: UserModel) => {
       this.hasLoading = true;
-      if (!user._id) {
+      if (!user._id&&  window.location.pathname!='/register') {
         this.router.navigate(['/login']);
-      } else {
+      } else if(user._id){
         this.sessionService.setSessionChangeSubject(user);
         if (this.router.url == "/") {
           this.router.navigate(['/projects']);

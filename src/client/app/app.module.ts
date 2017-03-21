@@ -5,9 +5,9 @@ import { HttpModule } from '@angular/http';
 import { FormsModule } from '@angular/forms';
 import { SimpleNotificationsModule } from 'angular2-notifications';
 
-import { AppComponent, LoginComponent, NotFoundComponent } from './index';
+import { AppComponent, LoginComponent, NotFoundComponent,RegisterComponent} from './other/index';
 import { AppRoutingModule } from './app-routing.module';
-import { NotFoundRoutingModule } from './not-found-routing.module';
+import { NotFoundRoutingModule } from './other/not-found-routing.module';
 
 import { SharedModule } from './shared/shared.module';
 import { UcMgrModule } from './ucmgr/ucmgr.module';
@@ -28,7 +28,7 @@ import {
     NotFoundRoutingModule,
     SimpleNotificationsModule.forRoot()
   ],
-  declarations: [AppComponent, LoginComponent, NotFoundComponent],
+  declarations: [AppComponent, LoginComponent, NotFoundComponent,RegisterComponent],
   providers: [
     {
       provide: APP_BASE_HREF,

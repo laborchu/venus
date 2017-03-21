@@ -1,0 +1,26 @@
+<div class="container">
+  <div class="content register-content">
+    <div class="login-box register-box">
+      <div>注册页面</div>
+      <form #loginForm="ngForm" (keyup.enter)="loginForm.form.valid&&login()">
+        <div class="form-group">
+          <label>用户名：</label>
+          <input type="text" class="form-control" placeholder="用户名" required [(ngModel)]="uname" name="username" #username="ngModel">
+          <div [hidden]="username.valid || username.pristine" class="valid-error">用户名不能为空</div>
+        </div>
+        <div class="form-group">
+          <label>密码：</label>
+          <input type="password" class="form-control col-xs-10" placeholder="密码" required [(ngModel)]="pwd" name="password" #password="ngModel">
+          <div [hidden]="password.valid || password.pristine" class="valid-error">密码不能为空</div>
+        </div>
+        <div class="form-group">
+          <label>确认密码：</label>
+          <input type="password" class="form-control col-xs-10" placeholder="确认密码" required [(ngModel)]="repwd" name="repassword" #repassword="ngModel">
+          <div [hidden]="repassword.valid || repassword.pristine" class="valid-error">确认密码不能为空</div>
+          <div [hidden]="!repwd|| repwd==pwd" class="valid-error">两次输入密码不一致</div>
+        </div>
+        <button type="button" [disabled]="!loginForm.form.valid" class="form-control btn btn-success" (click)="register()">注册</button>
+      </form>
+    </div>
+  </div>
+</div>
