@@ -179,7 +179,7 @@ export class UcComponent implements OnInit {
 			let nextNode: NodeModel = this.nodes[dragTo + 1];
 			nextOrder = nextNode.order;
 		} else {
-			curOrder = +(preOrder + 1).toFixed(0);
+			curOrder = +(preOrder + 0.01).toFixed(0);
 		}
 		if (curOrder == 0) {
 			curOrder = (preOrder + nextOrder) / 2;

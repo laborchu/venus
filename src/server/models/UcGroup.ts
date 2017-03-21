@@ -1,7 +1,7 @@
 'use strict';
 import BaseModel from "./BaseModel";
 import mongoose = require('mongoose');
-
+import autoIncrement = require('mongoose-auto-increment');
 import { UcGroupModel } from './index';
 
 const _schema = new mongoose.Schema({
@@ -15,6 +15,7 @@ const _schema = new mongoose.Schema({
   modifiedDate: { type: Date }
 });
 
+_schema.plugin(autoIncrement.plugin, { model: 'ucGroup', field: 'order', startAt: 1 });
 interface UcGroupDocument extends UcGroupModel, mongoose.Document {
   _id: string;
 }
@@ -36,8 +37,8 @@ class UcGroup extends BaseModel {
 
   static insert(ucGroup: UcGroupModel): Promise<UcGroupModel> {
     return new Promise<UcGroupModel>((resolve, reject) => {
-      _model.insertMany([ucGroup], (err: any, ucGroups: Array<UcGroupModel>) => {
-        err ? reject(err) : resolve(ucGroups[0])
+      _model.create(ucGroup, (err: any, result: UcGroupModel) => {
+        err ? reject(err) : resolve(result)
       })
     });
   }
