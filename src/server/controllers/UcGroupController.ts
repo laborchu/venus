@@ -69,7 +69,6 @@ class UcGroupController extends BaseController {
 		let user: UserModel = super.getUser(req);
 		let ucModel: UcModel = UcHelper.buildModel(req.body);
 		ucModel.setCreatedInfo(user);
-		console.log(ucModel);
 		let result = await Uc.insert(ucModel);
 		res.send(super.wrapperRes(result));
 	}

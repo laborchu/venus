@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import './operators';
-import { UserModel,UserHelper } from './models/index';
-import { SessionService } from './services/index';
+import '../operators';
+import { UserModel,UserHelper } from '../models/index';
+import { SessionService } from '../services/index';
 
 import { Md5 } from "ts-md5/dist/md5";
 
@@ -17,7 +17,8 @@ import { Md5 } from "ts-md5/dist/md5";
 export class LoginComponent implements OnInit {
 	constructor(
 		private router: Router,
-		private sessionService: SessionService) {}
+		private sessionService: SessionService
+  ) {}
 
   uname: string ="";
   pwd: string = "";
@@ -35,9 +36,9 @@ export class LoginComponent implements OnInit {
 	  user.username = this.uname;
 	  user.password = Md5.hashStr(this.pwd).toString();
 	  this.sessionService.postSession(user).subscribe((users: Array<UserModel>)=>{
-	  	
+
 		  if(user){
-		  	  this.router.navigate(['/projects']);		  	  
+		  	  this.router.navigate(['/projects']);
 		  	  this.sessionService.setSessionChangeSubject(users[0]);
 		  }
 	  })

@@ -39,10 +39,15 @@ class User extends BaseModel {
     });
   }
 
-  static insert(uc: UserModel): Promise<UserModel> {
+  static insert(user: any): Promise<UserModel> {
+    user._id = new mongoose.Types.ObjectId();
+    user.modifiedDate = new Date();
+    user.createdDate = new Date();
+    user.createdBy = user._id;
+    user.modifiedBy = user._id;
     return new Promise<UserModel>((resolve, reject) => {
-      _model.insertMany([uc], (err: any, ucGroups: Array<UserModel>) => {
-        err ? reject(err) : resolve(ucGroups[0])
+      _model.create(user, (err: any, result: UserModel) => {
+        err ? reject(err) : resolve(result)
       })
     });
   }

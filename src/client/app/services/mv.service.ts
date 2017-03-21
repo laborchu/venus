@@ -71,7 +71,7 @@ export abstract class MvService {
 		} else if (body.code == 2) {
 			this.router.navigate(['/login']);
 		} else if (body.code == 0) {
-			
+
 			this._notificationsService.error(
 				'错误',
 				body.msg

@@ -17,8 +17,11 @@ export class UserService extends MvService {
 		super(injector);
 	}
 
-	
-	
+  addUser(user: UserModel): Observable<UserModel> {
+    let url = `/api/user/setting`;
+    return this.postHttp(url, user);
+  }
+
 	updateUser(user: UserModel): Observable<UserModel> {
 		let url = `/api/user/setting`;
 		return this.patchHttp(url, user);

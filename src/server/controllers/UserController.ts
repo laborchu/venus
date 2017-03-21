@@ -5,7 +5,14 @@ import { Uc, UcGroup,User,UcGroupModel, UserModel,UserHelper} from '../models/in
 
 class UserController extends BaseController {
 
-
+  @router({
+    method: 'post',
+    path: '/api/user/setting'
+  })
+  async create(req: e.Request, res: e.Response) {
+    let result = await User.insert(req.body);
+    res.send(super.wrapperRes(result));
+  }
 
 
 	@router({
@@ -17,14 +24,14 @@ class UserController extends BaseController {
 		let userModel: UserModel = UserHelper.buildModel(req.body);
 		userModel._id=user._id;
 		userModel.setModifiedInfo(user);
-		
+
 		let result = await User.update(req.body);
 		res.send(super.wrapperRes(result));
-		
+
 	}
 
 
-	
+
 }
 
 export default UserController
