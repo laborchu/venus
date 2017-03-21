@@ -215,7 +215,7 @@ export class MenuComponent implements OnInit {
       let nextUc: UcGroupModel = this.groupArray[dragTo + 1];
       nextOrder = nextUc.order;
     }else{
-      curOrder = +(preOrder + 1).toFixed(0);
+      curOrder = +(preOrder + 0.01).toFixed(0);
     }
     if (curOrder==0){
       curOrder = (preOrder + nextOrder) / 2;
