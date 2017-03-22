@@ -79,6 +79,9 @@ export class UcComponent implements OnInit {
               this.form.form.markAsPristine();
               this.ucMode = ucs[0];
               this.ucService.setUcChangeSubject(this.ucMode);
+              this.nodeService.getUcNodes(this.ucMode._id)	.subscribe((nodes: Array<NodeModel>) => {
+                this.nodes = nodes;
+              });
             }, (msg) => {
               this._notificationsService.error(
                 'UC操作',
