@@ -26,10 +26,10 @@ class UcGroup extends BaseModel {
   constructor() {
     super()
   }
-  static find(params: Object): Promise<Array<UcGroupModel>> {
+  static find(params: any): Promise<Array<UcGroupModel>> {
     return new Promise<Array<UcGroupModel>>((resolve, reject) => {
-      _model.find(params).sort({ order: 1 }).exec((err: any, ucs: Array<UcGroupModel>) => {
-        err ? reject(err) : resolve(ucs)
+      _model.find(params).sort({ order: 1 }).exec((err: any, projects: Array<UcGroupModel>) => {
+        err ? reject(err) : resolve(projects)
       })
     });
   }
@@ -48,6 +48,16 @@ class UcGroup extends BaseModel {
       _model.update({ _id: ucGroup._id }, ucGroup, {}, (err, rawResponse) => {
         err ? reject(err) : resolve(rawResponse)
       })
+    });
+  }
+
+  static delete(ucId: string, modifiedBy: string): Promise<UcGroupModel> {
+    return new Promise<UcGroupModel>((resolve, reject) => {
+      _model.findOneAndUpdate({ _id: ucId },
+        { dataStatus: 0, modifiedBy: modifiedBy, modifiedDate: new Date() },
+        (err, rawResponse) => {
+          err ? reject(err) : resolve(rawResponse)
+        });
     });
   }
 

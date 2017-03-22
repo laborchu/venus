@@ -39,6 +39,11 @@ export class UcGroupService extends MvService {
 		return this.getHttp(ucGroupUrl);
 	}
 
+  delUcGroups(ucGroup: UcGroupModel): Observable<UcGroupModel> {
+    let ucGroupUrl = `api/ucgroups/${ucGroup._id}`;
+    return this.delHttp(ucGroupUrl);
+  }
+
 	addUcGroups(ucGroup: UcGroupModel): Observable<UcGroupModel> {
 		let ucGroupUrl = `api/projects/${ucGroup.projectId}/ucgroups`;
 		return this.postHttp(ucGroupUrl, ucGroup);

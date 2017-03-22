@@ -54,7 +54,7 @@
   <div class="body-right">
     <mv-nav [title]="checkTitle" [rightBtnConf]="rightBtnConf"></mv-nav>
     <div class="checker-list">
-      <div class="checker" *ngFor="let checker of pathModel.checker; let i = index;" (click)="openChecker(checker,i)">
+      <div class="checker clearfix" *ngFor="let checker of pathModel.checker; let i = index;" (click)="openChecker(checker,i)">
         {{checker.title}}
         <div class="checker-toobar" (click)="delChecker(i)">
           <i class="fa fa-trash"></i>

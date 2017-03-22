@@ -114,7 +114,7 @@ export class MenuComponent implements OnInit {
 				return this.projectJsService.getProjectJsList(project._id);
 			})
 			.subscribe((array: Array<ProjectJsModel>) => {
-				this.projectJsArray = array;
+        this.projectJsArray = array;
 			});
 	}
 
@@ -125,7 +125,15 @@ export class MenuComponent implements OnInit {
 		this.router.navigate(["/projects", this.selectProject._id, "ucgroups", group._id]);
 	}
 
+	delGroup(group: UcGroupModel,i:number) {
+    let ucGroupObservable = this.ucGroupService.delUcGroups(group);
+    ucGroupObservable.subscribe((ucGroups: UcGroupModel) => {
+      this.groupArray.splice(i,1)
+    });
+	}
+
 	openUcGroup(content: any) {
+    this.newUcGroup = new UcGroupModel();
 		this.modalService.open(content, { backdrop: "static" }).result.then(() => {
 			this.newUcGroup.projectId = this.selectProject._id;
 			let ucGroupObservable = this.ucGroupService.addUcGroups(this.newUcGroup);

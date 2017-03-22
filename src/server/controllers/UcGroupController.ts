@@ -10,7 +10,7 @@ class UcGroupController extends BaseController {
 	})
 	async find(req: e.Request, res: e.Response) {
 		if (req.params.projectId) {
-			let result = await UcGroup.find({ "projectId": req.params.projectId });
+			let result = await UcGroup.find({ "projectId": req.params.projectId,dataStatus:1 });
 			res.send(super.wrapperRes(result));
 		} else {
 			res.send(super.wrapperRes([]));
@@ -25,7 +25,7 @@ class UcGroupController extends BaseController {
 		let user: UserModel = super.getUser(req);
     let ucGroupModel: UcGroupModel = UcGroupHelper.buildModel(req.body);
 		ucGroupModel.setCreatedInfo(user);
-		let result = await UcGroup.insert(req.body);
+		let result = await UcGroup.insert(ucGroupModel);
 		res.send(super.wrapperRes(result));
 	}
 
@@ -42,6 +42,16 @@ class UcGroupController extends BaseController {
 		res.send(super.wrapperRes(result));
 	}
 
+  @router({
+    method: 'delete',
+    path: '/api/ucgroups/:groupId'
+  })
+  async delete(req: e.Request, res: e.Response) {
+    let user: UserModel = super.getUser(req);
+    let result = await UcGroup.delete(req.params.groupId, user._id);
+    console.log(result)
+    res.send(super.wrapperRes(result));
+  }
 
 	@router({
 		method: 'get',
