@@ -24,6 +24,9 @@ export class RegisterComponent implements OnInit {
   repwd: string = "";
   ngOnInit() {
   }
+  login() {
+    this.router.navigate(['/login']);
+  }
   register(){
     let user: UserModel = new UserModel();
     if(this.pwd==this.repwd){
