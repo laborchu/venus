@@ -20,6 +20,7 @@
           <div [hidden]="!repwd|| repwd==pwd" class="valid-error">两次输入密码不一致</div>
         </div>
         <button type="button" [disabled]="!loginForm.form.valid" class="form-control btn btn-success" (click)="register()">注册</button>
+        <p class="register"><a class="pull-right" (click)="login()" >返回登录</a></p>
       </form>
     </div>
   </div>

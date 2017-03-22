@@ -30,7 +30,9 @@ export class LoginComponent implements OnInit {
 		  }
 	  })
   }
-
+  register(){
+    this.router.navigate(['/register']);
+  }
   login(){
 	  let user: UserModel = new UserModel();
 	  user.username = this.uname;
