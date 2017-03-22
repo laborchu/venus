@@ -17,7 +17,6 @@
     .pop-select {
         background-color: $select-color;
     }
-
     .menu-header {
         height: 50px;
         background-color: #F5F5F5;
@@ -96,5 +95,18 @@
             cursor: pointer;
             margin-right: 20px;
         }
+    }
+
+     .new-project{        
+        border-top: 1px solid #ddd;
+        text-align: center;
+        height: 30px;
+        font-size: 12px;
+        cursor: pointer;
+        margin-top: 5px;
+        padding-top: 5px;
+        &:hover {
+            background-color: $select-color;
+        }        
     }
 }

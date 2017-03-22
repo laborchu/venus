@@ -91,7 +91,7 @@
           <a class="group-item" *ngFor="let group of groupArray; let i = index;" (click)="doSelectGroup(group)" [ngClass]="{select:group==selectGroup}">
             {{group.name}}
             <span class="pull-right item-num">4</span>
-            <span class="pull-right item-num" 	mwlConfirmationPopover
+            <span class="pull-right item-num"   mwlConfirmationPopover
                   [title]="'确认删除吗?'"
                   (confirm)="delGroup(group,i)"  ><i class="fa fa-trash"></i></span>
           </a>
@@ -107,15 +107,16 @@
         </a>
     </div>
     <footer class="menu-footer">
-        <i class="fa fa-plus-circle" #plusP="ngbPopover" placement="top" [ngbPopover]="popPlus"></i>
-        <i class="fa fa-cog" (click)="openNewProject(projectAddContent,this.selectProject)"></i>
+        <i class="fa fa-cog" #plusP="ngbPopover" placement="top" [ngbPopover]="popPlus"></i>
     </footer>
 </div>
 <template #popProject>
     <div class="pop-item" (click)="projectP.close();doSelectProject(project)" [class.pop-select]="project==selectProject" *ngFor="let project of projects">{{project.name}}</div>
+    <div class="new-project" (click)="projectP.close();openNewProject(projectAddContent);">创建新项目</div>
 </template>
+
 <template #popPlus>
-    <div class="pop-item" (click)="plusP.close();openNewProject(projectAddContent)">项目</div>
-    <div class="pop-item" (click)="plusP.close();openUcGroup(ucGroupAddContent)">UC组</div>
-    <div class="pop-item" (click)="plusP.close();openNewProjectJs()">脚本</div>
+    <div class="pop-item" (click)="plusP.close();openUcGroup(ucGroupAddContent)">新增UC组</div>
+    <div class="pop-item" (click)="plusP.close();openNewProjectJs()">新增脚本</div>
+    <div class="pop-item" (click)="plusP.close();openNewProject(projectAddContent,this.selectProject)">项目设置</div>
 </template>
