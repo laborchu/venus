@@ -16,6 +16,7 @@ const _schema = new mongoose.Schema({
   filter: { type: Boolean },
   only: { type: Boolean },
   code: { type: String },
+  handlerCode: { type: String },
   order: { type: Number },
   dataStatus: { type: Number },
   createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'users' },

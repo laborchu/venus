@@ -133,6 +133,15 @@ export class UcComponent implements OnInit {
 
 	}
 
+  SethandlerCode() {
+    const modalRef: NgbModalRef =  this.modalService.open(MvCodeJsFormContent, { backdrop: "static",size:'lg'})
+    modalRef.result.then((code) => {
+      this.ucMode.handlerCode = code;
+    }, () => {
+    });
+    modalRef.componentInstance.code = this.ucMode.handlerCode;
+	}
+
 	ngOnDestroy() {
 		this.dragulaService.destroy("node-list");
 	}

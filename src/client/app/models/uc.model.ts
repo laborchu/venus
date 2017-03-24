@@ -10,6 +10,7 @@ export class UcModel extends BaseModel {
 	sleep: number = null;
 	build: boolean = true;
 	handler: boolean = false;
+	handlerCode: string = null;
 	only: boolean = false;
 	code: string = null;
 	nodes: Array<NodeModel>;

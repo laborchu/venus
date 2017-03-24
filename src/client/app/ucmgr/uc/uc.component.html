@@ -19,11 +19,14 @@
                 <input  name="build" type="checkbox" [(ngModel)]="ucMode.build"> build
             </label>
             <label >
-                <input  name="handler" type="checkbox" [(ngModel)]="ucMode.handler"> handler
-            </label>
-            <label >
                 <input name="only" type="checkbox" [(ngModel)]="ucMode.only"> only
             </label>
+        </div>
+        <div class="clearfix">
+          <label >
+            <input  name="handler" type="checkbox" [(ngModel)]="ucMode.handler"> handler
+          </label>
+          <i class="fa fa-code" *ngIf="ucMode.handler" (click)="SethandlerCode()"></i>
         </div>
     </form>
 </div>

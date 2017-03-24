@@ -31,9 +31,13 @@ class UcController extends BaseController {
 		path: '/api/ucs/:ucId'
 	})
 	async update(req: e.Request, res: e.Response) {
+	  delete  req.body.createdBy;
 		let user: UserModel = super.getUser(req);
     let ucModel: UcModel = UcHelper.buildModel(req.body);
 		ucModel.setModifiedInfo(user);
+    delete  ucModel.createdBy;
+    delete  ucModel.createdDate;
+    console.log(ucModel)
 		let result = await Uc.update(ucModel);
 		res.send(super.wrapperRes(result));
 	}

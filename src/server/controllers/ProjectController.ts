@@ -40,7 +40,7 @@ let loadNodePath = async function(nodeModel: NodeModel, filterField: any): Promi
 	let pathArray: Array<PathModel> = await Path.find({ "nodeId": nodeModel._id });
 	let paths: Array<PathModel> = [];
 	for (let pathModel of pathArray) {//path
-		let checkerArray: Array<CheckerModel> = await Checker.find({ "pathId": pathModel._id });
+		let checkerArray: Array<CheckerModel> = await Checker.find({ "pathId": pathModel._id});
 		let checkers: Array<CheckerModel> = [];
 		for (let checker of checkerArray) {//checker
 			[checker] = CheckHelper.buildModel(checker.type, checker, true, filterField);
@@ -84,11 +84,11 @@ class ProjectController extends BaseController {
 			/**********获取项目信息 Start**********/
 			let project: ProjectModel = projectArray[0];
 			[project] = ProjectHelper.buildModel(project.platform, project);
-			let ucGroupArray: Array<UcGroupModel> = await UcGroup.find({ projectId: project._id });
+			let ucGroupArray: Array<UcGroupModel> = await UcGroup.find({ projectId: project._id,dataStatus:1 });
 			let filterField = {
 				"_id": true, "projectId": true, "filterStr": true,
 				"groupId": true, "dataStatus": true, "order": true,
-				"ucId": true, "nodeId": true, "pathId": true, "parentId": true, 
+				"ucId": true, "nodeId": true, "pathId": true, "parentId": true,
 				"isParent": true,
 				"createdBy": true, "createdDate": true, "modifiedBy": true, "modifiedDate": true
 			};
@@ -102,17 +102,16 @@ class ProjectController extends BaseController {
 				let ucs: Array<UcModel> = [];
 				for (let ucModel of ucArray) {//Uc
 					let nodeArray: Array<NodeModel> = await Node.find({ "ucId": ucModel._id});
-					
+
 					let nodeTree: Array<NodeModel> = [];
 					let curNode:NodeModel = null;
 					for (let nodeModel of nodeArray) {//Node
+            let paths: Array<PathModel> = await loadNodePath(nodeModel, filterField);
+            nodeModel = NodeHelper.buildModel(nodeModel, true, filterField);
+            nodeModel.paths = paths;
 						if (nodeModel.parentId) {
-							let paths: Array<PathModel> = await loadNodePath(nodeModel, filterField);
-							nodeModel = NodeHelper.buildModel(nodeModel, true, filterField);
-							nodeModel.paths = paths;
-							curNode.children.push(nodeModel);
+              curNode.children.push(nodeModel);
 						}else{
-							nodeModel = NodeHelper.buildModel(nodeModel, true, filterField);
 							curNode = nodeModel;
 							curNode.children = [];
 							nodeTree.push(nodeModel);
@@ -149,6 +148,7 @@ class ProjectController extends BaseController {
 			for (let ucGroup of project.ucGroups) {
 				let groupPath = path.join(ucPath, ucGroup.name);
 				fs.mkdirSync(groupPath);
+				console.log(ucGroup.ucs.length)
 				for (let uc of ucGroup.ucs) {
 					delete uc.code;
 					let ucTpl = _.template(fs.readFileSync(path.join(tplPath, "uc.tpl.js")));
