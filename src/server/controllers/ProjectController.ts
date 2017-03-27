@@ -106,11 +106,11 @@ class ProjectController extends BaseController {
 					let nodeTree: Array<NodeModel> = [];
 					let curNode:NodeModel = null;
 					for (let nodeModel of nodeArray) {//Node
-            let paths: Array<PathModel> = await loadNodePath(nodeModel, filterField);
-            nodeModel = NodeHelper.buildModel(nodeModel, true, filterField);
-            nodeModel.paths = paths;
+		            let paths: Array<PathModel> = await loadNodePath(nodeModel, filterField);
+		            nodeModel = NodeHelper.buildModel(nodeModel, true, filterField);
+		            nodeModel.paths = paths;
 						if (nodeModel.parentId) {
-              curNode.children.push(nodeModel);
+              				curNode.children.push(nodeModel);
 						}else{
 							curNode = nodeModel;
 							curNode.children = [];
@@ -147,11 +147,19 @@ class ProjectController extends BaseController {
 
 			for (let ucGroup of project.ucGroups) {
 				let groupPath = path.join(ucPath, ucGroup.name);
+				let handlerFilePath = path.join(handlerPath, ucGroup.name);
 				fs.mkdirSync(groupPath);
-				console.log(ucGroup.ucs.length)
+				fs.mkdirSync(handlerFilePath);
 				for (let uc of ucGroup.ucs) {
 					delete uc.code;
 					let ucTpl = _.template(fs.readFileSync(path.join(tplPath, "uc.tpl.js")));
+					if(uc.handlerCode){
+					  console.log(uc.handlerCode)
+            fs.writeFileSync(path.join(handlerFilePath, `${uc.ucKey}.handler.js`), ucTpl({
+              "content": uc.handlerCode
+            }));
+            delete uc.handlerCode;
+          }
 					fs.writeFileSync(path.join(groupPath, `${uc.ucKey}.uc.js`), ucTpl({
 						"content": JSON.stringify(uc)
 					}));
