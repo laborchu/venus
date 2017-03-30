@@ -11,15 +11,25 @@ import { UcGroupService } from '../../services/index';
   templateUrl: 'group-info.component.html',
   styleUrls: ['group-info.component.css'],
 })
-export class GroupInfoComponent implements OnInit{ 
+export class GroupInfoComponent implements OnInit{
 	constructor(
 		private router: Router,
 		private route: ActivatedRoute,
 		private ucGroupService: UcGroupService
 	){}
-
+  projectId: string = "";
 	ucGroup: UcGroupModel = new UcGroupModel();
 	rightBtnConf:Object = {
+    del: {
+      click: () => {
+        this.ucGroup.dataStatus = 0;
+        this.ucGroupService.delUcGroups(this.ucGroup)
+          .subscribe(() => {
+            this.ucGroupService.setUpdateGroupSubject(this.ucGroup);
+            this.router.navigate(["/projects", this.projectId]);
+          });
+      }
+    },
 		save:{
 			click:()=>{
 				let updateGroup: UcGroupModel = new UcGroupModel();
@@ -33,6 +43,9 @@ export class GroupInfoComponent implements OnInit{
 		}
 	};
 	ngOnInit(){
+    this.route.parent.parent.params.subscribe(params => {
+      this.projectId = params["projectId"];
+    });
 		this.route.params
 			.switchMap((params: Params) => this.ucGroupService.getUcGroup(params["groupId"]))
 			.subscribe((ucGroups: Array<UcGroupModel>) => {

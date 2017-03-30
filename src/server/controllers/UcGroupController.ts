@@ -49,7 +49,6 @@ class UcGroupController extends BaseController {
   async delete(req: e.Request, res: e.Response) {
     let user: UserModel = super.getUser(req);
     let result = await UcGroup.delete(req.params.groupId, user._id);
-    console.log(result)
     res.send(super.wrapperRes(result));
   }
 

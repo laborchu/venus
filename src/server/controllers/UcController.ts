@@ -11,6 +11,7 @@ import {
 } from '../models/index';
 import ErrorCode from '../ErrorCode';
 var requireFromString = require('require-from-string');
+import {UcServices} from '../services/index';
 
 class UcController extends BaseController {
 	@router({
@@ -21,6 +22,19 @@ class UcController extends BaseController {
 		if (req.params.ucId) {
 			let result = await Uc.find({ "_id": req.params.ucId });
 			res.send(super.wrapperRes(result));
+		} else {
+			res.send(super.wrapperRes([]));
+		}
+	}
+	@router({
+		method: 'get',
+		path: '/api/ucs/:ucId/code'
+	})
+	async getCode(req: e.Request, res: e.Response) {
+		if (req.params.ucId) {
+      await UcServices.updateUccode(req.params.ucId )
+      let result = await Uc.find({ "_id": req.params.ucId });
+			res.send(super.wrapperRes(result[0].code));
 		} else {
 			res.send(super.wrapperRes([]));
 		}
@@ -37,7 +51,6 @@ class UcController extends BaseController {
 		ucModel.setModifiedInfo(user);
     delete  ucModel.createdBy;
     delete  ucModel.createdDate;
-    console.log(ucModel)
 		let result = await Uc.update(ucModel);
 		res.send(super.wrapperRes(result));
 	}

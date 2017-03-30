@@ -34,6 +34,10 @@ export class UcService extends MvService {
 		let url = `/api/ucs/${id}`;
 		return this.getHttp(url);
 	}
+  getUcCode(id: string): Observable<string> {
+		let url = `/api/ucs/${id}/code`;
+		return this.getHttp(url);
+	}
 
 	addUc(uc: UcModel): Observable<UcModel> {
 		let ucGroupUrl = `/api/ucgroups/${uc.groupId}/ucs`;

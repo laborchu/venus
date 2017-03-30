@@ -154,7 +154,6 @@ class ProjectController extends BaseController {
 					delete uc.code;
 					let ucTpl = _.template(fs.readFileSync(path.join(tplPath, "uc.tpl.js")));
 					if(uc.handlerCode){
-					  console.log(uc.handlerCode)
             fs.writeFileSync(path.join(handlerFilePath, `${uc.ucKey}.handler.js`), ucTpl({
               "content": uc.handlerCode
             }));
@@ -230,8 +229,6 @@ class ProjectController extends BaseController {
 
 			res.send(super.wrapperRes(project));
 		} else {
-			console.log('right')
-
 			res.send(super.wrapperErrorRes(ErrorCode.PROJECT_FOUND));
 			return;
 		}

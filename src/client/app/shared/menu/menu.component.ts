@@ -58,6 +58,9 @@ export class MenuComponent implements OnInit {
 			this.groupArray.every((e: UcGroupModel, index: number) => {
 				if (group._id == e._id) {
 					this.groupArray[index] = group;
+					if(group.dataStatus==0){
+            this.groupArray.splice(index,1)
+          }
 					return false;
 				} else {
 					return true;
@@ -65,6 +68,9 @@ export class MenuComponent implements OnInit {
 			});
 			if (this.selectGroup._id == group._id) {
 				this.selectGroup = group;
+        if(group.dataStatus==0){
+          this.selectGroup = this.groupArray[0]
+        }
 			}
 		});
 
@@ -125,12 +131,12 @@ export class MenuComponent implements OnInit {
 		this.router.navigate(["/projects", this.selectProject._id, "ucgroups", group._id]);
 	}
 
-	delGroup(group: UcGroupModel,i:number) {
-    let ucGroupObservable = this.ucGroupService.delUcGroups(group);
-    ucGroupObservable.subscribe((ucGroups: UcGroupModel) => {
-      this.groupArray.splice(i,1)
-    });
-	}
+	// delGroup(group: UcGroupModel,i:number) {
+    // let ucGroupObservable = this.ucGroupService.delUcGroups(group);
+    // ucGroupObservable.subscribe((ucGroups: UcGroupModel) => {
+     //  this.groupArray.splice(i,1)
+    // });
+	// }
 
 	openUcGroup(content: any) {
     this.newUcGroup = new UcGroupModel();

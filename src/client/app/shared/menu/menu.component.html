@@ -91,9 +91,9 @@
           <a class="group-item" *ngFor="let group of groupArray; let i = index;" (click)="doSelectGroup(group)" [ngClass]="{select:group==selectGroup}">
             {{group.name}}
             <span class="pull-right item-num">4</span>
-            <span class="pull-right item-num"   mwlConfirmationPopover
-                  [title]="'确认删除吗?'"
-                  (confirm)="delGroup(group,i)"  ><i class="fa fa-trash"></i></span>
+            <!--<span class="pull-right item-num"   mwlConfirmationPopover-->
+                  <!--[title]="'确认删除吗?'"-->
+                  <!--(confirm)="delGroup(group,i)"  ><i class="fa fa-trash"></i></span>-->
           </a>
         </div>
     </div>

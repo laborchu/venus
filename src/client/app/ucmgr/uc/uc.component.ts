@@ -52,7 +52,6 @@ export class UcComponent implements OnInit {
 		},
 		del: {
 			click: () => {
-				this.ucMode.dataStatus = 0;
 				this.ucService.deleteUc(this.ucMode._id)
 					.subscribe(() => {
 						this.ucService.setUcChangeSubject(this.ucMode);
@@ -62,35 +61,38 @@ export class UcComponent implements OnInit {
 		},
 		code: {
       codeClick:() =>{
-        const modalRef: NgbModalRef =  this.modalService.open(MvCodeJsFormContent, { backdrop: "static",size:'lg'})
-        modalRef.result.then((code) => {
-          this.ucMode.code = code;
-          this.ucService.updateUcScript(this.ucMode)
-            .concatMap((result)=>{
-              if(result){
-                this._notificationsService.success(
+        this.ucService.getUcCode(this.ucMode._id)	.subscribe((newCode: string) => {
+          this.ucMode.code = newCode;
+          const modalRef: NgbModalRef =  this.modalService.open(MvCodeJsFormContent, { backdrop: "static",size:'lg'})
+          modalRef.result.then((code) => {
+            this.ucMode.code = code;
+            this.ucService.updateUcScript(this.ucMode)
+              .concatMap((result)=>{
+                if(result){
+                  this._notificationsService.success(
+                    'UC操作',
+                    "操作成功"
+                  );
+                }
+                return this.ucService.getUc(this.ucMode._id);
+              })
+              .subscribe((ucs: Array<UcModel>) => {
+                this.form.form.markAsPristine();
+                this.ucMode = ucs[0];
+                this.ucService.setUcChangeSubject(this.ucMode);
+                this.nodeService.getUcNodes(this.ucMode._id)	.subscribe((nodes: Array<NodeModel>) => {
+                  this.nodes = nodes;
+                });
+              }, (msg) => {
+                this._notificationsService.error(
                   'UC操作',
-                  "操作成功"
+                  msg
                 );
-              }
-              return this.ucService.getUc(this.ucMode._id);
-            })
-            .subscribe((ucs: Array<UcModel>) => {
-              this.form.form.markAsPristine();
-              this.ucMode = ucs[0];
-              this.ucService.setUcChangeSubject(this.ucMode);
-              this.nodeService.getUcNodes(this.ucMode._id)	.subscribe((nodes: Array<NodeModel>) => {
-                this.nodes = nodes;
               });
-            }, (msg) => {
-              this._notificationsService.error(
-                'UC操作',
-                msg
-              );
-            });
-        }, () => {
+          }, () => {
+          });
+          modalRef.componentInstance.code = this.ucMode.code;
         });
-        modalRef.componentInstance.code = this.ucMode.code;
       }
 		}
 	};
