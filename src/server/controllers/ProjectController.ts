@@ -78,6 +78,11 @@ class ProjectController extends BaseController {
     let result = await Project.find({ "_id": req.params.id });
     let rootPath = path.join(process.cwd(), "projects");
     let projectPath = path.join(rootPath,result[0].name);
+    let downloadPath = path.join(process.cwd(), "download");
+    if (!fs.existsSync(downloadPath)) {
+      fs.mkdirSync(downloadPath);
+    }
+
     let output = fs.createWriteStream(path.join(process.cwd(), "download/")+result[0].name+'.zip');
     let archive = archiver('zip');
 

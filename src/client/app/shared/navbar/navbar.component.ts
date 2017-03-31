@@ -102,7 +102,6 @@ export class NavbarComponent implements OnInit {
 		});
 	}
   download(): void {
-	  debugger
 	  window.open("/download/projects/"+this.projectId)
 	}
 
