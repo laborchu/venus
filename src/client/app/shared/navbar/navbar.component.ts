@@ -31,11 +31,11 @@ export class NavbarComponent implements OnInit {
 		private userService:UserService,
 		private sessionService:SessionService
 
-		
+
 	) { }
 	groupId: string;
 	projectId: string;
-	user:UserModel=new UserModel();		
+	user:UserModel=new UserModel();
 	@ViewChild('newUcView') newUcView: any;
 	sessionSub:Subscription;
 	ngOnInit(): void {
@@ -46,14 +46,14 @@ export class NavbarComponent implements OnInit {
 			this.projectId = project._id;
 		})
 		this.sessionSub = this.sessionService.getSessionChangeSubject().subscribe((u:UserModel)=>{
-			
+
 			this.user=u;
 		});
 	}
 
 	ngOnDestroy() {
 		this.sessionSub.unsubscribe();
-			
+
 	}
 
 	@HostListener('document:keydown', ['$event'])
@@ -101,11 +101,15 @@ export class NavbarComponent implements OnInit {
 			);
 		});
 	}
+  download(): void {
+	  debugger
+	  window.open("/download/projects/"+this.projectId)
+	}
 
 	openUserSetting(content: any) {
-			
+
 			this.modalService.open(content, { backdrop: "static" }).result.then(() => {
-				
+
 		}, () => {
 			//保存
 			this.userService.updateUser(this.user).subscribe(() => {

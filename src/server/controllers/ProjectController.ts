@@ -4,6 +4,7 @@ import { router } from "../decorators/Web";
 let path = require("path");
 let fs = require("fs");
 let _ = require('lodash');
+let archiver = require('archiver');
 
 import {
 	Project, UcGroup, Uc, Node, Path, Checker, ProjectJs, UserModel,
@@ -67,7 +68,46 @@ class ProjectController extends BaseController {
 	})
 	async find(req: e.Request, res: e.Response) {
 		let result = await Project.find({});
-		res.send(super.wrapperRes(result));
+    res.send(super.wrapperRes(result));
+	}
+	@router({
+    method: 'get',
+    path: '/download/projects/:id'
+	})
+	async download(req: e.Request, res: e.Response) {
+    let result = await Project.find({ "_id": req.params.id });
+    let rootPath = path.join(process.cwd(), "projects");
+    let projectPath = path.join(rootPath,result[0].name);
+    let output = fs.createWriteStream(path.join(process.cwd(), "download/")+result[0].name+'.zip');
+    let archive = archiver('zip');
+
+    archive.pipe(output);
+    archive.bulk([
+      {
+        src: ['**'],
+        dest: result[0].name + '/',
+        cwd: projectPath+ '/',
+        expand: true
+      }
+    ]);
+    await  archive.finalize();
+    output.on('close', function() {
+      let fileName = result[0].name+'.zip';
+      let filePath =path.join(process.cwd(), "download/")+result[0].name+'.zip'
+      let stats = fs.statSync(filePath);
+      console.log("bb")
+      if(stats.isFile()){
+        console.log("aa")
+        res.set({
+          'Content-Type': 'application/octet-stream',
+          'Content-Disposition': 'attachment; filename='+fileName,
+          'Content-Length': stats.size
+        });
+        fs.createReadStream(filePath).pipe(res);
+      } else {
+        res.end(404);
+      }
+    });
 	}
 
 	@router({
